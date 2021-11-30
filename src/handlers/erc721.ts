@@ -21,11 +21,6 @@ import { updateERC721Ownership } from '../modules/ownership';
 import { updateStatsForTransfer } from '../modules/stats';
 
 export function handleTransfer(event: Transfer): void {
-  log.warning('handleTransfer: {} to {}', [
-    event.params.from.toHexString(),
-    event.params.to.toHexString(),
-  ]);
-
   let id = getNFTId(
     event.address.toHexString(),
     event.params.tokenId.toString()
@@ -93,18 +88,9 @@ export function handleTransfer(event: Transfer): void {
     event.params.to,
     BigInt.fromI32(1)
   );
-  log.warning('Updating ownership: {} to {}', [
-    event.params.from.toHexString(),
-    event.params.to.toHexString(),
-  ]);
-  updateERC721Ownership(nft, event.params.from, event.params.to);
-  log.warning('Updating activity: {} to {}', [
-    event.params.from.toHexString(),
-    event.params.to.toHexString(),
-  ]);
-  createERC721TransferActivity(nft, event);
 
-  log.warning('done {}', [nft.id]);
+  updateERC721Ownership(nft, event.params.from, event.params.to);
+  createERC721TransferActivity(nft, event);
 }
 
 export function handleMint(event: Mint): void {
