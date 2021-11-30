@@ -1,0 +1,23 @@
+{
+  "name": "endemic-subgraph",
+  "license": "ISC",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "prepare:rinkeby": "mustache configs/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:aurora_testnet": "mustache configs/aurora_testnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:aurora": "mustache configs/aurora.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:rinkeby": "npm run prepare:rinkeby && graph deploy mmarinovic/endemic-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ ",
+    "deploy:aurora": "npm run prepare:aurora && graph deploy endemic-nft/endemic-aurora --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ ",
+    "deploy:aurora_testnet": "npm run prepare:aurora_testnet && graph deploy endemic-nft/endemic-aurora-t3stnet --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ "
+  },
+  "dependencies": {
+    "@graphprotocol/graph-ts": "^0.23.1",
+    "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}
+
+

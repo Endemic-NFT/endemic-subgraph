@@ -1,0 +1,133 @@
+type NFTContract @entity {
+  id: ID!
+  name: String!
+  symbol: String!
+  category: String!
+  createdAt: BigInt!
+  nfts: [NFT!]! @derivedFrom(field: "contract")
+}
+
+type NFTOwnership @entity {
+  id: ID!
+  account: Account!
+  nft: NFT
+  value: BigInt!
+
+  #copy fields from nft because graph can't filter / sort on child collection
+  nftContractId: Bytes!
+  nftCategory: String
+  nftPrice: BigInt!
+  nftBurned: Boolean!
+  nftCreatedAt: BigInt!
+  nftIsOnSale: Boolean!
+}
+
+type NFT @entity {
+  id: ID!
+  contract: NFTContract!
+  tokenId: BigInt!
+  category: String
+  artist: Account
+  ownership: [NFTOwnership!] @derivedFrom(field: "nft")
+  updatedAt: BigInt!
+  createdAt: BigInt!
+  auctions: [Auction!] @derivedFrom(field: "nft")
+  auctionIds: [String!]!
+  burned: Boolean!
+
+  #erc-1155
+  supply: BigInt
+
+  isOnSale: Boolean!
+  price: BigInt!
+  lastSalePrice: BigInt
+
+  #metadata
+  tokenURI: String
+  name: String
+  description: String
+  image: String
+
+  #denormalized for performance
+  contractId: Bytes!
+  contractName: String
+  artistId: Bytes
+
+  type: String!
+}
+
+type Account @entity {
+  id: ID!
+  address: Bytes!
+  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
+  createdNfts: [NFT!] @derivedFrom(field: "artist")
+}
+
+type Auction @entity {
+  id: ID!
+  seller: Bytes!
+  buyer: Bytes
+  startingPrice: BigInt!
+  endingPrice: BigInt!
+  duration: BigInt!
+  startedAt: BigInt!
+  nft: NFT!
+  canceledAt: BigInt
+  soldAt: BigInt
+  tokenAmount: BigInt!
+  soldTokenAmount: BigInt!
+  totalPrice: BigInt
+}
+
+type Activity @entity {
+  id: ID!
+  nft: NFT
+  type: String!
+  createdAt: BigInt!
+
+  #transfer activity
+  transferFrom: Bytes
+  transferTo: Bytes
+
+  #auction activity
+  auctionSeller: Bytes
+  auctionBuyer: Bytes
+  auctionStartingPrice: BigInt
+  auctionTotalPrice: BigInt
+
+  transactionHash: Bytes!
+  from: Bytes!
+}
+
+type CollectionStatistic @entity {
+  id: ID!
+  totalCount: BigInt!
+  onSaleCount: BigInt!
+  volumeTraded: BigInt!
+}
+
+type UserStatistic @entity {
+  id: ID!
+  createdCount: BigInt!
+  ownedCount: BigInt!
+  onSaleCount: BigInt!
+  makerVolume: BigInt!
+  takerVolume: BigInt!
+}
+
+enum ActivityType @entity {
+  mint
+  burn
+  transfer
+  auctionCreate
+  auctionSuccess
+  auctionCancel
+}
+
+type _Schema_
+  @fulltext(
+    name: "nftSearch"
+    language: en
+    algorithm: proximityRank
+    include: [{ entity: "NFT", fields: [{ name: "name" }, { name: "id" }] }]
+  )

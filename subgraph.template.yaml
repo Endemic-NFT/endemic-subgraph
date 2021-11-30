@@ -1,0 +1,151 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Marketplace
+    network: {{network}}
+    source:
+      address: "{{marketplaceAddress}}"
+      abi: Marketplace
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
+          handler: handleAuctionCreated
+        - event:  AuctionSuccessful(indexed bytes32,indexed uint256,address,uint256)
+          handler: handleAuctionSuccessful
+        - event:  AuctionCancelled(indexed bytes32)
+          handler: handleAuctionCancelled
+      file: ./src/handlers/marketplace.ts
+    
+  - kind: ethereum/contract
+    name: EndemicNFTFactory
+    network: {{network}}
+    source:
+      address: "{{nftFactoryAddress}}"
+      abi: EndemicNFTFactory
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFTContract
+        - Account
+      abis:
+        - name: EndemicNFTFactory
+          file: ./abis/EndemicNFTFactory.json
+      eventHandlers:
+        - event: NFTContractCreated(indexed address,indexed address,string,string,string)
+          handler: handleCreated
+      file: ./src/handlers/erc721Factory.ts
+
+  # - kind: ethereum/contract
+  #   name: EndemicERC1155Factory
+  #   network: {{network}}
+  #   source:
+  #     address: "{{erc1155FactoryAddress}}"
+  #     abi: EndemicERC1155Factory
+  #     startBlock: {{startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - NFTContract
+  #       - Account
+  #     abis:
+  #       - name: EndemicERC1155Factory
+  #         file: ./abis/EndemicERC1155Factory.json
+  #     eventHandlers:
+  #       - event: Created(indexed address,indexed address,string,string,string)
+  #         handler: handleCreated
+  #     file: ./src/handlers/erc1155Factory.ts
+
+{{#collections}}
+  - kind: ethereum/contract
+    name: {{name}}
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: EndemicNFT
+      startBlock: {{block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: EndemicNFT
+          file: ./abis/EndemicNFT.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Mint(indexed uint256,address)
+          handler: handleMint
+      file: ./src/handlers/erc721.ts
+{{/collections}}
+
+templates:
+  - kind: ethereum/contract
+    name: EndemicNFT
+    network: {{network}}
+    source:
+      abi: EndemicNFT
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: EndemicNFT
+          file: ./abis/EndemicNFT.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Mint(indexed uint256,address)
+          handler: handleMint
+      file: ./src/handlers/erc721.ts 
+  - kind: ethereum/contract
+    name: EndemicERC1155
+    network: {{network}}
+    source:
+      abi: EndemicERC1155
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: EndemicERC1155
+          file: ./abis/EndemicERC1155.json
+        - name: Marketplace
+          file: ./abis/Marketplace.json  
+      eventHandlers:
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        # - event:  TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+        #   handler: handleTransferBatch
+        - event: Create(indexed uint256,address,uint256)
+          handler: handleCreate
+      file: ./src/handlers/erc1155.ts

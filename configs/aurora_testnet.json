@@ -1,0 +1,14 @@
+{
+    "network": "aurora-testnet",
+    "nftFactoryAddress": "0xBA2D5636A3EE2C0528D0B4385d57E97Cb64B16e6",
+    "marketplaceAddress": "0x192A5Dc88b6d6e469EB701C305d14f188dF09644",
+    "erc1155FactoryAddress": "",
+    "startBlock": 72141565,
+    "collections": [
+        {
+            "name": "Endemic Master Keys",
+            "address": "0x79356B3928fB4729F1F4e472AbE9C5a5f7Cd07c2",
+            "block": 70291372
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "network": "mainnet",
+    "nftFactoryAddress": "",
+    "lazyNftFactoryAddress": "",
+    "marketplaceAddress": "",
+    "startBlock": 0
+}
