@@ -9,6 +9,11 @@
             "name": "Endemic Master Keys",
             "address": "0x79356B3928fB4729F1F4e472AbE9C5a5f7Cd07c2",
             "block": 70291372
+        },
+        {
+            "name": "Endemic",
+            "address": "0xAEdea478eD31a54C6812EfE671d02335c4cA8253",
+            "block": 72141565
         }
     ]
 }
