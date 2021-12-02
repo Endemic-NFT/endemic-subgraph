@@ -1,19 +1,19 @@
 {
     "network": "aurora-testnet",
-    "nftFactoryAddress": "0xBA2D5636A3EE2C0528D0B4385d57E97Cb64B16e6",
-    "marketplaceAddress": "0x192A5Dc88b6d6e469EB701C305d14f188dF09644",
+    "nftFactoryAddress": "0xa5572e8558b2CCf6Cb7f05f04f3803dc577966F1",
+    "marketplaceAddress": "0x45b87060571e9d372c0762497b6893374f3638Ee",
     "erc1155FactoryAddress": "",
-    "startBlock": 72141565,
+    "startBlock": 73612730,
     "collections": [
         {
             "name": "Endemic Master Keys",
-            "address": "0x79356B3928fB4729F1F4e472AbE9C5a5f7Cd07c2",
-            "block": 70291372
+            "address": "0x6D27C84EC245A7865718e1CDb7D1aE0EF4B6f08E",
+            "block": 73612730
         },
         {
             "name": "Endemic",
-            "address": "0xAEdea478eD31a54C6812EfE671d02335c4cA8253",
-            "block": 72141565
+            "address": "0x1F081B956f670D0fbf6d02b0439e802540bA1aBD",
+            "block": 73612730
         }
     ]
 }
