@@ -10,7 +10,7 @@ import {
   getNFTId,
   isMarketplaceAddress,
   isMintEvent,
-  readTokenMetadataFromIPFS,
+  updateTokenMetadataFromIPFS,
 } from '../modules/nft';
 import { createAccount } from '../modules/account';
 import { createERC1155TransferActivity } from '../modules/activity';
@@ -18,6 +18,7 @@ import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/use
 import { updateERC1155Ownership } from '../modules/ownership';
 import { removeActiveAuction } from '../modules/auction';
 import { updateStatsForTransfer } from '../modules/stats';
+import { toLowerCase } from '../utils/string';
 
 export function handleTransferSingle(event: TransferSingle): void {
   let nftId = getNFTId(event.address.toHexString(), event.params.id.toString());
@@ -84,13 +85,9 @@ export function handleCreate(event: Create): void {
   nft.isOnSale = false;
   nft.burned = false;
 
-  let metaData = readTokenMetadataFromIPFS(tokenURI);
-  if (metaData) {
-    nft.image = metaData.image;
-    nft.name = metaData.name;
-    nft.description = metaData.description;
-  } else {
-    log.warning('TokenURI: {} not available', [tokenURI]);
+  nft = updateTokenMetadataFromIPFS(nft);
+  if (nft.name !== null) {
+    nft.searchText = toLowerCase(nft.name!);
   }
 
   nft.save();

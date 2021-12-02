@@ -5,6 +5,7 @@ type NFTContract @entity {
   category: String!
   createdAt: BigInt!
   nfts: [NFT!]! @derivedFrom(field: "contract")
+  searchText: String!
 }
 
 type NFTOwnership @entity {
@@ -54,6 +55,7 @@ type NFT @entity {
   artistId: Bytes
 
   type: String!
+  searchText: String
 }
 
 type Account @entity {
@@ -123,11 +125,3 @@ enum ActivityType @entity {
   auctionSuccess
   auctionCancel
 }
-
-type _Schema_
-  @fulltext(
-    name: "nftSearch"
-    language: en
-    algorithm: proximityRank
-    include: [{ entity: "NFT", fields: [{ name: "name" }, { name: "id" }] }]
-  )

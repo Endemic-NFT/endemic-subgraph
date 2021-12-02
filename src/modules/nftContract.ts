@@ -2,12 +2,11 @@ import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { NFTContract } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 
-export function createThirdPartyNFTContract(
-  id: Address,
-  createdAt: BigInt
-): NFTContract {
+const DEFAULT_CATEGORY = 'Collectibles';
+
+export function createNFTContract(id: Address, createdAt: BigInt): NFTContract {
   let nftContract = new NFTContract(id.toHexString());
-  nftContract.category = getPredefinedCategory(id.toHexString());
+  nftContract.category = DEFAULT_CATEGORY;
   nftContract.createdAt = createdAt;
 
   let instance = EndemicNFT.bind(id);
@@ -25,8 +24,4 @@ export function createThirdPartyNFTContract(
   nftContract.save();
 
   return nftContract;
-}
-
-export function getPredefinedCategory(id: string): string {
-  return 'Collectibles';
 }

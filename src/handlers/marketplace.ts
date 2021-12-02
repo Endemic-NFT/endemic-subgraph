@@ -48,7 +48,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 
   auction.save();
 
-  handleAuctionCreatedForNFT(nft, auction);
+  nft = handleAuctionCreatedForNFT(nft, auction);
   nft.save();
 
   let nftOwnership = getOrCreateOwnership(nft, auction.seller);
@@ -83,7 +83,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
 
   if (isAuctionCompleted) {
     store.remove('Auction', auction.id);
-    handleAuctionCompletedForNFT(nft, auction.id);
+    nft = handleAuctionCompletedForNFT(nft, auction.id);
     nft.lastSalePrice = auction.totalPrice;
     nft.save();
   }
@@ -105,7 +105,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
     log.warning('NFT {} not available', [auction.nft]);
     return;
   }
-  handleAuctionCompletedForNFT(nft, auction.id);
+  nft = handleAuctionCompletedForNFT(nft, auction.id);
   nft.save();
 
   let nftOwnership = getOrCreateOwnership(nft, auction.seller);

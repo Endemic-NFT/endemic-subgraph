@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Transfer,
   Mint,
@@ -7,7 +7,7 @@ import { NFT, NFTContract } from '../../generated/schema';
 import {
   getERC721TokenURI,
   getNFTId,
-  readTokenMetadataFromIPFS,
+  updateTokenMetadataFromIPFS,
   isBurnEvent,
   isMintEvent,
   isMarketplaceAddress,
@@ -15,10 +15,11 @@ import {
 import { removeActiveAuction } from '../modules/auction';
 import { createAccount } from '../modules/account';
 import { createERC721TransferActivity } from '../modules/activity';
-import { createThirdPartyNFTContract } from '../modules/nftContract';
+import { createNFTContract } from '../modules/nftContract';
 import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/userStats';
 import { updateERC721Ownership } from '../modules/ownership';
 import { updateStatsForTransfer } from '../modules/stats';
+import { toLowerCase } from '../utils/string';
 
 export function handleTransfer(event: Transfer): void {
   let id = getNFTId(
@@ -37,11 +38,7 @@ export function handleTransfer(event: Transfer): void {
 
   let contract = NFTContract.load(event.address.toHexString());
   if (!contract) {
-    // Contract is not created via our factory, it's third party
-    contract = createThirdPartyNFTContract(
-      event.address,
-      event.block.timestamp
-    );
+    contract = createNFTContract(event.address, event.block.timestamp);
   }
 
   nft.tokenId = event.params.tokenId;
@@ -59,13 +56,9 @@ export function handleTransfer(event: Transfer): void {
     nft.tokenURI = tokenURI;
     nft.supply = BigInt.fromI32(1);
 
-    let metaData = readTokenMetadataFromIPFS(tokenURI);
-    if (metaData != null) {
-      nft.image = metaData.image;
-      nft.name = metaData.name;
-      nft.description = metaData.description;
-    } else {
-      log.warning('TokenURI: {} not available', [tokenURI]);
+    nft = updateTokenMetadataFromIPFS(nft);
+    if (nft.name !== null) {
+      nft.searchText = toLowerCase(nft.name!);
     }
   } else if (isBurnEvent(event.params.to)) {
     nft.burned = true;

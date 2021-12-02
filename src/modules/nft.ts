@@ -3,7 +3,6 @@ import { Auction, NFT } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import * as addresses from '../data/addresses';
-import { Metadata } from './models';
 import { filter } from '../utils/array';
 
 export function isMarketplaceAddress(address: String): boolean {
@@ -35,7 +34,7 @@ export function getERC721TokenURI(address: Address, tokenId: BigInt): string {
   let tokenURI = '';
 
   if (tokenURICallResult.reverted) {
-    log.warning('tokenURI reverted for tokenID: {} contract: {}', [
+    log.warning('ERC721 tokenURI reverted for tokenID: {} contract: {}', [
       tokenId.toString(),
       address.toHexString(),
     ]);
@@ -53,7 +52,7 @@ export function getERC1155TokenURI(address: Address, tokenId: BigInt): string {
   let tokenURI = '';
 
   if (tokenURICallResult.reverted) {
-    log.warning('tokenURI reverted for tokenID: {} contract: {}', [
+    log.warning('ERC1155 tokenURI reverted for tokenID: {} contract: {}', [
       tokenId.toString(),
       address.toHexString(),
     ]);
@@ -64,11 +63,14 @@ export function getERC1155TokenURI(address: Address, tokenId: BigInt): string {
   return tokenURI;
 }
 
-export function readTokenMetadataFromIPFS(tokenURI: string): Metadata | null {
-  if (!tokenURI) return null;
+export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
+  if (!nft.tokenURI) {
+    log.warning('TokenURI not available: {}', [nft.id]);
+    return nft;
+  }
 
-  let uriParts = tokenURI.split('/');
-  if (!uriParts.length) return null;
+  let uriParts = nft.tokenURI!.split('/');
+  if (!uriParts.length) return nft;
 
   uriParts.splice(0, 2);
   let ipfsHash = uriParts.join('/');
@@ -76,28 +78,30 @@ export function readTokenMetadataFromIPFS(tokenURI: string): Metadata | null {
   if (bytes !== null) {
     let data = json.fromBytes(bytes);
     if (data === null) {
-      return null;
+      log.warning('Metadata not available: {}', [nft.tokenURI!]);
+      return nft;
     }
     let metaData = data.toObject();
     if (metaData === null) {
-      return null;
+      log.warning('Metadata not available: {}', [nft.tokenURI!]);
+      return nft;
     }
 
     const image = metaData.get('image');
     const name = metaData.get('name');
     const description = metaData.get('description');
 
-    return {
-      image: image ? image.toString() : null,
-      name: name ? name.toString() : null,
-      description: description ? description.toString() : null,
-    };
+    nft.image = image ? image.toString() : null;
+    nft.name = name ? name.toString() : null;
+    nft.description = description ? description.toString() : null;
+  } else {
+    log.warning('Metadata not available: {}', [nft.tokenURI!]);
   }
 
-  return null;
+  return nft;
 }
 
-export function handleAuctionCreatedForNFT(nft: NFT, auction: Auction): void {
+export function handleAuctionCreatedForNFT(nft: NFT, auction: Auction): NFT {
   let auctionIds = nft.auctionIds;
   auctionIds.push(auction.id.toString());
 
@@ -112,12 +116,11 @@ export function handleAuctionCreatedForNFT(nft: NFT, auction: Auction): void {
     // we only support immutable price for now. Starting and ending prices will always be the same in the contract
     nft.price = auction.startingPrice;
   }
+
+  return nft;
 }
 
-export function handleAuctionCompletedForNFT(
-  nft: NFT,
-  auctionId: string
-): void {
+export function handleAuctionCompletedForNFT(nft: NFT, auctionId: string): NFT {
   nft.auctionIds = filter(nft.auctionIds, auctionId);
 
   if (nft.type == 'ERC-1155') {
@@ -139,4 +142,6 @@ export function handleAuctionCompletedForNFT(
     nft.isOnSale = false;
     nft.price = BigInt.fromI32(0);
   }
+
+  return nft;
 }
