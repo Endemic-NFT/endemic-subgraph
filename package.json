@@ -2,8 +2,8 @@
   "name": "endemic-subgraph",
   "version": "0.1.0",
   "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
+    "codegen": "npx graph codegen",
+    "build": "npx graph build",
     "prepare:rinkeby": "mustache configs/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:aurora_testnet": "mustache configs/aurora_testnet.json subgraph.template.yaml > subgraph.yaml",
     "prepare:aurora": "mustache configs/aurora.json subgraph.template.yaml > subgraph.yaml",
