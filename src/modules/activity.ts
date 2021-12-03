@@ -31,7 +31,7 @@ export function createAuctionActivity(
   activity.nft = nft.id;
   activity.transactionHash = event.transaction.hash;
 
-  if (type == 'auctionSuccess' || type == 'auctionCancel') {
+  if (type == 'auctionCreate' || type == 'auctionCancel') {
     activity.from = auction.seller;
   } else if (type == 'auctionSuccess') {
     activity.from = auction.buyer!;

@@ -74,8 +74,6 @@ type Auction @entity {
   duration: BigInt!
   startedAt: BigInt!
   nft: NFT!
-  canceledAt: BigInt
-  soldAt: BigInt
   tokenAmount: BigInt!
   soldTokenAmount: BigInt!
   totalPrice: BigInt
