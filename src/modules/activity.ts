@@ -1,8 +1,8 @@
 import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
-import { Activity, NFT, Auction } from '../../generated/schema';
+import { Activity, NFT, Auction, Bid } from '../../generated/schema';
 import { isMintEvent, isBurnEvent } from './nft';
-import { Address, ethereum } from '@graphprotocol/graph-ts';
+import { Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -31,11 +31,31 @@ export function createAuctionActivity(
   activity.nft = nft.id;
   activity.transactionHash = event.transaction.hash;
 
-  if (type == 'auctionSuccess' || type == 'auctionCancel') {
+  if (type == 'auctionCreate' || type == 'auctionCancel') {
     activity.from = auction.seller;
   } else if (type == 'auctionSuccess') {
     activity.from = auction.buyer!;
   }
+
+  activity.save();
+}
+
+export function createBidActivity(
+  bid: Bid,
+  nft: NFT,
+  type: string,
+  actor: Bytes,
+  event: ethereum.Event
+): void {
+  let id = 'bid/' + event.transaction.hash.toHex() + event.logIndex.toHex();
+  let activity = new Activity(id);
+  activity.type = type;
+  activity.bidBidder = bid.bidder;
+  activity.bidPrice = bid.price;
+  activity.createdAt = event.block.timestamp;
+  activity.nft = nft.id;
+  activity.transactionHash = event.transaction.hash;
+  activity.from = actor;
 
   activity.save();
 }
