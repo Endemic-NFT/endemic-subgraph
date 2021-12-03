@@ -1,6 +1,5 @@
 
-## Indexer
+## Deploy
 ```
-$ cd indexer
 $ yarn deploy:{network}
 ```
