@@ -29,7 +29,7 @@ export function handleBidCreated(event: BidCreated): void {
 
   bid.save();
 
-  createAccount(bid.bidder);
+  createAccount(event.params.bidder);
   createBidActivity(bid, nft, 'bidCreate', bid.bidder, event);
 }
 
