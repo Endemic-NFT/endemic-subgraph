@@ -3,6 +3,8 @@ import { BidAccepted, BidCancelled, BidCreated } from '../../generated/Bid/Bid';
 import { Bid, NFT } from '../../generated/schema';
 import { getNFTId } from '../modules/nft';
 import { createBidActivity } from '../modules/activity';
+import { updateStatsForBidAccepted } from '../modules/stats';
+import { createAccount } from '../modules/account';
 
 export function handleBidCreated(event: BidCreated): void {
   let nftId = getNFTId(
@@ -27,6 +29,7 @@ export function handleBidCreated(event: BidCreated): void {
 
   bid.save();
 
+  createAccount(bid.bidder);
   createBidActivity(bid, nft, 'bidCreate', bid.bidder, event);
 }
 
@@ -46,6 +49,12 @@ export function handleBidAccepted(event: BidAccepted): void {
   }
 
   store.remove('Bid', bid.id);
+  updateStatsForBidAccepted(
+    nft,
+    event.params.bidder,
+    event.params.seller,
+    event.params.price
+  );
   createBidActivity(bid, nft, 'bidAccept', event.params.seller, event);
 }
 
