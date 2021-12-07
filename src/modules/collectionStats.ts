@@ -64,3 +64,13 @@ export function updateStatsForAuctionCompleted(
     collectionStats.volumeTraded.plus(volumeTraded);
   collectionStats.save();
 }
+
+export function updateStatsForBidAccepted(
+  contractAddress: string,
+  volumeTraded: BigInt
+): void {
+  let collectionStats = getOrCreateColectionStats(contractAddress);
+  collectionStats.volumeTraded =
+    collectionStats.volumeTraded.plus(volumeTraded);
+  collectionStats.save();
+}

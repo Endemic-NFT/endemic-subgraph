@@ -85,3 +85,17 @@ export function updateStatsForAuctionCompleted(
   sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
   sellerStats.save();
 }
+
+export function updateStatsForBidAccepted(
+  buyerAddress: string,
+  sellerAddress: string,
+  volumeTraded: BigInt
+): void {
+  let buyerStats = getOrCreateUserStats(buyerAddress);
+  buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
+  buyerStats.save();
+
+  let sellerStats = getOrCreateUserStats(sellerAddress);
+  sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
+  sellerStats.save();
+}

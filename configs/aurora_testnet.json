@@ -2,6 +2,7 @@
     "network": "aurora-testnet",
     "nftFactoryAddress": "0xa5572e8558b2CCf6Cb7f05f04f3803dc577966F1",
     "marketplaceAddress": "0x45b87060571e9d372c0762497b6893374f3638Ee",
+    "bidAddress": "0x6b144f36F83D49dc8c6CCe50a30A18651EC7DF88",
     "erc1155FactoryAddress": "",
     "startBlock": 73612730,
     "collections": [

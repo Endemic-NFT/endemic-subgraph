@@ -1,7 +1,7 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import * as userStats from './userStats';
 import * as collectionStats from './collectionStats';
-import { Auction, NFT } from '../../generated/schema';
+import { Auction, Bid, NFT } from '../../generated/schema';
 import { isBurnEvent } from './nft';
 
 export function updateStatsForAuctionCreate(
@@ -71,4 +71,22 @@ export function updateStatsForTransfer(
       BigInt.fromI32(1)
     );
   }
+}
+
+export function updateStatsForBidAccepted(
+  nft: NFT,
+  bidder: Bytes,
+  seller: Bytes,
+  price: BigInt
+): void {
+  collectionStats.updateStatsForBidAccepted(
+    nft.contractId.toHexString(),
+    price
+  );
+
+  userStats.updateStatsForBidAccepted(
+    bidder.toHexString(),
+    seller.toHexString(),
+    price
+  );
 }

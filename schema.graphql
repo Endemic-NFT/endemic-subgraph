@@ -33,6 +33,7 @@ type NFT @entity {
   updatedAt: BigInt!
   createdAt: BigInt!
   auctions: [Auction!] @derivedFrom(field: "nft")
+  bids: [Bid!] @derivedFrom(field: "nft")
   auctionIds: [String!]!
   burned: Boolean!
 
@@ -79,6 +80,15 @@ type Auction @entity {
   totalPrice: BigInt
 }
 
+type Bid @entity {
+  id: ID!
+  nft: NFT!
+  bidder: Bytes!
+  price: BigInt!
+  expiresAt: BigInt!
+  createdAt: BigInt!
+}
+
 type Activity @entity {
   id: ID!
   nft: NFT
@@ -94,6 +104,10 @@ type Activity @entity {
   auctionBuyer: Bytes
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
+
+  #bid activity
+  bidBidder: Bytes
+  bidPrice: BigInt
 
   transactionHash: Bytes!
   from: Bytes!
@@ -122,4 +136,7 @@ enum ActivityType @entity {
   auctionCreate
   auctionSuccess
   auctionCancel
+  bidCreate
+  bidAccept
+  bidCancel
 }
