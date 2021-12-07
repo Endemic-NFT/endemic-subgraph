@@ -10,6 +10,12 @@
             "name": "Lost Animals of the World",
             "address": "0x97cb197f862173a0f4c0B9Fda3272b56464578cc",
             "block": 54570015
+        },
+        {
+            "name": "Endemic",
+            "address": "0x329b61bF16aDd14863c1C154614888F14303169c",
+            "block": 54570015
         }
     ]
 }
+
