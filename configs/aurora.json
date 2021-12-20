@@ -2,7 +2,7 @@
     "network": "aurora",
     "nftFactoryAddress": "0xf44F8a702945B1dc9819286D11E8cFce94d90Ef2",
     "marketplaceAddress": "0xdC446d49c0055B48Ad6626FDf0F358396c8C0D06",
-    "bidAddress": "0x70669ea7C7c7364fbC7418e7d12F416379389fC4",
+    "bidAddress": "0xf65D3A9820b2ceFf9289d9EACFc3aAB9bf00a935",
     "erc1155FactoryAddress": "",
     "startBlock": 54570015,
     "collections": [
