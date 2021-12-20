@@ -6,7 +6,10 @@ import * as addresses from '../data/addresses';
 import { filter } from '../utils/array';
 
 export function isMarketplaceAddress(address: String): boolean {
-  return address.toLowerCase() == addresses.EndemicMarketplace.toLowerCase();
+  return (
+    address.toLowerCase() ==
+    addresses.getEndemicMarketplaceAddress().toLowerCase()
+  );
 }
 
 export function isMintEvent(from: Address): boolean {
