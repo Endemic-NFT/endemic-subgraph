@@ -2,13 +2,14 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
+{{#marketplaces}}
   - kind: ethereum/contract
-    name: Marketplace
+    name: {{name}}
     network: {{network}}
     source:
-      address: "{{marketplaceAddress}}"
+      address: "{{address}}"
       abi: Marketplace
-      startBlock: {{startBlock}}
+      startBlock: {{block}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -27,7 +28,7 @@ dataSources:
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
       file: ./src/handlers/marketplace.ts
-
+{{/marketplaces}}
   - kind: ethereum/contract
     name: Bid
     network: {{network}}
