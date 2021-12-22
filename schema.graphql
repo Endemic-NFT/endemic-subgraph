@@ -49,6 +49,7 @@ type NFT @entity {
   name: String
   description: String
   image: String
+  thumbnail: String
 
   #denormalized for performance
   contractId: Bytes!

@@ -91,10 +91,12 @@ export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
     }
 
     const image = metaData.get('image');
+    const thumbnail = metaData.get('thumbnail');
     const name = metaData.get('name');
     const description = metaData.get('description');
 
     nft.image = image ? image.toString() : null;
+    nft.thumbnail = thumbnail ? thumbnail.toString() : nft.image;
     nft.name = name ? name.toString() : null;
     nft.description = description ? description.toString() : null;
   } else {
