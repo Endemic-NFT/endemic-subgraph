@@ -55,13 +55,14 @@ dataSources:
           handler: handleBidCancelled
       file: ./src/handlers/bid.ts
     
+{{#erc721Factories}}
   - kind: ethereum/contract
-    name: EndemicNFTFactory
+    name: {{name}}
     network: {{network}}
     source:
-      address: "{{nftFactoryAddress}}"
+      address: "{{address}}"
       abi: EndemicNFTFactory
-      startBlock: {{startBlock}}
+      startBlock: {{block}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -76,6 +77,7 @@ dataSources:
         - event: NFTContractCreated(indexed address,indexed address,string,string,string)
           handler: handleCreated
       file: ./src/handlers/erc721Factory.ts
+{{/erc721Factories}}
 
   # - kind: ethereum/contract
   #   name: EndemicERC1155Factory
