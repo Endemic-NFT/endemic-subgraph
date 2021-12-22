@@ -12,7 +12,7 @@ export function removeActiveAuction(
   amount: BigInt
 ): void {
   let marketplace = Marketplace.bind(
-    Address.fromString(addresses.EndemicMarketplace)
+    Address.fromString(addresses.getEndemicMarketplaceAddress())
   );
 
   let auctionId = marketplace.try_createAuctionId(
