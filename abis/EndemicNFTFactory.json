@@ -197,11 +197,6 @@
       {
         "components": [
           {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
-          },
-          {
             "internalType": "string",
             "name": "name",
             "type": "string"
@@ -228,6 +223,46 @@
       }
     ],
     "name": "createToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "category",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "baseURI",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct EndemicNFTFactory.OwnedDeployParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "createTokenForOwner",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
