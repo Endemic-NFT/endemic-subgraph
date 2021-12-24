@@ -1,6 +1,6 @@
 {
     "network": "aurora-testnet",
-    "bidAddress": "0x7CDdB0f2defc12205693454a6B6581702e3C7924",
+    "bidAddress": "0xd88B5Df16cBe94A25A33Ac85C936e123B7264683",
     "erc1155FactoryAddress": "",
     "startBlock": 73612730,
     "erc721Factories": [
