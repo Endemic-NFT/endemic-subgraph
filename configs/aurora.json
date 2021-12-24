@@ -1,10 +1,22 @@
 {
     "network": "aurora",
-    "nftFactoryAddress": "0xf44F8a702945B1dc9819286D11E8cFce94d90Ef2",
-    "marketplaceAddress": "0xdC446d49c0055B48Ad6626FDf0F358396c8C0D06",
     "bidAddress": "0xf65D3A9820b2ceFf9289d9EACFc3aAB9bf00a935",
     "erc1155FactoryAddress": "",
     "startBlock": 54570015,
+    "erc721Factories": [
+        {
+            "name": "ERC721 Factory v1",
+            "address": "0x7e4fD7d4bb0e31A14B76a396F840b6FE08A51da3",
+            "block": 54570015
+        }
+    ],
+    "marketplaces": [
+        {
+            "name": "Marketplace v1",
+            "address": "0xdC446d49c0055B48Ad6626FDf0F358396c8C0D06",
+            "block": 54570015
+        }
+    ],
     "collections": [
         {
             "name": "Lost Animals of the World",
