@@ -1,8 +1,8 @@
+import { Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, NFT, Auction, Bid } from '../../generated/schema';
 import { isMintEvent, isBurnEvent } from './nft';
-import { Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
