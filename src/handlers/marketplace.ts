@@ -48,7 +48,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 
   auction.save();
 
-  nft = handleAuctionCreatedForNFT(nft, auction);
+  nft = handleAuctionCreatedForNFT(nft, auction, event.block.timestamp);
   nft.save();
 
   let nftOwnership = getOrCreateOwnership(nft, auction.seller);

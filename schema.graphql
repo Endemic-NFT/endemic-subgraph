@@ -32,6 +32,7 @@ type NFT @entity {
   ownership: [NFTOwnership!] @derivedFrom(field: "nft")
   updatedAt: BigInt!
   createdAt: BigInt!
+  listedAt: BigInt
   auctions: [Auction!] @derivedFrom(field: "nft")
   bids: [Bid!] @derivedFrom(field: "nft")
   auctionIds: [String!]!

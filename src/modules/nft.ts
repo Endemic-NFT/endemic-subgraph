@@ -42,6 +42,12 @@ export function getERC721TokenURI(address: Address, tokenId: BigInt): string {
       address.toHexString(),
     ]);
   } else {
+    if (tokenURICallResult.value == null) {
+      log.warning('ERC721 got NULL tokenURI for tokenID: {} contract: {}', [
+        tokenId.toString(),
+        address.toHexString(),
+      ]);
+    }
     tokenURI = tokenURICallResult.value;
   }
 
@@ -106,12 +112,17 @@ export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
   return nft;
 }
 
-export function handleAuctionCreatedForNFT(nft: NFT, auction: Auction): NFT {
+export function handleAuctionCreatedForNFT(
+  nft: NFT,
+  auction: Auction,
+  listedAt: BigInt
+): NFT {
   let auctionIds = nft.auctionIds;
   auctionIds.push(auction.id.toString());
 
   nft.auctionIds = auctionIds;
   nft.isOnSale = true;
+  nft.listedAt = listedAt;
 
   if (nft.type == 'ERC-1155') {
     if (nft.price === null || nft.price > auction.startingPrice) {
@@ -141,10 +152,12 @@ export function handleAuctionCompletedForNFT(nft: NFT, auctionId: string): NFT {
       nft.price = lowestPrice;
     } else {
       nft.isOnSale = false;
+      nft.listedAt = null;
       nft.price = BigInt.fromI32(0);
     }
   } else {
     nft.isOnSale = false;
+    nft.listedAt = null;
     nft.price = BigInt.fromI32(0);
   }
 
