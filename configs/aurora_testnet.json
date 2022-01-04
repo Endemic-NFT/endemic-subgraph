@@ -3,6 +3,7 @@
     "bidAddress": "0xd88B5Df16cBe94A25A33Ac85C936e123B7264683",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xe34Ec7b3A3aB22B2422a37ad6726E7A76e5C2787",
+    "contractImporterAddress": "0x44317C983Ada8176801B40f98650cf1A1c3E4DcC",
     "startBlock": 73612730,
     "erc721Factories": [
         {
