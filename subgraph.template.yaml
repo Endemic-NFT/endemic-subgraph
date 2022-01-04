@@ -101,6 +101,30 @@ dataSources:
   #         handler: handleCreated
   #     file: ./src/handlers/erc1155Factory.ts
 
+  - kind: ethereum/contract
+    name: RoyaltiesProvider
+    network: {{network}}
+    source:
+      address: "{{royaltiesProviderAddress}}"
+      abi: RoyaltiesProvider
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFTContract
+        - NFT
+      abis:
+        - name: RoyaltiesProvider
+          file: ./abis/RoyaltiesProvider.json
+      eventHandlers:
+        - event: RoyaltiesSetForCollection(indexed address,address,uint256)
+          handler: handleRoyaltiesSetForCollection
+        - event:  RoyaltiesSetForToken(indexed address,indexed uint256,address,uint256)
+          handler: handleRoyaltiesSetForToken
+      file: ./src/handlers/royalties.ts
+
 {{#collections}}
   - kind: ethereum/contract
     name: {{name}}

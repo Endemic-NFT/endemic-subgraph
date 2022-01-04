@@ -2,27 +2,28 @@
     "network": "aurora-testnet",
     "bidAddress": "0xd88B5Df16cBe94A25A33Ac85C936e123B7264683",
     "erc1155FactoryAddress": "",
+    "royaltiesProviderAddress": "0xe34Ec7b3A3aB22B2422a37ad6726E7A76e5C2787",
     "startBlock": 73612730,
     "erc721Factories": [
         {
-            "name": "ERC721 Factory v1",
+            "name": "EndemicNFTFactory",
             "address": "0xa5572e8558b2CCf6Cb7f05f04f3803dc577966F1",
             "block": 73612730
         },
         {
-            "name": "ERC721 Factory v2",
+            "name": "EndemicNFTFactoryV2",
             "address": "0xFe7F3f28b5963b5447ECb37F1d9710f453BDFB21",
             "block": 75756908
         }
     ],
     "marketplaces": [
         {
-            "name": "Marketplace v1",
+            "name": "Marketplace",
             "address": "0x45b87060571e9d372c0762497b6893374f3638Ee",
             "block": 73612730
         },
         {
-            "name": "Marketplace v2",
+            "name": "Marketplacev2",
             "address": "0xDd29A2E65c01B75d74A53a469bF90371697846BF",
             "block": 75756908
         }

@@ -2,6 +2,7 @@
     "network": "aurora",
     "bidAddress": "0xf65D3A9820b2ceFf9289d9EACFc3aAB9bf00a935",
     "erc1155FactoryAddress": "",
+    "royaltiesProviderAddress": "",
     "startBlock": 54570015,
     "erc721Factories": [
         {

@@ -6,6 +6,7 @@ type NFTContract @entity {
   createdAt: BigInt!
   nfts: [NFT!]! @derivedFrom(field: "contract")
   searchText: String!
+  royalties: BigInt
 }
 
 type NFTOwnership @entity {
@@ -37,6 +38,7 @@ type NFT @entity {
   bids: [Bid!] @derivedFrom(field: "nft")
   auctionIds: [String!]!
   burned: Boolean!
+  royalties: BigInt
 
   #erc-1155
   supply: BigInt
