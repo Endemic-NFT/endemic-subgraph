@@ -3,17 +3,18 @@
     "bidAddress": "0xf65D3A9820b2ceFf9289d9EACFc3aAB9bf00a935",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "",
+    "contractImporterAddress":"",
     "startBlock": 54570015,
     "erc721Factories": [
         {
-            "name": "ERC721 Factory v1",
+            "name": "EndemicNFTFactory",
             "address": "0x7e4fD7d4bb0e31A14B76a396F840b6FE08A51da3",
             "block": 54570015
         }
     ],
     "marketplaces": [
         {
-            "name": "Marketplace v1",
+            "name": "Marketplace",
             "address": "0x5f89c1bBbCAc22fc15aC3074c0CfeC6bcF117FE5",
             "block": 54570015
         }
