@@ -27,7 +27,6 @@ export function handleTransfer(event: Transfer): void {
     event.params.tokenId.toString()
   );
 
-  let tokenURI = getERC721TokenURI(event.address, event.params.tokenId);
   let nft = NFT.load(id);
 
   if (!nft) {
@@ -49,6 +48,8 @@ export function handleTransfer(event: Transfer): void {
   nft.isOnSale = false;
 
   if (isMintEvent(event.params.from)) {
+    let tokenURI = getERC721TokenURI(event.address, event.params.tokenId);
+
     nft.createdAt = event.block.timestamp;
     nft.category = contract.category;
     nft.contractId = event.address;
