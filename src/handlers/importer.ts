@@ -30,7 +30,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     return;
   }
 
-  let symbol = erc721.try_name();
+  let symbol = erc721.try_symbol();
   if (symbol.reverted) {
     log.warning('Invalid ERC721 {} - symbol error', [
       event.params.contractAddress.toHex(),
@@ -100,6 +100,8 @@ export function handleCollectionAdded(event: CollectionAdded): void {
       tokenId.value.toString()
     );
 
+    createAccount(tokenOwner.value);
+
     let nft = new NFT(id);
     nft.auctionIds = [];
     nft.type = 'ERC-721';
@@ -111,7 +113,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.isOnSale = false;
     nft.createdAt = event.block.timestamp;
     nft.category = nftContract.category;
-    nft.contractId = event.address;
+    nft.contractId = event.params.contractAddress;
     nft.contractName = nftContract.name;
     nft.tokenURI = tokenURI.value;
     nft.supply = BigInt.fromI32(1);
