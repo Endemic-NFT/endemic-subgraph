@@ -26,6 +26,7 @@ export function getOrCreateOwnership(nft: NFT, accountId: Bytes): NFTOwnership {
     nftOwnership.nftContractId = nft.contractId;
     nftOwnership.nftBurned = nft.burned;
     nftOwnership.nftCreatedAt = nft.createdAt;
+    nftOwnership.nftListedAt = nft.listedAt;
     nftOwnership.nftIsOnSale = false;
   }
 

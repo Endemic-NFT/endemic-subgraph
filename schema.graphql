@@ -21,6 +21,7 @@ type NFTOwnership @entity {
   nftPrice: BigInt!
   nftBurned: Boolean!
   nftCreatedAt: BigInt!
+  nftListedAt: BigInt
   nftIsOnSale: Boolean!
 }
 

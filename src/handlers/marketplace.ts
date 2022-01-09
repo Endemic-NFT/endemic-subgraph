@@ -54,6 +54,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   let nftOwnership = getOrCreateOwnership(nft, auction.seller);
   nftOwnership.nftPrice = nft.price;
   nftOwnership.nftIsOnSale = true;
+  nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 
   updateStatsForAuctionCreate(auction, nft.contractId.toHexString());
@@ -110,6 +111,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   let nftOwnership = getOrCreateOwnership(nft, auction.seller);
   nftOwnership.nftIsOnSale = false;
   nftOwnership.nftPrice = nft.price;
+  nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 
   updateStatsForAuctionCancel(nft, auction);
