@@ -54,6 +54,7 @@ type NFT @entity {
   description: String
   image: String
   thumbnail: String
+  attributes: [NftAttribute!] @derivedFrom(field: "nft")
 
   #denormalized for performance
   contractId: Bytes!
@@ -62,6 +63,14 @@ type NFT @entity {
 
   type: String!
   searchText: String
+}
+
+type NftAttribute @entity {
+  id: ID!
+  nft: NFT!
+  contractId: Bytes!
+  type: String
+  value: String
 }
 
 type Account @entity {
