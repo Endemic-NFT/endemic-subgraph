@@ -1,5 +1,12 @@
-import { log, ipfs, json, BigInt, Address } from '@graphprotocol/graph-ts';
-import { Auction, NFT } from '../../generated/schema';
+import {
+  log,
+  ipfs,
+  json,
+  BigInt,
+  Address,
+  JSONValue,
+} from '@graphprotocol/graph-ts';
+import { Auction, NFT, NftAttribute } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import * as addresses from '../data/addresses';
@@ -100,6 +107,33 @@ export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
     const thumbnail = metaData.get('thumbnail');
     const name = metaData.get('name');
     const description = metaData.get('description');
+
+    let attributes: JSONValue[] = [];
+    let atts = metaData.get('attributes');
+    if (atts) {
+      attributes = atts.toArray();
+    }
+
+    for (let i = 0; i < attributes.length; i++) {
+      let item = attributes[i].toObject();
+      let traitType: string = '';
+      let t = item.get('trait_type');
+      if (t) {
+        traitType = t.toString();
+      }
+      let traitValue: string = '';
+      let v = item.get('value');
+      if (v) {
+        traitValue = v.toString();
+      }
+
+      let attribute = new NftAttribute(nft.id + '-' + i.toString());
+      attribute.nft = nft.id;
+      attribute.contractId = nft.contractId;
+      attribute.value = traitValue;
+      attribute.type = traitType;
+      attribute.save();
+    }
 
     nft.image = image ? image.toString() : null;
     nft.thumbnail = thumbnail ? thumbnail.toString() : nft.image;

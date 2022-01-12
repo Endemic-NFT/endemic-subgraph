@@ -5,7 +5,7 @@ export const Null = '0x0000000000000000000000000000000000000000';
 export function getEndemicMarketplaceAddress(): string {
   let network = dataSource.network();
   if (network == 'aurora') {
-    return '0x915F1E2aDE42374BbdD9051BA84dc0EC401DBed2';
+    return '0x71bD15c6C2117ef58dd1Eb9a494A1abc24423808';
   }
 
   if (network == 'aurora-testnet') {
