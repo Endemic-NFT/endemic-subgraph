@@ -15,16 +15,11 @@
     "marketplaces": [
         {
             "name": "Marketplace",
-            "address": "0x915F1E2aDE42374BbdD9051BA84dc0EC401DBed2",
-            "block": 54570015
+            "address": "0x71bD15c6C2117ef58dd1Eb9a494A1abc24423808",
+            "block": 57246873
         }
     ],
     "collections": [
-        {
-            "name": "Lost Animals of the World",
-            "address": "0x97cb197f862173a0f4c0B9Fda3272b56464578cc",
-            "block": 54570015
-        },
         {
             "name": "Endemic",
             "address": "0x329b61bF16aDd14863c1C154614888F14303169c",
