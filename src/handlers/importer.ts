@@ -2,7 +2,6 @@ import { BigInt, Address } from '@graphprotocol/graph-ts';
 import { CollectionAdded } from '../../generated/ContractImporter/ContractImporter';
 import { EndemicNFT } from '../../generated/templates';
 import { EndemicNFT as EndemicNFTTemplate } from '../../generated/templates/EndemicNFT/EndemicNFT';
-
 import { NFT, NFTContract } from '../../generated/schema';
 import { createAccount } from '../modules/account';
 import { toLowerCase } from '../utils/string';
@@ -118,6 +117,9 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.tokenURI = tokenURI.value;
     nft.supply = BigInt.fromI32(1);
     nft = updateTokenMetadataFromIPFS(nft);
+    if (nft.name !== null) {
+      nft.searchText = toLowerCase(nft.name!);
+    }
 
     nft.save();
 
