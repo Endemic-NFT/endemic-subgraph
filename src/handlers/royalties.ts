@@ -18,6 +18,7 @@ export function handleRoyaltiesSetForCollection(
   }
 
   nftContract.royalties = event.params.fee;
+  nftContract.royaltiesRecipient = event.params.feeRecipient;
   nftContract.save();
 }
 
