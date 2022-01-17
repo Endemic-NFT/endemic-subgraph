@@ -19,7 +19,7 @@ export function getOrCreateOwnership(nft: NFT, accountId: Bytes): NFTOwnership {
   let nftOwnership = NFTOwnership.load(nftOwnershipId);
   if (!nftOwnership) {
     nftOwnership = new NFTOwnership(nftOwnershipId);
-    nftOwnership.account = accountId.toHexString();
+    nftOwnership.account = accountId;
     nftOwnership.nft = nft.id;
     nftOwnership.nftCategory = nft.category;
     nftOwnership.nftPrice = nft.price;

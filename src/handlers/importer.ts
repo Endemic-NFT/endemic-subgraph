@@ -3,7 +3,6 @@ import { CollectionAdded } from '../../generated/ContractImporter/ContractImport
 import { EndemicNFT } from '../../generated/templates';
 import { EndemicNFT as EndemicNFTTemplate } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { NFT, NFTContract } from '../../generated/schema';
-import { createAccount } from '../modules/account';
 import { toLowerCase } from '../utils/string';
 import { log } from '@graphprotocol/graph-ts';
 import { getNFTId, updateTokenMetadataFromIPFS } from '../modules/nft';
@@ -55,7 +54,6 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     ]);
     return;
   }
-  createAccount(owner.value);
 
   let totalSupply = erc721.try_totalSupply();
   if (totalSupply.reverted) {
@@ -98,8 +96,6 @@ export function handleCollectionAdded(event: CollectionAdded): void {
       event.params.contractAddress.toHexString(),
       tokenId.value.toString()
     );
-
-    createAccount(tokenOwner.value);
 
     let nft = new NFT(id);
     nft.auctionIds = [];

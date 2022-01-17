@@ -12,7 +12,6 @@ import {
   isMintEvent,
   updateTokenMetadataFromIPFS,
 } from '../modules/nft';
-import { createAccount } from '../modules/account';
 import { createERC1155TransferActivity } from '../modules/activity';
 import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/userStats';
 import { updateERC1155Ownership } from '../modules/ownership';
@@ -33,7 +32,6 @@ export function handleTransferSingle(event: TransferSingle): void {
     nft.save();
   }
 
-  createAccount(event.params.to);
   createERC1155TransferActivity(nft, event);
   updateStatsForTransfer(
     nft,
@@ -67,7 +65,6 @@ export function handleCreate(event: Create): void {
 
   nft.type = 'ERC-1155';
   nft.category = contract.category;
-  nft.artist = event.params.artistId.toHex();
   nft.artistId = event.params.artistId;
 
   nft.contract = event.address.toHexString();

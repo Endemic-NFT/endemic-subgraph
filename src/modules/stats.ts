@@ -1,17 +1,14 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import * as userStats from './userStats';
 import * as collectionStats from './collectionStats';
-import { Auction, Bid, NFT } from '../../generated/schema';
+import { Auction, NFT } from '../../generated/schema';
 import { isBurnEvent } from './nft';
 
 export function updateStatsForAuctionCreate(
   auction: Auction,
-  contractAddress: string
+  contractAddress: Bytes
 ): void {
-  userStats.updateStatsForAuctionCreate(
-    auction.seller.toHexString(),
-    auction.tokenAmount
-  );
+  userStats.updateStatsForAuctionCreate(auction.seller, auction.tokenAmount);
 
   collectionStats.updateStatsForAuctionCreate(
     contractAddress,
@@ -21,30 +18,30 @@ export function updateStatsForAuctionCreate(
 
 export function updateStatsForAuctionCancel(nft: NFT, auction: Auction): void {
   collectionStats.updateStatsForAuctionCancel(
-    nft.contractId.toHexString(),
+    nft.contractId,
     auction.tokenAmount
   );
 
-  userStats.updateStatsForAuctionCancel(
-    auction.seller.toHexString(),
-    auction.tokenAmount
-  );
+  userStats.updateStatsForAuctionCancel(auction.seller, auction.tokenAmount);
 }
 
 export function updateStatsForAuctionCompleted(
+  blockTimestamp: BigInt,
   auction: Auction,
   nft: NFT,
   tokenAmount: BigInt
 ): void {
   collectionStats.updateStatsForAuctionCompleted(
-    nft.contractId.toHexString(),
+    blockTimestamp,
+    nft.contractId,
     auction.totalPrice!,
     tokenAmount
   );
 
   userStats.updateStatsForAuctionCompleted(
-    auction.buyer!.toHexString(),
-    auction.seller.toHexString(),
+    blockTimestamp,
+    auction.buyer!,
+    auction.seller,
     auction.totalPrice!,
     tokenAmount
   );
@@ -56,12 +53,7 @@ export function updateStatsForTransfer(
   to: Address,
   tokenAmount: BigInt
 ): void {
-  collectionStats.updateStatsForTransfer(
-    nft.contractId.toHexString(),
-    from,
-    to,
-    tokenAmount
-  );
+  collectionStats.updateStatsForTransfer(nft.contractId, from, to, tokenAmount);
 
   userStats.updateStatsForTransfer(from, to, tokenAmount);
 
@@ -74,19 +66,17 @@ export function updateStatsForTransfer(
 }
 
 export function updateStatsForBidAccepted(
+  blockTimestamp: BigInt,
   nft: NFT,
   bidder: Bytes,
   seller: Bytes,
   price: BigInt
 ): void {
   collectionStats.updateStatsForBidAccepted(
-    nft.contractId.toHexString(),
+    blockTimestamp,
+    nft.contractId,
     price
   );
 
-  userStats.updateStatsForBidAccepted(
-    bidder.toHexString(),
-    seller.toHexString(),
-    price
-  );
+  userStats.updateStatsForBidAccepted(blockTimestamp, bidder, seller, price);
 }

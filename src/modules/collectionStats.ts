@@ -1,14 +1,14 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { CollectionStatistic } from '../../generated/schema';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { CollectionDayData, CollectionStatistic } from '../../generated/schema';
 import { isBurnEvent, isMintEvent } from './nft';
 
 export function getOrCreateColectionStats(
-  contractAddress: string
+  contractAddress: Bytes
 ): CollectionStatistic {
-  let stats = CollectionStatistic.load(contractAddress);
+  let stats = CollectionStatistic.load(contractAddress.toHexString());
 
   if (!stats) {
-    stats = new CollectionStatistic(contractAddress);
+    stats = new CollectionStatistic(contractAddress.toHexString());
     stats.onSaleCount = BigInt.fromI32(0);
     stats.totalCount = BigInt.fromI32(0);
     stats.volumeTraded = BigInt.fromI32(0);
@@ -19,7 +19,7 @@ export function getOrCreateColectionStats(
 }
 
 export function updateStatsForTransfer(
-  contractAddress: string,
+  contractAddress: Bytes,
   from: Address,
   to: Address,
   tokenAmount: BigInt
@@ -36,7 +36,7 @@ export function updateStatsForTransfer(
 }
 
 export function updateStatsForAuctionCreate(
-  contractAddress: string,
+  contractAddress: Bytes,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionStats(contractAddress);
@@ -45,7 +45,7 @@ export function updateStatsForAuctionCreate(
 }
 
 export function updateStatsForAuctionCancel(
-  contractAddress: string,
+  contractAddress: Bytes,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionStats(contractAddress);
@@ -54,7 +54,8 @@ export function updateStatsForAuctionCancel(
 }
 
 export function updateStatsForAuctionCompleted(
-  contractAddress: string,
+  blockTimestamp: BigInt,
+  contractAddress: Bytes,
   volumeTraded: BigInt,
   tokenAmount: BigInt
 ): void {
@@ -63,14 +64,43 @@ export function updateStatsForAuctionCompleted(
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
   collectionStats.save();
+
+  updateDayStats(blockTimestamp, contractAddress, volumeTraded);
 }
 
 export function updateStatsForBidAccepted(
-  contractAddress: string,
+  blockTimestamp: BigInt,
+  contractAddress: Bytes,
   volumeTraded: BigInt
 ): void {
   let collectionStats = getOrCreateColectionStats(contractAddress);
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
   collectionStats.save();
+
+  updateDayStats(blockTimestamp, contractAddress, volumeTraded);
+}
+
+export function updateDayStats(
+  blockTimestamp: BigInt,
+  contractAddress: Bytes,
+  volumeTraded: BigInt
+): void {
+  const timestamp = blockTimestamp.toI32();
+  const dayID = timestamp / 86400;
+  const dayStartTimestamp = dayID * 86400;
+  const dayDataId = contractAddress.toHexString() + '-' + dayID.toString();
+
+  let collectionDayData = CollectionDayData.load(dayDataId);
+  if (collectionDayData == null) {
+    collectionDayData = new CollectionDayData(dayDataId);
+    collectionDayData.date = dayStartTimestamp;
+    collectionDayData.volumeTraded = BigInt.fromI32(0);
+    collectionDayData.contractId = contractAddress;
+  }
+
+  collectionDayData.volumeTraded =
+    collectionDayData.volumeTraded.plus(volumeTraded);
+
+  collectionDayData.save();
 }

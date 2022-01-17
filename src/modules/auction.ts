@@ -35,11 +35,8 @@ export function removeActiveAuction(
     auction.save();
   }
 
-  userStats.updateStatsForAuctionCancel(auction.seller.toHexString(), amount);
-  collectionStats.updateStatsForAuctionCancel(
-    nft.contractId.toHexString(),
-    amount
-  );
+  userStats.updateStatsForAuctionCancel(auction.seller, amount);
+  collectionStats.updateStatsForAuctionCancel(nft.contractId, amount);
 
   handleAuctionCompletedForNFT(nft, auctionIdValue);
 }

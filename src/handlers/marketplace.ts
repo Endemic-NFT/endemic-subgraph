@@ -57,7 +57,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 
-  updateStatsForAuctionCreate(auction, nft.contractId.toHexString());
+  updateStatsForAuctionCreate(auction, nft.contractId);
   createAuctionActivity(auction, nft, 'auctionCreate', event);
 }
 
@@ -88,7 +88,12 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     nft.save();
   }
 
-  updateStatsForAuctionCompleted(auction, nft, event.params.amount);
+  updateStatsForAuctionCompleted(
+    event.block.timestamp,
+    auction,
+    nft,
+    event.params.amount
+  );
   createAuctionActivity(auction, nft, 'auctionSuccess', event);
 }
 

@@ -12,7 +12,7 @@ type NFTContract @entity {
 
 type NFTOwnership @entity {
   id: ID!
-  account: Account!
+  account: Bytes!
   nft: NFT
   value: BigInt!
 
@@ -30,8 +30,8 @@ type NFT @entity {
   id: ID!
   contract: NFTContract!
   tokenId: BigInt!
+  artistId: Bytes
   category: String
-  artist: Account
   ownership: [NFTOwnership!] @derivedFrom(field: "nft")
   updatedAt: BigInt!
   createdAt: BigInt!
@@ -42,12 +42,12 @@ type NFT @entity {
   burned: Boolean!
   royalties: BigInt
 
-  #erc-1155
-  supply: BigInt
-
   isOnSale: Boolean!
   price: BigInt!
   lastSalePrice: BigInt
+
+  #erc-1155
+  supply: BigInt
 
   #metadata
   tokenURI: String
@@ -60,7 +60,6 @@ type NFT @entity {
   #denormalized for performance
   contractId: Bytes!
   contractName: String
-  artistId: Bytes
 
   type: String!
   searchText: String
@@ -72,13 +71,6 @@ type NftAttribute @entity {
   contractId: Bytes!
   type: String
   value: String
-}
-
-type Account @entity {
-  id: ID!
-  address: Bytes!
-  nftOwnership: [NFTOwnership!] @derivedFrom(field: "account")
-  createdNfts: [NFT!] @derivedFrom(field: "artist")
 }
 
 type Auction @entity {
@@ -140,6 +132,21 @@ type UserStatistic @entity {
   createdCount: BigInt!
   ownedCount: BigInt!
   onSaleCount: BigInt!
+  makerVolume: BigInt!
+  takerVolume: BigInt!
+}
+
+type CollectionDayData @entity {
+  id: ID! # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  contractId: Bytes!
+  volumeTraded: BigInt!
+}
+
+type UserDayData @entity {
+  id: ID! # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  accountId: Bytes!
   makerVolume: BigInt!
   takerVolume: BigInt!
 }

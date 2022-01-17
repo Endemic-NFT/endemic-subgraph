@@ -13,7 +13,6 @@ import {
   isMarketplaceAddress,
 } from '../modules/nft';
 import { removeActiveAuction } from '../modules/auction';
-import { createAccount } from '../modules/account';
 import { createERC721TransferActivity } from '../modules/activity';
 import { createNFTContract } from '../modules/nftContract';
 import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/userStats';
@@ -75,7 +74,6 @@ export function handleTransfer(event: Transfer): void {
 
   nft.save();
 
-  createAccount(event.params.to);
   updateStatsForTransfer(
     nft,
     event.params.from,
@@ -94,7 +92,6 @@ export function handleMint(event: Mint): void {
   );
   let nft = NFT.load(id)!;
 
-  nft.artist = event.params.artistId.toHex();
   nft.artistId = event.params.artistId;
 
   nft.save();
