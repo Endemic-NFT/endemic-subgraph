@@ -22,7 +22,7 @@ type NFTOwnership @entity {
   nftPrice: BigInt!
   nftBurned: Boolean!
   nftCreatedAt: BigInt!
-  nftListedAt: BigInt
+  nftListedAt: BigInt!
   nftIsOnSale: Boolean!
 }
 
@@ -35,7 +35,7 @@ type NFT @entity {
   ownership: [NFTOwnership!] @derivedFrom(field: "nft")
   updatedAt: BigInt!
   createdAt: BigInt!
-  listedAt: BigInt
+  listedAt: BigInt!
   auctions: [Auction!] @derivedFrom(field: "nft")
   bids: [Bid!] @derivedFrom(field: "nft")
   auctionIds: [String!]!

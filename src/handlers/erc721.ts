@@ -45,6 +45,7 @@ export function handleTransfer(event: Transfer): void {
   nft.price = BigInt.fromI32(0);
   nft.burned = false;
   nft.isOnSale = false;
+  nft.listedAt = BigInt.fromI32(0);
 
   if (isMintEvent(event.params.from)) {
     let tokenURI = getERC721TokenURI(event.address, event.params.tokenId);

@@ -186,12 +186,12 @@ export function handleAuctionCompletedForNFT(nft: NFT, auctionId: string): NFT {
       nft.price = lowestPrice;
     } else {
       nft.isOnSale = false;
-      nft.listedAt = null;
+      nft.listedAt = BigInt.fromI32(0);
       nft.price = BigInt.fromI32(0);
     }
   } else {
     nft.isOnSale = false;
-    nft.listedAt = null;
+    nft.listedAt = BigInt.fromI32(0);
     nft.price = BigInt.fromI32(0);
   }
 
