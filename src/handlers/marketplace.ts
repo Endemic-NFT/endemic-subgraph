@@ -58,7 +58,13 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   nftOwnership.save();
 
   updateStatsForAuctionCreate(auction, nft.contractId);
-  createAuctionActivity(auction, nft, 'auctionCreate', event);
+  createAuctionActivity(
+    auction,
+    nft,
+    'auctionCreate',
+    BigInt.fromI32(0),
+    event
+  );
 }
 
 export function handleAuctionSuccessful(event: AuctionSuccessful): void {
@@ -94,7 +100,14 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     nft,
     event.params.amount
   );
-  createAuctionActivity(auction, nft, 'auctionSuccess', event);
+
+  createAuctionActivity(
+    auction,
+    nft,
+    'auctionSuccess',
+    event.params.totalFees,
+    event
+  );
 }
 
 export function handleAuctionCancelled(event: AuctionCancelled): void {
@@ -120,5 +133,11 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   nftOwnership.save();
 
   updateStatsForAuctionCancel(nft, auction);
-  createAuctionActivity(auction, nft, 'auctionCancel', event);
+  createAuctionActivity(
+    auction,
+    nft,
+    'auctionCancel',
+    BigInt.fromI32(0),
+    event
+  );
 }

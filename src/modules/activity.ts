@@ -1,4 +1,4 @@
-import { Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
+import { Address, Bytes, ethereum, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, NFT, Auction, Bid } from '../../generated/schema';
@@ -18,6 +18,7 @@ export function createAuctionActivity(
   auction: Auction,
   nft: NFT,
   type: string,
+  totalFee: BigInt,
   event: ethereum.Event
 ): void {
   let id = 'auction/' + event.transaction.hash.toHex() + event.logIndex.toHex();
@@ -30,6 +31,7 @@ export function createAuctionActivity(
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
   activity.transactionHash = event.transaction.hash;
+  activity.auctionFee = totalFee;
 
   if (type == 'auctionCreate' || type == 'auctionCancel') {
     activity.from = auction.seller;

@@ -111,6 +111,7 @@ type Activity @entity {
   auctionBuyer: Bytes
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
+  auctionFee: BigInt
 
   #bid activity
   bidBidder: Bytes
