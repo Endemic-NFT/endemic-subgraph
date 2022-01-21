@@ -2,7 +2,7 @@ import { store, Bytes, BigInt, Address } from '@graphprotocol/graph-ts';
 import { NFT, NFTOwnership } from '../../generated/schema';
 import { isMintEvent } from './nft';
 
-export function getNftOwnershipId(
+export function createNftOwnershipId(
   nftId: string,
   accountAddress: string
 ): string {
@@ -10,12 +10,12 @@ export function getNftOwnershipId(
 }
 
 export function deleteOwnership(nftId: string, accountId: Bytes): void {
-  let oldBalanceId = getNftOwnershipId(nftId, accountId.toHexString());
+  let oldBalanceId = createNftOwnershipId(nftId, accountId.toHexString());
   store.remove('NFTOwnership', oldBalanceId);
 }
 
 export function getOrCreateOwnership(nft: NFT, accountId: Bytes): NFTOwnership {
-  let nftOwnershipId = getNftOwnershipId(nft.id, accountId.toHexString());
+  let nftOwnershipId = createNftOwnershipId(nft.id, accountId.toHexString());
   let nftOwnership = NFTOwnership.load(nftOwnershipId);
   if (!nftOwnership) {
     nftOwnership = new NFTOwnership(nftOwnershipId);
@@ -60,7 +60,7 @@ export function updateERC1155Ownership(
   nftOwnership.save();
 
   let sourceOwnership = NFTOwnership.load(
-    getNftOwnershipId(nft.id, fromAccountId.toHexString())
+    createNftOwnershipId(nft.id, fromAccountId.toHexString())
   );
   if (sourceOwnership) {
     sourceOwnership.value = sourceOwnership.value.minus(tokenAmount);
