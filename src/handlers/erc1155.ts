@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts';
+import { log } from '@graphprotocol/graph-ts';
 import {
   TransferSingle,
   Create,
@@ -18,6 +18,7 @@ import { removeActiveAuction } from '../modules/auction';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { toLowerCase } from '../utils/string';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
 
 export function handleTransferSingle(event: TransferSingle): void {
   let nftId = createNftId(
@@ -90,7 +91,7 @@ export function handleCreate(event: Create): void {
   nft.tokenId = event.params.tokenId;
   nft.supply = event.params.supply;
 
-  nft.price = BigInt.fromI32(0);
+  nft.price = ZERO_BI;
   nft.isOnSale = false;
   nft.burned = false;
 
@@ -101,8 +102,5 @@ export function handleCreate(event: Create): void {
 
   nft.save();
 
-  userData.updateHistoricDataForCreate(
-    event.params.artistId,
-    BigInt.fromI32(1)
-  );
+  userData.updateHistoricDataForCreate(event.params.artistId, ONE_BI);
 }

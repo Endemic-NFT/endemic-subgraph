@@ -14,6 +14,7 @@ import { BigInt, log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
+import { ZERO_BI } from '../utils/constants';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -48,7 +49,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.duration = event.params.duration;
   auction.nft = nftId;
   auction.tokenAmount = event.params.amount;
-  auction.soldTokenAmount = BigInt.fromI32(0);
+  auction.soldTokenAmount = ZERO_BI;
 
   auction.save();
 
@@ -69,13 +70,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
     nft.contractId,
     auction.tokenAmount
   );
-  createAuctionActivity(
-    auction,
-    nft,
-    'auctionCreate',
-    BigInt.fromI32(0),
-    event
-  );
+  createAuctionActivity(auction, nft, 'auctionCreate', ZERO_BI, event);
 }
 
 export function handleAuctionSuccessful(event: AuctionSuccessful): void {
@@ -96,7 +91,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
   auction.totalPrice = event.params.totalPrice;
   auction.save();
 
-  let isAuctionCompleted = auction.tokenAmount <= BigInt.fromI32(0);
+  let isAuctionCompleted = auction.tokenAmount <= ZERO_BI;
   if (isAuctionCompleted) {
     store.remove('Auction', auction.id);
     nft = handleAuctionCompletedForNFT(nft, auction.id);
@@ -168,11 +163,5 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
     auction.tokenAmount
   );
 
-  createAuctionActivity(
-    auction,
-    nft,
-    'auctionCancel',
-    BigInt.fromI32(0),
-    event
-  );
+  createAuctionActivity(auction, nft, 'auctionCancel', ZERO_BI, event);
 }

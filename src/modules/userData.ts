@@ -1,5 +1,6 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { UserHistoricData, UserDayData } from '../../generated/schema';
+import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
 
 export function getOrCreateUserHistoricData(
@@ -9,11 +10,11 @@ export function getOrCreateUserHistoricData(
 
   if (!stats) {
     stats = new UserHistoricData(userAddress);
-    stats.createdCount = BigInt.fromI32(0);
-    stats.onSaleCount = BigInt.fromI32(0);
-    stats.ownedCount = BigInt.fromI32(0);
-    stats.makerVolume = BigInt.fromI32(0);
-    stats.takerVolume = BigInt.fromI32(0);
+    stats.createdCount = ZERO_BI;
+    stats.onSaleCount = ZERO_BI;
+    stats.ownedCount = ZERO_BI;
+    stats.makerVolume = ZERO_BI;
+    stats.takerVolume = ZERO_BI;
   }
 
   return stats;
@@ -128,8 +129,8 @@ export function updateDayData(
     userDayData = new UserDayData(dayDataId);
     userDayData.date = dayStartTimestamp;
     userDayData.accountId = userAddress;
-    userDayData.makerVolume = BigInt.fromI32(0);
-    userDayData.takerVolume = BigInt.fromI32(0);
+    userDayData.makerVolume = ZERO_BI;
+    userDayData.takerVolume = ZERO_BI;
   }
 
   userDayData.makerVolume = userDayData.makerVolume.plus(makerVolume);

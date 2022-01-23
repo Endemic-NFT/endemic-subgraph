@@ -1,7 +1,7 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { Auction, Nft } from '../../generated/schema';
 import { Marketplace } from '../../generated/Marketplace/Marketplace';
-import * as addresses from '../data/addresses';
+import * as addresses from '../utils/addresses';
 import { handleAuctionCompletedForNFT } from './nft';
 import * as userData from './userData';
 import * as collectionData from './collectionData';
@@ -35,4 +35,8 @@ export function removeActiveAuction(
     auction.save();
   }
 
+  userData.updateHistoricDataForAuctionCancel(auction.seller, amount);
+  collectionData.updateHistoricDataForAuctionCancel(nft.contractId, amount);
+
+  handleAuctionCompletedForNFT(nft, auctionIdValue);
 }

@@ -9,8 +9,9 @@ import {
 import { Auction, Nft, NftAttribute } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
-import * as addresses from '../data/addresses';
+import * as addresses from '../utils/addresses';
 import { filter } from '../utils/array';
+import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
 
 export function isMarketplaceAddress(address: String): boolean {
   return (
@@ -20,16 +21,17 @@ export function isMarketplaceAddress(address: String): boolean {
 }
 
 export function isMintEvent(from: Address): boolean {
-  return from.toHexString() == addresses.Null;
+  return from.toHexString() == NULL_ADDRESS.toHexString();
 }
 
 export function isBurnEvent(to: Address): boolean {
-  return to.toHexString() == addresses.Null;
+  return to.toHexString() == NULL_ADDRESS.toHexString();
 }
 
 export function isTransferEvent(from: Address, to: Address): boolean {
   return (
-    from.toHexString() != addresses.Null && to.toHexString() != addresses.Null
+    from.toHexString() != NULL_ADDRESS.toHexString() &&
+    to.toHexString() != NULL_ADDRESS.toHexString()
   );
 }
 
@@ -186,13 +188,13 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.price = lowestPrice;
     } else {
       nft.isOnSale = false;
-      nft.listedAt = BigInt.fromI32(0);
-      nft.price = BigInt.fromI32(0);
+      nft.listedAt = ZERO_BI;
+      nft.price = ZERO_BI;
     }
   } else {
     nft.isOnSale = false;
-    nft.listedAt = BigInt.fromI32(0);
-    nft.price = BigInt.fromI32(0);
+    nft.listedAt = ZERO_BI;
+    nft.price = ZERO_BI;
   }
 
   return nft;

@@ -1,4 +1,4 @@
-import { BigInt, Address } from '@graphprotocol/graph-ts';
+import { Address } from '@graphprotocol/graph-ts';
 import { CollectionAdded } from '../../generated/ContractImporter/ContractImporter';
 import { EndemicNFT } from '../../generated/templates';
 import { EndemicNFT as EndemicNFTTemplate } from '../../generated/templates/EndemicNFT/EndemicNFT';
@@ -6,10 +6,10 @@ import { Nft, NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 import { log } from '@graphprotocol/graph-ts';
 import { createNftId, updateTokenMetadataFromIPFS } from '../modules/nft';
-import * as addresses from '../data/addresses';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
+import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
 
 export function handleCollectionAdded(event: CollectionAdded): void {
   let nftContract = NftContract.load(event.params.contractAddress.toHex());
@@ -64,9 +64,9 @@ export function handleCollectionAdded(event: CollectionAdded): void {
   }
 
   for (
-    let tokenIndex = BigInt.fromI32(0);
+    let tokenIndex = ZERO_BI;
     tokenIndex < totalSupply.value;
-    tokenIndex = tokenIndex.plus(BigInt.fromI32(1))
+    tokenIndex = tokenIndex.plus(ONE_BI)
   ) {
     let tokenId = erc721.try_tokenByIndex(tokenIndex);
     if (tokenId.reverted) {
@@ -86,7 +86,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
       return;
     }
 
-    if (tokenOwner.value.toHexString() == addresses.Null) {
+    if (tokenOwner.value.toHexString() == NULL_ADDRESS.toHexString()) {
       continue;
     }
 
@@ -103,7 +103,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.tokenId = tokenId.value;
     nft.contract = event.params.contractAddress.toHexString();
     nft.updatedAt = event.block.timestamp;
-    nft.price = BigInt.fromI32(0);
+    nft.price = ZERO_BI;
     nft.burned = false;
     nft.isOnSale = false;
     nft.createdAt = event.block.timestamp;
@@ -111,7 +111,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.contractId = event.params.contractAddress;
     nft.contractName = nftContract.name;
     nft.tokenURI = tokenURI.value;
-    nft.supply = BigInt.fromI32(1);
+    nft.supply = ONE_BI;
     nft = updateTokenMetadataFromIPFS(nft);
     if (nft.name !== null) {
       nft.searchText = toLowerCase(nft.name!);
@@ -120,20 +120,16 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.save();
 
     userData.updateHistoricDataForTransfer(
-      Address.fromString(addresses.Null),
+      NULL_ADDRESS,
       tokenOwner.value,
-      BigInt.fromI32(1)
+      ONE_BI
     );
     collectionData.updateHistoricDataForTransfer(
       nft.contractId,
-      Address.fromString(addresses.Null),
+      NULL_ADDRESS,
       tokenOwner.value,
-      BigInt.fromI32(1)
+      ONE_BI
     );
-    updateERC721Ownership(
-      nft,
-      Address.fromString(addresses.Null),
-      tokenOwner.value
-    );
+    updateERC721Ownership(nft, NULL_ADDRESS, tokenOwner.value);
   }
 }

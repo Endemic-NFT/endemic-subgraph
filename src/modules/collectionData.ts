@@ -3,6 +3,7 @@ import {
   CollectionDayData,
   CollectionHistoricData,
 } from '../../generated/schema';
+import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isMintEvent } from './nft';
 
 export function getOrCreateColectionHistoricData(
@@ -12,9 +13,9 @@ export function getOrCreateColectionHistoricData(
 
   if (!stats) {
     stats = new CollectionHistoricData(contractAddress.toHexString());
-    stats.onSaleCount = BigInt.fromI32(0);
-    stats.totalCount = BigInt.fromI32(0);
-    stats.volumeTraded = BigInt.fromI32(0);
+    stats.onSaleCount = ZERO_BI;
+    stats.totalCount = ZERO_BI;
+    stats.volumeTraded = ZERO_BI;
     stats.save();
   }
 
@@ -92,7 +93,7 @@ export function updateDayData(
   if (collectionDayData == null) {
     collectionDayData = new CollectionDayData(dayDataId);
     collectionDayData.date = dayStartTimestamp;
-    collectionDayData.volumeTraded = BigInt.fromI32(0);
+    collectionDayData.volumeTraded = ZERO_BI;
     collectionDayData.contractId = contractAddress;
   }
 

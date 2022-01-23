@@ -1,5 +1,6 @@
 import { store, Bytes, BigInt, Address } from '@graphprotocol/graph-ts';
 import { Nft, NftOwnership } from '../../generated/schema';
+import { ONE_BI } from '../utils/constants';
 import { isMintEvent } from './nft';
 
 export function createNftOwnershipId(
@@ -43,7 +44,7 @@ export function updateERC721Ownership(
   }
 
   let nftOwnership = getOrCreateOwnership(nft, toAccountId);
-  nftOwnership.value = BigInt.fromI32(1);
+  nftOwnership.value = ONE_BI;
   nftOwnership.nftBurned = nft.burned;
   nftOwnership.nftIsOnSale = false;
   nftOwnership.save();

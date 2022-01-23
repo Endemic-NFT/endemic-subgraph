@@ -19,6 +19,7 @@ import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { toLowerCase } from '../utils/string';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
 
 export function handleTransfer(event: Transfer): void {
   let id = createNftId(
@@ -42,10 +43,10 @@ export function handleTransfer(event: Transfer): void {
   nft.tokenId = event.params.tokenId;
   nft.contract = event.address.toHexString();
   nft.updatedAt = event.block.timestamp;
-  nft.price = BigInt.fromI32(0);
+  nft.price = ZERO_BI;
   nft.burned = false;
   nft.isOnSale = false;
-  nft.listedAt = BigInt.fromI32(0);
+  nft.listedAt = ZERO_BI;
 
   if (isMintEvent(event.params.from)) {
     let tokenURI = getERC721TokenURI(event.address, event.params.tokenId);
@@ -55,7 +56,7 @@ export function handleTransfer(event: Transfer): void {
     nft.contractId = event.address;
     nft.contractName = contract.name;
     nft.tokenURI = tokenURI;
-    nft.supply = BigInt.fromI32(1);
+    nft.supply = ONE_BI;
 
     nft = updateTokenMetadataFromIPFS(nft);
     if (nft.name !== null) {
@@ -70,7 +71,7 @@ export function handleTransfer(event: Transfer): void {
     !isMarketplaceAddress(event.transaction.to!.toHexString()) &&
     !isMintEvent(event.params.from)
   ) {
-    removeActiveAuction(nft, event.params.from, BigInt.fromI32(1));
+    removeActiveAuction(nft, event.params.from, ONE_BI);
   }
 
   nft.save();
@@ -78,13 +79,13 @@ export function handleTransfer(event: Transfer): void {
   userData.updateHistoricDataForTransfer(
     event.params.from,
     event.params.to,
-    BigInt.fromI32(1)
+    ONE_BI
   );
   collectionData.updateHistoricDataForTransfer(
     nft.contractId,
     event.params.from,
     event.params.to,
-    BigInt.fromI32(1)
+    ONE_BI
   );
 
   updateERC721Ownership(nft, event.params.from, event.params.to);
@@ -101,8 +102,5 @@ export function handleMint(event: Mint): void {
   nft.artistId = event.params.artistId;
   nft.save();
 
-  userData.updateHistoricDataForCreate(
-    event.params.artistId,
-    BigInt.fromI32(1)
-  );
+  userData.updateHistoricDataForCreate(event.params.artistId, ONE_BI);
 }
