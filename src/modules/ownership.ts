@@ -11,7 +11,7 @@ export function createNftOwnershipId(
 
 export function deleteOwnership(nftId: string, accountId: Bytes): void {
   let oldBalanceId = createNftOwnershipId(nftId, accountId.toHexString());
-  store.remove('NFTOwnership', oldBalanceId);
+  store.remove('NftOwnership', oldBalanceId);
 }
 
 export function getOrCreateOwnership(nft: Nft, accountId: Bytes): NftOwnership {
