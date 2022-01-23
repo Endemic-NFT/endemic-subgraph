@@ -4,24 +4,31 @@ import {
   Create,
 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 
-import { NFT, NFTContract } from '../../generated/schema';
+import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC1155TokenURI,
-  getNFTId,
+  createNftId,
   isMarketplaceAddress,
   isMintEvent,
   updateTokenMetadataFromIPFS,
 } from '../modules/nft';
 import { createERC1155TransferActivity } from '../modules/activity';
-import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/userStats';
 import { updateERC1155Ownership } from '../modules/ownership';
 import { removeActiveAuction } from '../modules/auction';
-import { updateStatsForTransfer } from '../modules/stats';
+import * as userData from '../modules/userData';
+import * as collectionData from '../modules/collectionData';
 import { toLowerCase } from '../utils/string';
 
 export function handleTransferSingle(event: TransferSingle): void {
-  let nftId = getNFTId(event.address.toHexString(), event.params.id.toString());
-  let nft = <NFT>NFT.load(nftId);
+  let nftId = createNftId(
+    event.address.toHexString(),
+    event.params.id.toString()
+  );
+  let nft = Nft.load(nftId);
+  if (nft == null) {
+    log.info('NFT not found {}', [nftId]);
+    return;
+  }
 
   if (
     event.transaction.to !== null &&
@@ -32,9 +39,13 @@ export function handleTransferSingle(event: TransferSingle): void {
     nft.save();
   }
 
-  createERC1155TransferActivity(nft, event);
-  updateStatsForTransfer(
-    nft,
+  userData.updateHistoricDataForTransfer(
+    event.params.from,
+    event.params.to,
+    event.params.value
+  );
+  collectionData.updateHistoricDataForTransfer(
+    nft.contractId,
     event.params.from,
     event.params.to,
     event.params.value
@@ -45,17 +56,18 @@ export function handleTransferSingle(event: TransferSingle): void {
     event.params.to,
     event.params.value
   );
+  createERC1155TransferActivity(nft, event);
 }
 
 export function handleCreate(event: Create): void {
-  let id = getNFTId(
+  let id = createNftId(
     event.address.toHexString(),
     event.params.tokenId.toString()
   );
-  let nft = new NFT(id);
+  let nft = new Nft(id);
   nft.auctionIds = [];
 
-  let contract = NFTContract.load(event.address.toHexString());
+  let contract = NftContract.load(event.address.toHexString());
   if (!contract) {
     log.warning('Contract: {} not available', [event.address.toHexString()]);
     return;
@@ -89,5 +101,8 @@ export function handleCreate(event: Create): void {
 
   nft.save();
 
-  updateUserStatsForCreate(event.params.artistId, BigInt.fromI32(1));
+  userData.updateHistoricDataForCreate(
+    event.params.artistId,
+    BigInt.fromI32(1)
+  );
 }

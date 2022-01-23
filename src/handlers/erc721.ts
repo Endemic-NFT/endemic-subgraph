@@ -3,10 +3,10 @@ import {
   Transfer,
   Mint,
 } from '../../generated/templates/EndemicNFT/EndemicNFT';
-import { NFT, NFTContract } from '../../generated/schema';
+import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC721TokenURI,
-  getNFTId,
+  createNftId,
   updateTokenMetadataFromIPFS,
   isBurnEvent,
   isMintEvent,
@@ -15,26 +15,26 @@ import {
 import { removeActiveAuction } from '../modules/auction';
 import { createERC721TransferActivity } from '../modules/activity';
 import { createNFTContract } from '../modules/nftContract';
-import { updateStatsForCreate as updateUserStatsForCreate } from '../modules/userStats';
+import * as userData from '../modules/userData';
+import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
-import { updateStatsForTransfer } from '../modules/stats';
 import { toLowerCase } from '../utils/string';
 
 export function handleTransfer(event: Transfer): void {
-  let id = getNFTId(
+  let id = createNftId(
     event.address.toHexString(),
     event.params.tokenId.toString()
   );
 
-  let nft = NFT.load(id);
+  let nft = Nft.load(id);
 
   if (!nft) {
-    nft = new NFT(id);
+    nft = new Nft(id);
     nft.auctionIds = [];
     nft.type = 'ERC-721';
   }
 
-  let contract = NFTContract.load(event.address.toHexString());
+  let contract = NftContract.load(event.address.toHexString());
   if (!contract) {
     contract = createNFTContract(event.address, event.block.timestamp);
   }
@@ -75,8 +75,13 @@ export function handleTransfer(event: Transfer): void {
 
   nft.save();
 
-  updateStatsForTransfer(
-    nft,
+  userData.updateHistoricDataForTransfer(
+    event.params.from,
+    event.params.to,
+    BigInt.fromI32(1)
+  );
+  collectionData.updateHistoricDataForTransfer(
+    nft.contractId,
     event.params.from,
     event.params.to,
     BigInt.fromI32(1)
@@ -87,15 +92,17 @@ export function handleTransfer(event: Transfer): void {
 }
 
 export function handleMint(event: Mint): void {
-  let id = getNFTId(
+  let id = createNftId(
     event.address.toHexString(),
     event.params.tokenId.toString()
   );
-  let nft = NFT.load(id)!;
 
+  let nft = Nft.load(id)!;
   nft.artistId = event.params.artistId;
-
   nft.save();
 
-  updateUserStatsForCreate(event.params.artistId, BigInt.fromI32(1));
+  userData.updateHistoricDataForCreate(
+    event.params.artistId,
+    BigInt.fromI32(1)
+  );
 }

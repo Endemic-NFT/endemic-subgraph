@@ -1,12 +1,13 @@
 import { log, store } from '@graphprotocol/graph-ts';
 import { BidAccepted, BidCancelled, BidCreated } from '../../generated/Bid/Bid';
-import { Bid, NFT } from '../../generated/schema';
-import { getNFTId } from '../modules/nft';
+import { Bid, Nft } from '../../generated/schema';
+import { createNftId } from '../modules/nft';
 import { createBidActivity } from '../modules/activity';
-import { updateStatsForBidAccepted } from '../modules/stats';
+import * as userData from '../modules/userData';
+import * as collectionData from '../modules/collectionData';
 
 export function handleBidCreated(event: BidCreated): void {
-  let nftId = getNFTId(
+  let nftId = createNftId(
     event.params.nftContract.toHexString(),
     event.params.tokenId.toString()
   );
@@ -14,7 +15,7 @@ export function handleBidCreated(event: BidCreated): void {
   let bidId = event.params.id.toHexString();
   let bid = new Bid(bidId);
 
-  let nft = NFT.load(nftId);
+  let nft = Nft.load(nftId);
   if (nft == null) {
     log.info('NFT not found {} for bid {}', [nftId, bidId]);
     return;
@@ -40,20 +41,36 @@ export function handleBidAccepted(event: BidAccepted): void {
     return;
   }
 
-  let nft = NFT.load(bid.nft);
+  let nft = Nft.load(bid.nft);
   if (nft == null) {
     log.info('NFT not found {} for bid {}', [nft!.id, bidId]);
     return;
   }
 
   store.remove('Bid', bid.id);
-  updateStatsForBidAccepted(
-    event.block.timestamp,
-    nft,
+
+  userData.updateHistoricDataForBidAccepted(
     event.params.bidder,
     event.params.seller,
     event.params.price
   );
+  userData.updateDayDataForSaleCompleted(
+    event.block.timestamp,
+    event.params.price,
+    event.params.bidder,
+    event.params.seller
+  );
+
+  collectionData.updateHistoricDataForBidAccepted(
+    nft.contractId,
+    event.params.price
+  );
+  collectionData.updateDayData(
+    event.block.timestamp,
+    nft.contractId,
+    event.params.price
+  );
+
   createBidActivity(bid, nft, 'bidAccept', event.params.seller, event);
 }
 
@@ -66,12 +83,13 @@ export function handleBidCanceled(event: BidCancelled): void {
     return;
   }
 
-  let nft = NFT.load(bid.nft);
+  let nft = Nft.load(bid.nft);
   if (nft == null) {
     log.info('NFT not found {} for bid {}', [nft!.id, bidId]);
     return;
   }
 
   store.remove('Bid', bid.id);
+
   createBidActivity(bid, nft, 'bidCancel', event.params.bidder, event);
 }

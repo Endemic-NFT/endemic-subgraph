@@ -1,12 +1,12 @@
 import { NFTContractCreated } from '../../generated/EndemicNFTFactory/EndemicNFTFactory';
 import { EndemicNFT } from '../../generated/templates';
-import { NFTContract } from '../../generated/schema';
+import { NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 
 export function handleCreated(event: NFTContractCreated): void {
-  let nftContract = NFTContract.load(event.params.nftContract.toHex());
+  let nftContract = NftContract.load(event.params.nftContract.toHex());
   if (!nftContract) {
-    nftContract = new NFTContract(event.params.nftContract.toHex());
+    nftContract = new NftContract(event.params.nftContract.toHex());
   }
 
   nftContract.name = event.params.name;

@@ -1,5 +1,5 @@
 import { store, Bytes, BigInt, Address } from '@graphprotocol/graph-ts';
-import { NFT, NFTOwnership } from '../../generated/schema';
+import { Nft, NftOwnership } from '../../generated/schema';
 import { isMintEvent } from './nft';
 
 export function createNftOwnershipId(
@@ -14,11 +14,11 @@ export function deleteOwnership(nftId: string, accountId: Bytes): void {
   store.remove('NFTOwnership', oldBalanceId);
 }
 
-export function getOrCreateOwnership(nft: NFT, accountId: Bytes): NFTOwnership {
+export function getOrCreateOwnership(nft: Nft, accountId: Bytes): NftOwnership {
   let nftOwnershipId = createNftOwnershipId(nft.id, accountId.toHexString());
-  let nftOwnership = NFTOwnership.load(nftOwnershipId);
+  let nftOwnership = NftOwnership.load(nftOwnershipId);
   if (!nftOwnership) {
-    nftOwnership = new NFTOwnership(nftOwnershipId);
+    nftOwnership = new NftOwnership(nftOwnershipId);
     nftOwnership.account = accountId;
     nftOwnership.nft = nft.id;
     nftOwnership.nftCategory = nft.category;
@@ -34,7 +34,7 @@ export function getOrCreateOwnership(nft: NFT, accountId: Bytes): NFTOwnership {
 }
 
 export function updateERC721Ownership(
-  nft: NFT,
+  nft: Nft,
   fromAccountId: Address,
   toAccountId: Address
 ): void {
@@ -50,7 +50,7 @@ export function updateERC721Ownership(
 }
 
 export function updateERC1155Ownership(
-  nft: NFT,
+  nft: Nft,
   fromAccountId: Address,
   toAccountId: Address,
   tokenAmount: BigInt
@@ -59,7 +59,7 @@ export function updateERC1155Ownership(
   nftOwnership.value = nftOwnership.value.plus(tokenAmount);
   nftOwnership.save();
 
-  let sourceOwnership = NFTOwnership.load(
+  let sourceOwnership = NftOwnership.load(
     createNftOwnershipId(nft.id, fromAccountId.toHexString())
   );
   if (sourceOwnership) {

@@ -1,19 +1,19 @@
-type NFTContract @entity {
+type NftContract @entity {
   id: ID!
   name: String!
   symbol: String!
   category: String!
   createdAt: BigInt!
-  nfts: [NFT!]! @derivedFrom(field: "contract")
+  nfts: [Nft!]! @derivedFrom(field: "contract")
   searchText: String!
   royalties: BigInt
   royaltiesRecipient: Bytes
 }
 
-type NFTOwnership @entity {
+type NftOwnership @entity {
   id: ID!
   account: Bytes!
-  nft: NFT
+  nft: Nft
   value: BigInt!
 
   #copy fields from nft because graph can't filter / sort on child collection
@@ -26,28 +26,26 @@ type NFTOwnership @entity {
   nftIsOnSale: Boolean!
 }
 
-type NFT @entity {
+type Nft @entity {
   id: ID!
-  contract: NFTContract!
+  contract: NftContract!
   tokenId: BigInt!
+  type: String! #erc-721 or erc-1155
   artistId: Bytes
   category: String
-  ownership: [NFTOwnership!] @derivedFrom(field: "nft")
+  burned: Boolean!
   updatedAt: BigInt!
   createdAt: BigInt!
-  listedAt: BigInt!
-  auctions: [Auction!] @derivedFrom(field: "nft")
-  bids: [Bid!] @derivedFrom(field: "nft")
-  auctionIds: [String!]!
-  burned: Boolean!
+
+  #specific royalties for this nft
   royalties: BigInt
 
+  #listing
+  listedAt: BigInt!
   isOnSale: Boolean!
   price: BigInt!
   lastSalePrice: BigInt
-
-  #erc-1155
-  supply: BigInt
+  auctionIds: [String!]!
 
   #metadata
   tokenURI: String
@@ -61,13 +59,19 @@ type NFT @entity {
   contractId: Bytes!
   contractName: String
 
-  type: String!
   searchText: String
+
+  ownership: [NftOwnership!] @derivedFrom(field: "nft")
+  auctions: [Auction!] @derivedFrom(field: "nft")
+  bids: [Bid!] @derivedFrom(field: "nft")
+
+  #for erc-1155
+  supply: BigInt
 }
 
 type NftAttribute @entity {
   id: ID!
-  nft: NFT!
+  nft: Nft!
   contractId: Bytes!
   type: String
   value: String
@@ -81,7 +85,7 @@ type Auction @entity {
   endingPrice: BigInt!
   duration: BigInt!
   startedAt: BigInt!
-  nft: NFT!
+  nft: Nft!
   tokenAmount: BigInt!
   soldTokenAmount: BigInt!
   totalPrice: BigInt
@@ -89,7 +93,7 @@ type Auction @entity {
 
 type Bid @entity {
   id: ID!
-  nft: NFT!
+  nft: Nft!
   bidder: Bytes!
   price: BigInt!
   expiresAt: BigInt!
@@ -98,38 +102,34 @@ type Bid @entity {
 
 type Activity @entity {
   id: ID!
-  nft: NFT
-  type: String!
+  nft: Nft
+  type: ActivityType!
   createdAt: BigInt!
-
+  transactionHash: Bytes!
+  from: Bytes! #address of user who initiated activity
   #transfer activity
   transferFrom: Bytes
   transferTo: Bytes
-
   #auction activity
   auctionSeller: Bytes
   auctionBuyer: Bytes
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
   auctionFee: BigInt
-
   #bid activity
   bidBidder: Bytes
   bidPrice: BigInt
-
-  transactionHash: Bytes!
-  from: Bytes!
 }
 
-type CollectionStatistic @entity {
-  id: ID!
+type CollectionHistoricData @entity {
+  id: ID! # collection address
   totalCount: BigInt!
   onSaleCount: BigInt!
   volumeTraded: BigInt!
 }
 
-type UserStatistic @entity {
-  id: ID!
+type UserHistoricData @entity {
+  id: ID! # user address
   createdCount: BigInt!
   ownedCount: BigInt!
   onSaleCount: BigInt!

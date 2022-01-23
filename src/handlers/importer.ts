@@ -2,16 +2,17 @@ import { BigInt, Address } from '@graphprotocol/graph-ts';
 import { CollectionAdded } from '../../generated/ContractImporter/ContractImporter';
 import { EndemicNFT } from '../../generated/templates';
 import { EndemicNFT as EndemicNFTTemplate } from '../../generated/templates/EndemicNFT/EndemicNFT';
-import { NFT, NFTContract } from '../../generated/schema';
+import { Nft, NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 import { log } from '@graphprotocol/graph-ts';
-import { getNFTId, updateTokenMetadataFromIPFS } from '../modules/nft';
+import { createNftId, updateTokenMetadataFromIPFS } from '../modules/nft';
 import * as addresses from '../data/addresses';
-import { updateStatsForTransfer } from '../modules/stats';
+import * as userData from '../modules/userData';
+import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 
 export function handleCollectionAdded(event: CollectionAdded): void {
-  let nftContract = NFTContract.load(event.params.contractAddress.toHex());
+  let nftContract = NftContract.load(event.params.contractAddress.toHex());
   if (nftContract) {
     log.warning('NFT contract already indexed {}', [
       event.params.contractAddress.toHex(),
@@ -36,8 +37,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     return;
   }
 
-  nftContract = new NFTContract(event.params.contractAddress.toHex());
-
+  nftContract = new NftContract(event.params.contractAddress.toHex());
   nftContract.name = name.value;
   nftContract.symbol = symbol.value;
   nftContract.category = event.params.category;
@@ -92,12 +92,12 @@ export function handleCollectionAdded(event: CollectionAdded): void {
 
     let tokenURI = erc721.try_tokenURI(tokenId.value);
 
-    let id = getNFTId(
+    let id = createNftId(
       event.params.contractAddress.toHexString(),
       tokenId.value.toString()
     );
 
-    let nft = new NFT(id);
+    let nft = new Nft(id);
     nft.auctionIds = [];
     nft.type = 'ERC-721';
     nft.tokenId = tokenId.value;
@@ -119,13 +119,17 @@ export function handleCollectionAdded(event: CollectionAdded): void {
 
     nft.save();
 
-    updateStatsForTransfer(
-      nft,
+    userData.updateHistoricDataForTransfer(
       Address.fromString(addresses.Null),
       tokenOwner.value,
       BigInt.fromI32(1)
     );
-
+    collectionData.updateHistoricDataForTransfer(
+      nft.contractId,
+      Address.fromString(addresses.Null),
+      tokenOwner.value,
+      BigInt.fromI32(1)
+    );
     updateERC721Ownership(
       nft,
       Address.fromString(addresses.Null),

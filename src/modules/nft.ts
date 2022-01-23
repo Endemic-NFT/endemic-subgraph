@@ -6,7 +6,7 @@ import {
   Address,
   JSONValue,
 } from '@graphprotocol/graph-ts';
-import { Auction, NFT, NftAttribute } from '../../generated/schema';
+import { Auction, Nft, NftAttribute } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import * as addresses from '../data/addresses';
@@ -33,7 +33,7 @@ export function isTransferEvent(from: Address, to: Address): boolean {
   );
 }
 
-export function getNFTId(contractAddress: string, tokenId: string): string {
+export function createNftId(contractAddress: string, tokenId: string): string {
   return contractAddress + '-' + tokenId;
 }
 
@@ -79,7 +79,7 @@ export function getERC1155TokenURI(address: Address, tokenId: BigInt): string {
   return tokenURI;
 }
 
-export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
+export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
   if (!nft.tokenURI) {
     log.warning('TokenURI not available: {}', [nft.id]);
     return nft;
@@ -147,10 +147,10 @@ export function updateTokenMetadataFromIPFS(nft: NFT): NFT {
 }
 
 export function handleAuctionCreatedForNFT(
-  nft: NFT,
+  nft: Nft,
   auction: Auction,
   listedAt: BigInt
-): NFT {
+): Nft {
   let auctionIds = nft.auctionIds;
   auctionIds.push(auction.id.toString());
 
@@ -170,7 +170,7 @@ export function handleAuctionCreatedForNFT(
   return nft;
 }
 
-export function handleAuctionCompletedForNFT(nft: NFT, auctionId: string): NFT {
+export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
   nft.auctionIds = filter(nft.auctionIds, auctionId);
 
   if (nft.type == 'ERC-1155') {

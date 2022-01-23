@@ -1,11 +1,11 @@
 import { Created } from '../../generated/EndemicERC1155Factory/EndemicERC1155Factory';
 import { EndemicERC1155 } from '../../generated/templates';
-import { NFTContract } from '../../generated/schema';
+import { NftContract } from '../../generated/schema';
 
 export function handleCreated(event: Created): void {
-  let nftContract = NFTContract.load(event.params.nftContract.toHex());
+  let nftContract = NftContract.load(event.params.nftContract.toHex());
   if (!nftContract) {
-    nftContract = new NFTContract(event.params.nftContract.toHex());
+    nftContract = new NftContract(event.params.nftContract.toHex());
   }
 
   nftContract.name = event.params.name;

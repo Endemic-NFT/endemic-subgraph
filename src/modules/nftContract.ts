@@ -1,11 +1,11 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { NFTContract } from '../../generated/schema';
+import { NftContract } from '../../generated/schema';
 import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
 
 const DEFAULT_CATEGORY = 'Collectibles';
 
-export function createNFTContract(id: Address, createdAt: BigInt): NFTContract {
-  let nftContract = new NFTContract(id.toHexString());
+export function createNFTContract(id: Address, createdAt: BigInt): NftContract {
+  let nftContract = new NftContract(id.toHexString());
   nftContract.category = DEFAULT_CATEGORY;
   nftContract.createdAt = createdAt;
 

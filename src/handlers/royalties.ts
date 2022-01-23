@@ -3,13 +3,13 @@ import {
   RoyaltiesSetForCollection,
   RoyaltiesSetForToken,
 } from '../../generated/RoyaltiesProvider/RoyaltiesProvider';
-import { NFT, NFTContract } from '../../generated/schema';
-import { getNFTId } from '../modules/nft';
+import { Nft, NftContract } from '../../generated/schema';
+import { createNftId } from '../modules/nft';
 
 export function handleRoyaltiesSetForCollection(
   event: RoyaltiesSetForCollection
 ): void {
-  let nftContract = NFTContract.load(event.params.nftContract.toHex());
+  let nftContract = NftContract.load(event.params.nftContract.toHex());
   if (!nftContract) {
     log.warning('NFT contract {} not available', [
       event.params.nftContract.toHexString(),
@@ -23,11 +23,11 @@ export function handleRoyaltiesSetForCollection(
 }
 
 export function handleRoyaltiesSetForToken(event: RoyaltiesSetForToken): void {
-  let nftId = getNFTId(
+  let nftId = createNftId(
     event.params.nftContract.toHexString(),
     event.params.tokenId.toString()
   );
-  let nft = NFT.load(nftId);
+  let nft = Nft.load(nftId);
   if (!nft) {
     log.warning('NFT {} not available', [nftId]);
     return;
