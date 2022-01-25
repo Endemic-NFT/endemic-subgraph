@@ -20,11 +20,6 @@
     "marketplaces": [
         {
             "name": "Marketplace",
-            "address": "0x45b87060571e9d372c0762497b6893374f3638Ee",
-            "block": 73612730
-        },
-        {
-            "name": "Marketplacev2",
             "address": "0xDd29A2E65c01B75d74A53a469bF90371697846BF",
             "block": 75756908
         }

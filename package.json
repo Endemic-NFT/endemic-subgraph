@@ -10,8 +10,8 @@
     "deploy:aurora_testnet": "npm run prepare:aurora_testnet && npx graph deploy endemic-nft/endemic-aurora-t3stnet --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ "
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.25.3",
-    "@graphprotocol/graph-ts": "^0.24.1",
+    "@graphprotocol/graph-cli": "0.25.3",
+    "@graphprotocol/graph-ts": "0.24.1",
     "mustache": "^4.2.0",
     "prettier": "^2.5.1"
   }
