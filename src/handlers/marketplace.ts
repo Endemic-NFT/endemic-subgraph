@@ -154,7 +154,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   nftOwnership.save();
 
   userData.updateHistoricDataForAuctionCancel(
-    nft.contractId,
+    auction.seller,
     auction.tokenAmount
   );
 
