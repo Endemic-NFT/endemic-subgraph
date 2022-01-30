@@ -5,6 +5,7 @@ import {
 } from '../../generated/RoyaltiesProvider/RoyaltiesProvider';
 import { Nft, NftContract } from '../../generated/schema';
 import { createNftId } from '../modules/nft';
+import { createAccount } from '../modules/account';
 
 export function handleRoyaltiesSetForCollection(
   event: RoyaltiesSetForCollection
@@ -20,6 +21,8 @@ export function handleRoyaltiesSetForCollection(
   nftContract.royalties = event.params.fee;
   nftContract.royaltiesRecipient = event.params.feeRecipient;
   nftContract.save();
+
+  createAccount(event.params.feeRecipient);
 }
 
 export function handleRoyaltiesSetForToken(event: RoyaltiesSetForToken): void {

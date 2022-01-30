@@ -19,6 +19,7 @@ import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { toLowerCase } from '../utils/string';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { createAccount } from '../modules/account';
 
 export function handleTransferSingle(event: TransferSingle): void {
   let nftId = createNftId(
@@ -39,6 +40,9 @@ export function handleTransferSingle(event: TransferSingle): void {
     removeActiveAuction(nft, event.params.from, event.params.value);
     nft.save();
   }
+
+  createAccount(event.params.from);
+  createAccount(event.params.to);
 
   userData.updateHistoricDataForTransfer(
     event.params.from,
@@ -79,6 +83,7 @@ export function handleCreate(event: Create): void {
   nft.type = 'ERC-1155';
   nft.category = contract.category;
   nft.artistId = event.params.artistId;
+  nft.artist = event.params.artistId.toHex();
 
   nft.contract = event.address.toHexString();
   nft.contractId = event.address;

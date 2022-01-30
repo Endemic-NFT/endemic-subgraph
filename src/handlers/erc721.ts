@@ -1,4 +1,3 @@
-import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Transfer,
   Mint,
@@ -20,6 +19,7 @@ import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { toLowerCase } from '../utils/string';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { createAccount } from '../modules/account';
 
 export function handleTransfer(event: Transfer): void {
   let id = createNftId(
@@ -88,6 +88,8 @@ export function handleTransfer(event: Transfer): void {
     ONE_BI
   );
 
+  createAccount(event.params.from);
+  createAccount(event.params.to);
   updateERC721Ownership(nft, event.params.from, event.params.to);
   createERC721TransferActivity(nft, event);
 }
@@ -100,6 +102,7 @@ export function handleMint(event: Mint): void {
 
   let nft = Nft.load(id)!;
   nft.artistId = event.params.artistId;
+  nft.artist = event.params.artistId.toHexString();
   nft.save();
 
   userData.updateHistoricDataForCreate(event.params.artistId, ONE_BI);

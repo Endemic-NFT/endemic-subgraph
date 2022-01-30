@@ -2,6 +2,7 @@ import { NFTContractCreated } from '../../generated/EndemicNFTFactory/EndemicNFT
 import { EndemicNFT } from '../../generated/templates';
 import { NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
+import { createAccount } from '../modules/account';
 
 export function handleCreated(event: NFTContractCreated): void {
   let nftContract = NftContract.load(event.params.nftContract.toHex());
@@ -17,4 +18,5 @@ export function handleCreated(event: NFTContractCreated): void {
   nftContract.save();
 
   EndemicNFT.create(event.params.nftContract);
+  createAccount(event.params.owner);
 }

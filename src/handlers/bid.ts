@@ -5,6 +5,7 @@ import { createNftId } from '../modules/nft';
 import { createBidActivity } from '../modules/activity';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
+import { createAccount } from '../modules/account';
 
 export function handleBidCreated(event: BidCreated): void {
   let nftId = createNftId(
@@ -29,7 +30,8 @@ export function handleBidCreated(event: BidCreated): void {
 
   bid.save();
 
-  createBidActivity(bid, nft, 'bidCreate', bid.bidder, event);
+  createAccount(event.params.bidder);
+  createBidActivity(bid, nft, 'bidCreate', event.params.bidder, event);
 }
 
 export function handleBidAccepted(event: BidAccepted): void {

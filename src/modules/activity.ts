@@ -26,7 +26,7 @@ export function createAuctionActivity(
   activity.auctionTotalPrice = auction.totalPrice;
   activity.auctionStartingPrice = auction.startingPrice;
   activity.auctionSeller = auction.seller;
-  activity.auctionBuyer = auction.buyer;
+  activity.auctionBuyer = null;
   activity.type = type;
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
@@ -36,7 +36,8 @@ export function createAuctionActivity(
   if (type == 'auctionCreate' || type == 'auctionCancel') {
     activity.from = auction.seller;
   } else if (type == 'auctionSuccess') {
-    activity.from = auction.buyer!;
+    activity.auctionBuyer = auction.buyer!.toHexString();
+    activity.from = auction.buyer!.toHexString();
   }
 
   activity.save();
@@ -57,7 +58,7 @@ export function createBidActivity(
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
   activity.transactionHash = event.transaction.hash;
-  activity.from = actor;
+  activity.from = actor.toHexString();
 
   activity.save();
 }
@@ -68,8 +69,8 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   let activity = new Activity(id);
   activity.nft = nft.id;
   activity.type = getTransferActivityType(event.params.from, event.params.to);
-  activity.transferFrom = event.params.from;
-  activity.transferTo = event.params.to;
+  activity.transferFrom = event.params.from.toHexString();
+  activity.transferTo = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
 
@@ -91,8 +92,8 @@ export function createERC1155TransferActivity(
   let activity = new Activity(id);
   activity.nft = nft.id;
   activity.type = getTransferActivityType(event.params.from, event.params.to);
-  activity.transferFrom = event.params.from;
-  activity.transferTo = event.params.to;
+  activity.transferFrom = event.params.from.toHexString();
+  activity.transferTo = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
 

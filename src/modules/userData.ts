@@ -56,49 +56,49 @@ export function updateHistoricDataForCreate(
 }
 
 export function updateHistoricDataForAuctionCreate(
-  userAddress: Bytes,
+  userAddress: string,
   tokenAmount: BigInt
 ): void {
-  let userStats = getOrCreateUserHistoricData(userAddress.toHexString());
+  let userStats = getOrCreateUserHistoricData(userAddress);
   userStats.onSaleCount = userStats.onSaleCount.plus(tokenAmount);
   userStats.save();
 }
 
 export function updateHistoricDataForAuctionCancel(
-  userAddress: Bytes,
+  userAddress: string,
   tokenAmount: BigInt
 ): void {
-  let userStats = getOrCreateUserHistoricData(userAddress.toHexString());
+  let userStats = getOrCreateUserHistoricData(userAddress);
   userStats.onSaleCount = userStats.onSaleCount.minus(tokenAmount);
   userStats.save();
 }
 
 export function updateHistoricDataForAuctionCompleted(
-  buyerAddress: Bytes,
-  sellerAddress: Bytes,
+  buyerAddress: string,
+  sellerAddress: string,
   volumeTraded: BigInt,
   tokenAmount: BigInt
 ): void {
-  let buyerStats = getOrCreateUserHistoricData(buyerAddress.toHexString());
+  let buyerStats = getOrCreateUserHistoricData(buyerAddress);
   buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
   buyerStats.save();
 
-  let sellerStats = getOrCreateUserHistoricData(sellerAddress.toHexString());
+  let sellerStats = getOrCreateUserHistoricData(sellerAddress);
   sellerStats.onSaleCount = sellerStats.onSaleCount.minus(tokenAmount);
   sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
   sellerStats.save();
 }
 
 export function updateHistoricDataForBidAccepted(
-  buyerAddress: Bytes,
-  sellerAddress: Bytes,
+  buyerAddress: string,
+  sellerAddress: string,
   volumeTraded: BigInt
 ): void {
-  let buyerStats = getOrCreateUserHistoricData(buyerAddress.toHexString());
+  let buyerStats = getOrCreateUserHistoricData(buyerAddress);
   buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
   buyerStats.save();
 
-  let sellerStats = getOrCreateUserHistoricData(sellerAddress.toHexString());
+  let sellerStats = getOrCreateUserHistoricData(sellerAddress);
   sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
   sellerStats.save();
 }
@@ -106,8 +106,8 @@ export function updateHistoricDataForBidAccepted(
 export function updateDayDataForSaleCompleted(
   blockTimestamp: BigInt,
   volume: BigInt,
-  buyerAddress: Bytes,
-  sellerAddress: Bytes
+  buyerAddress: string,
+  sellerAddress: string
 ): void {
   updateDayData(blockTimestamp, buyerAddress, BigInt.fromU32(0), volume);
   updateDayData(blockTimestamp, sellerAddress, volume, BigInt.fromU32(0));
@@ -115,14 +115,14 @@ export function updateDayDataForSaleCompleted(
 
 export function updateDayData(
   blockTimestamp: BigInt,
-  userAddress: Bytes,
+  userAddress: string,
   makerVolume: BigInt,
   takerVolume: BigInt
 ): void {
   const timestamp = blockTimestamp.toI32();
   const dayID = timestamp / 86400;
   const dayStartTimestamp = dayID * 86400;
-  const dayDataId = userAddress.toHexString() + '-' + dayID.toString();
+  const dayDataId = userAddress + '-' + dayID.toString();
 
   let userDayData = UserDayData.load(dayDataId);
   if (userDayData == null) {

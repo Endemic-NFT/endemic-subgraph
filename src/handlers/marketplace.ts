@@ -10,7 +10,7 @@ import {
   handleAuctionCreatedForNFT,
 } from '../modules/nft';
 import { createAuctionActivity } from '../modules/activity';
-import { BigInt, log, store } from '@graphprotocol/graph-ts';
+import { log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
@@ -43,7 +43,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   }
 
   auction.startedAt = event.block.timestamp;
-  auction.seller = event.params.seller;
+  auction.seller = event.params.seller.toHexString();
   auction.startingPrice = event.params.startingPrice;
   auction.endingPrice = event.params.endingPrice;
   auction.duration = event.params.duration;
@@ -100,7 +100,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
   }
 
   userData.updateHistoricDataForAuctionCompleted(
-    auction.buyer!,
+    auction.buyer!.toHexString(),
     auction.seller,
     auction.totalPrice!,
     event.params.amount
@@ -108,7 +108,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
   userData.updateDayDataForSaleCompleted(
     event.block.timestamp,
     auction.totalPrice!,
-    auction.buyer!,
+    auction.buyer!.toHexString(),
     auction.seller
   );
   collectionData.updateHistoricDataForAuctionCompleted(

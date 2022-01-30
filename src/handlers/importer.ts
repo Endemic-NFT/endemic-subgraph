@@ -10,6 +10,7 @@ import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
+import { createAccount } from '../modules/account';
 
 export function handleCollectionAdded(event: CollectionAdded): void {
   let nftContract = NftContract.load(event.params.contractAddress.toHex());
@@ -130,6 +131,9 @@ export function handleCollectionAdded(event: CollectionAdded): void {
       tokenOwner.value,
       ONE_BI
     );
+    createAccount(tokenOwner.value);
     updateERC721Ownership(nft, NULL_ADDRESS, tokenOwner.value);
   }
+
+  createAccount(owner.value);
 }

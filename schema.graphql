@@ -1,18 +1,27 @@
+type Account @entity {
+  id: ID!
+  address: Bytes!
+  nftOwnership: [NftOwnership!] @derivedFrom(field: "account")
+  createdNfts: [Nft!] @derivedFrom(field: "artist")
+  auctions: [Auction!] @derivedFrom(field: "seller")
+  bids: [Bid!] @derivedFrom(field: "bidder")
+}
+
 type NftContract @entity {
   id: ID!
   name: String!
   symbol: String!
   category: String!
   createdAt: BigInt!
-  nfts: [Nft!]! @derivedFrom(field: "contract")
   searchText: String!
   royalties: BigInt
   royaltiesRecipient: Bytes
+  nfts: [Nft!]! @derivedFrom(field: "contract")
 }
 
 type NftOwnership @entity {
   id: ID!
-  account: Bytes!
+  account: Account!
   nft: Nft
   value: BigInt!
 
@@ -31,6 +40,7 @@ type Nft @entity {
   contract: NftContract!
   tokenId: BigInt!
   type: String! #erc-721 or erc-1155
+  artist: Account
   artistId: Bytes
   category: String
   burned: Boolean!
@@ -61,12 +71,12 @@ type Nft @entity {
 
   searchText: String
 
+  #for erc-1155
+  supply: BigInt
+
   ownership: [NftOwnership!] @derivedFrom(field: "nft")
   auctions: [Auction!] @derivedFrom(field: "nft")
   bids: [Bid!] @derivedFrom(field: "nft")
-
-  #for erc-1155
-  supply: BigInt
 }
 
 type NftAttribute @entity {
@@ -79,7 +89,7 @@ type NftAttribute @entity {
 
 type Auction @entity {
   id: ID!
-  seller: Bytes!
+  seller: Account!
   buyer: Bytes
   startingPrice: BigInt!
   endingPrice: BigInt!
@@ -94,7 +104,7 @@ type Auction @entity {
 type Bid @entity {
   id: ID!
   nft: Nft!
-  bidder: Bytes!
+  bidder: Account!
   price: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
@@ -106,18 +116,18 @@ type Activity @entity {
   type: ActivityType!
   createdAt: BigInt!
   transactionHash: Bytes!
-  from: Bytes! #address of user who initiated activity
+  from: Account! #address of user who initiated activity
   #transfer activity
-  transferFrom: Bytes
-  transferTo: Bytes
+  transferFrom: Account
+  transferTo: Account
   #auction activity
-  auctionSeller: Bytes
-  auctionBuyer: Bytes
+  auctionSeller: Account
+  auctionBuyer: Account
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
   auctionFee: BigInt
   #bid activity
-  bidBidder: Bytes
+  bidBidder: Account
   bidPrice: BigInt
 }
 
@@ -147,7 +157,7 @@ type CollectionDayData @entity {
 type UserDayData @entity {
   id: ID! # timestamp rounded to current day by dividing by 86400
   date: Int!
-  accountId: Bytes!
+  accountId: Account!
   makerVolume: BigInt!
   takerVolume: BigInt!
 }
