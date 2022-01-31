@@ -19,12 +19,6 @@
             "block": 57246873
         }
     ],
-    "collections": [
-        {
-            "name": "Endemic",
-            "address": "0x329b61bF16aDd14863c1C154614888F14303169c",
-            "block": 54570015
-        }
-    ]
+    "collections": []
 }
 
