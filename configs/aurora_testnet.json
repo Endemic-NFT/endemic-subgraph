@@ -27,17 +27,17 @@
             "name": "Marketplacev2",
             "address": "0xDd29A2E65c01B75d74A53a469bF90371697846BF",
             "block": 75756908
+        },
+        {
+            "name": "Marketplacev3",
+            "address": "0x74f43bE6944154CF4da1731E3ad472dFe34E372B",
+            "block": 75756908
         }
     ],
     "collections": [
         {
             "name": "Endemic Master Keys",
             "address": "0x6D27C84EC245A7865718e1CDb7D1aE0EF4B6f08E",
-            "block": 73612730
-        },
-        {
-            "name": "Endemic",
-            "address": "0x1F081B956f670D0fbf6d02b0439e802540bA1aBD",
             "block": 73612730
         }
     ]
