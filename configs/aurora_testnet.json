@@ -27,11 +27,6 @@
             "name": "Marketplacev2",
             "address": "0xDd29A2E65c01B75d74A53a469bF90371697846BF",
             "block": 75756908
-        },
-        {
-            "name": "Marketplacev3",
-            "address": "0x74f43bE6944154CF4da1731E3ad472dFe34E372B",
-            "block": 75756908
         }
     ],
     "collections": [
