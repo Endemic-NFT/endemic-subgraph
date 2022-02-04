@@ -7,14 +7,14 @@
     "startBlock": 73612730,
     "erc721Factories": [
         {
-            "name": "EndemicNFTFactory",
-            "address": "0xa5572e8558b2CCf6Cb7f05f04f3803dc577966F1",
-            "block": 73612730
-        },
-        {
             "name": "EndemicNFTFactoryV2",
             "address": "0xFe7F3f28b5963b5447ECb37F1d9710f453BDFB21",
             "block": 75756908
+        },
+        {
+            "name": "EndemicNFTFactory",
+            "address": "0x3Ee89Db55E6dC0Ff1c2E64917bd4f6C8A7A0F9B2",
+            "block": 81276814
         }
     ],
     "marketplaces": [
