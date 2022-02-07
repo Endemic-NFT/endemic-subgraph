@@ -1,7 +1,12 @@
 import { store, Bytes, BigInt, Address } from '@graphprotocol/graph-ts';
-import { Nft, NftOwnership } from '../../generated/schema';
-import { ONE_BI } from '../utils/constants';
-import { isMintEvent } from './nft';
+import {
+  Nft,
+  NftContract,
+  NftOwnership,
+  NftOwnershipPerContract,
+} from '../../generated/schema';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { isBurnEvent, isMintEvent } from './nft';
 
 export function createNftOwnershipId(
   nftId: string,
@@ -10,12 +15,19 @@ export function createNftOwnershipId(
   return nftId + '-' + accountAddress;
 }
 
-export function deleteOwnership(nftId: string, accountId: Bytes): void {
+export function createOwnershipPerContractId(
+  contractId: string,
+  accountAddress: string
+): string {
+  return contractId + '-' + accountAddress;
+}
+
+export function deleteNftOwnership(nftId: string, accountId: Bytes): void {
   let oldBalanceId = createNftOwnershipId(nftId, accountId.toHexString());
   store.remove('NftOwnership', oldBalanceId);
 }
 
-export function getOrCreateOwnership(
+export function getOrCreateNftOwnership(
   nft: Nft,
   accountId: string
 ): NftOwnership {
@@ -37,16 +49,32 @@ export function getOrCreateOwnership(
   return nftOwnership;
 }
 
+export function getOrCreateOwnershipPerContract(
+  contractId: string,
+  accountId: string
+): NftOwnershipPerContract {
+  let ownershipId = createOwnershipPerContractId(contractId, accountId);
+  let ownership = NftOwnershipPerContract.load(ownershipId);
+  if (!ownership) {
+    ownership = new NftOwnershipPerContract(ownershipId);
+    ownership.account = accountId;
+    ownership.contract = contractId;
+    ownership.tokensCount = ZERO_BI;
+  }
+
+  return ownership;
+}
+
 export function updateERC721Ownership(
   nft: Nft,
   fromAccountId: Address,
   toAccountId: Address
 ): void {
   if (!isMintEvent(fromAccountId)) {
-    deleteOwnership(nft.id, fromAccountId);
+    deleteNftOwnership(nft.id, fromAccountId);
   }
 
-  let nftOwnership = getOrCreateOwnership(nft, toAccountId.toHexString());
+  let nftOwnership = getOrCreateNftOwnership(nft, toAccountId.toHexString());
   nftOwnership.value = ONE_BI;
   nftOwnership.nftBurned = nft.burned;
   nftOwnership.nftIsOnSale = false;
@@ -59,7 +87,7 @@ export function updateERC1155Ownership(
   toAccountId: Address,
   tokenAmount: BigInt
 ): void {
-  let nftOwnership = getOrCreateOwnership(nft, toAccountId.toHexString());
+  let nftOwnership = getOrCreateNftOwnership(nft, toAccountId.toHexString());
   nftOwnership.value = nftOwnership.value.plus(tokenAmount);
   nftOwnership.save();
 

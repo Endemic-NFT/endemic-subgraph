@@ -11,7 +11,7 @@ import {
 } from '../modules/nft';
 import { createAuctionActivity } from '../modules/activity';
 import { log, store } from '@graphprotocol/graph-ts';
-import { getOrCreateOwnership } from '../modules/ownership';
+import { getOrCreateNftOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { ZERO_BI } from '../utils/constants';
@@ -56,7 +56,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   nft = handleAuctionCreatedForNFT(nft, auction, event.block.timestamp);
   nft.save();
 
-  let nftOwnership = getOrCreateOwnership(nft, auction.seller);
+  let nftOwnership = getOrCreateNftOwnership(nft, auction.seller);
   nftOwnership.nftPrice = nft.price;
   nftOwnership.nftIsOnSale = true;
   nftOwnership.nftListedAt = nft.listedAt;
@@ -147,7 +147,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   nft = handleAuctionCompletedForNFT(nft, auction.id);
   nft.save();
 
-  let nftOwnership = getOrCreateOwnership(nft, auction.seller);
+  let nftOwnership = getOrCreateNftOwnership(nft, auction.seller);
   nftOwnership.nftIsOnSale = false;
   nftOwnership.nftPrice = nft.price;
   nftOwnership.nftListedAt = nft.listedAt;

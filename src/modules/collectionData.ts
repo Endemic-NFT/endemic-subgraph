@@ -3,8 +3,9 @@ import {
   CollectionDayData,
   CollectionHistoricData,
 } from '../../generated/schema';
-import { ZERO_BI } from '../utils/constants';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isMintEvent } from './nft';
+import { getOrCreateOwnershipPerContract } from './ownership';
 
 export function getOrCreateColectionHistoricData(
   contractAddress: Bytes
@@ -16,6 +17,7 @@ export function getOrCreateColectionHistoricData(
     stats.onSaleCount = ZERO_BI;
     stats.totalCount = ZERO_BI;
     stats.volumeTraded = ZERO_BI;
+    stats.ownersCount = ZERO_BI;
     stats.save();
   }
 
@@ -31,10 +33,61 @@ export function updateHistoricDataForTransfer(
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
 
   if (isMintEvent(from)) {
+    // creates ownership per contract so we can track num of owners in collection
+    let toOwnershipPerContract = getOrCreateOwnershipPerContract(
+      contractAddress.toHexString(),
+      to.toHexString()
+    );
+    if (toOwnershipPerContract.tokensCount.equals(ZERO_BI)) {
+      // we have new owner
+      collectionStats.ownersCount = collectionStats.ownersCount.plus(ONE_BI);
+    }
     collectionStats.totalCount = collectionStats.totalCount.plus(tokenAmount);
     collectionStats.save();
+
+    toOwnershipPerContract.tokensCount =
+      toOwnershipPerContract.tokensCount.plus(tokenAmount);
+    toOwnershipPerContract.save();
   } else if (isBurnEvent(to)) {
+    let fromOwnershipPerContract = getOrCreateOwnershipPerContract(
+      contractAddress.toHexString(),
+      from.toHexString()
+    );
+    fromOwnershipPerContract.tokensCount =
+      fromOwnershipPerContract.tokensCount.minus(tokenAmount);
+
+    if (fromOwnershipPerContract.tokensCount.equals(ZERO_BI)) {
+      // owner has no tokens left
+      collectionStats.ownersCount = collectionStats.ownersCount.minus(ONE_BI);
+    }
     collectionStats.totalCount = collectionStats.totalCount.minus(tokenAmount);
+    collectionStats.save();
+  } else {
+    // it's transfer event
+    let fromOwnershipPerContract = getOrCreateOwnershipPerContract(
+      contractAddress.toHexString(),
+      from.toHexString()
+    );
+    fromOwnershipPerContract.tokensCount =
+      fromOwnershipPerContract.tokensCount.minus(tokenAmount);
+
+    if (fromOwnershipPerContract.tokensCount.equals(ZERO_BI)) {
+      collectionStats.ownersCount = collectionStats.ownersCount.minus(ONE_BI);
+    }
+
+    let toOwnershipPerContract = getOrCreateOwnershipPerContract(
+      contractAddress.toHexString(),
+      to.toHexString()
+    );
+    if (toOwnershipPerContract.tokensCount.equals(ZERO_BI)) {
+      collectionStats.ownersCount = collectionStats.ownersCount.plus(ONE_BI);
+    }
+
+    toOwnershipPerContract.tokensCount =
+      toOwnershipPerContract.tokensCount.plus(ONE_BI);
+
+    fromOwnershipPerContract.save();
+    toOwnershipPerContract.save();
     collectionStats.save();
   }
 }

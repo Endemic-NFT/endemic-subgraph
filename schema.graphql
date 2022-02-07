@@ -19,6 +19,13 @@ type NftContract @entity {
   nfts: [Nft!]! @derivedFrom(field: "contract")
 }
 
+type NftOwnershipPerContract @entity {
+  id: ID!
+  account: Account!
+  contract: NftContract!
+  tokensCount: BigInt!
+}
+
 type NftOwnership @entity {
   id: ID!
   account: Account!
@@ -136,6 +143,7 @@ type CollectionHistoricData @entity {
   totalCount: BigInt!
   onSaleCount: BigInt!
   volumeTraded: BigInt!
+  ownersCount: BigInt!
 }
 
 type UserHistoricData @entity {
