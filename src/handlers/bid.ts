@@ -23,7 +23,7 @@ export function handleBidCreated(event: BidCreated): void {
   }
 
   bid.nft = nftId;
-  bid.bidder = event.params.bidder;
+  bid.bidder = event.params.bidder.toHexString();
   bid.price = event.params.price;
   bid.expiresAt = event.params.expiresAt;
   bid.createdAt = event.block.timestamp;
@@ -52,15 +52,15 @@ export function handleBidAccepted(event: BidAccepted): void {
   store.remove('Bid', bid.id);
 
   userData.updateHistoricDataForBidAccepted(
-    event.params.bidder,
-    event.params.seller,
+    event.params.bidder.toHexString(),
+    event.params.seller.toHexString(),
     event.params.price
   );
   userData.updateDayDataForSaleCompleted(
     event.block.timestamp,
     event.params.price,
-    event.params.bidder,
-    event.params.seller
+    event.params.bidder.toHexString(),
+    event.params.seller.toHexString()
   );
 
   collectionData.updateHistoricDataForBidAccepted(
