@@ -29,31 +29,60 @@ dataSources:
           handler: handleAuctionCancelled
       file: ./src/handlers/marketplace.ts
 {{/marketplaces}}
-  # - kind: ethereum/contract
-  #   name: Bid
-  #   network: {{network}}
-  #   source:
-  #     address: "{{bidAddress}}"
-  #     abi: Bid
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.5
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - NFT
-  #       - Account
-  #     abis:
-  #       - name: Bid
-  #         file: ./abis/Bid.json
-  #     eventHandlers:
-  #       - event: BidCreated(bytes32,indexed address,indexed uint256,indexed address,uint256,uint256)
-  #         handler: handleBidCreated
-  #       - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
-  #         handler: handleBidAccepted
-  #       - event: BidCancelled(bytes32,indexed address,indexed uint256,indexed address)
-  #         handler: handleBidCancelled
-  #     file: ./src/handlers/bid.ts
+
+  - kind: ethereum/contract
+    name: Bid
+    network: {{network}}
+    source:
+      address: "{{bidAddress}}"
+      abi: Bid
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: Bid
+          file: ./abis/Bid.json
+      eventHandlers:
+        - event: BidCreated(bytes32,indexed address,indexed uint256,indexed address,uint256,uint256)
+          handler: handleBidCreated
+        - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
+          handler: handleBidAccepted
+        - event: BidCancelled(bytes32,indexed address,indexed uint256,indexed address)
+          handler: handleBidCancelled
+      file: ./src/handlers/bid.ts
+
+  - kind: ethereum/contract
+    name: CollectionBid
+    network: {{network}}
+    source:
+      address: "{{collectionBidAddress}}"
+      abi: CollectionBid
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - NFTContract
+        - Account
+      abis:
+        - name: CollectionBid
+          file: ./abis/CollectionBid.json
+      eventHandlers:
+        - event: BidCreated(bytes32,indexed address,indexed address,uint256,uint256)
+          handler: handleBidCreated
+        - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
+          handler: handleBidAccepted
+        - event: BidCancelled(bytes32,indexed address,indexed address)
+          handler: handleBidCancelled
+      file: ./src/handlers/collectionBid.ts
+
     
 {{#erc721Factories}}
   - kind: ethereum/contract

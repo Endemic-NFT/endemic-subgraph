@@ -17,6 +17,7 @@ type NftContract @entity {
   royalties: BigInt
   royaltiesRecipient: Bytes
   nfts: [Nft!]! @derivedFrom(field: "contract")
+  bids: [Bid!] @derivedFrom(field: "nftContract")
 }
 
 type NftOwnershipPerContract @entity {
@@ -110,16 +111,19 @@ type Auction @entity {
 
 type Bid @entity {
   id: ID!
-  nft: Nft!
+  nft: Nft
+  nftContract: NftContract
   bidder: Account!
   price: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
+  isCollectionOffer: Boolean!
 }
 
 type Activity @entity {
   id: ID!
   nft: Nft
+  nftContract: NftContract
   type: ActivityType!
   createdAt: BigInt!
   transactionHash: Bytes!
