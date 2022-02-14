@@ -3,11 +3,16 @@ import { EndemicNFT } from '../../generated/templates';
 import { NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 import { createAccount } from '../modules/account';
+import { blacklistedCollections } from '../data/blacklist';
 
 export function handleCreated(event: NFTContractCreated): void {
-  let nftContract = NftContract.load(event.params.nftContract.toHex());
+  if (blacklistedCollections.includes(event.params.nftContract.toHexString())) {
+    return;
+  }
+
+  let nftContract = NftContract.load(event.params.nftContract.toHexString());
   if (!nftContract) {
-    nftContract = new NftContract(event.params.nftContract.toHex());
+    nftContract = new NftContract(event.params.nftContract.toHexString());
   }
 
   nftContract.name = event.params.name;
