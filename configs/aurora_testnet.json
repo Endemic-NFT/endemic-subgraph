@@ -1,39 +1,30 @@
 {
     "network": "aurora-testnet",
     "bidAddress": "0xd88B5Df16cBe94A25A33Ac85C936e123B7264683",
+    "collectionBidAddress": "0x35eAfaf3A839DEa11Df7f3dbb573E261124f3CE3",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xe34Ec7b3A3aB22B2422a37ad6726E7A76e5C2787",
     "contractImporterAddress": "0x44317C983Ada8176801B40f98650cf1A1c3E4DcC",
-    "startBlock": 73612730,
+    "startBlock": 81276731,
     "erc721Factories": [
-        {
-            "name": "EndemicNFTFactoryV2",
-            "address": "0xFe7F3f28b5963b5447ECb37F1d9710f453BDFB21",
-            "block": 75756908
-        },
         {
             "name": "EndemicNFTFactory",
             "address": "0x3Ee89Db55E6dC0Ff1c2E64917bd4f6C8A7A0F9B2",
-            "block": 81276814
+            "block": 81276731
         }
     ],
     "marketplaces": [
         {
             "name": "Marketplace",
-            "address": "0x45b87060571e9d372c0762497b6893374f3638Ee",
-            "block": 73612730
-        },
-        {
-            "name": "Marketplacev2",
             "address": "0xDd29A2E65c01B75d74A53a469bF90371697846BF",
-            "block": 75756908
+            "block": 81276731
         }
     ],
     "collections": [
         {
             "name": "Endemic Master Keys",
             "address": "0x6D27C84EC245A7865718e1CDb7D1aE0EF4B6f08E",
-            "block": 73612730
+            "block": 81276731
         }
     ]
 }

@@ -45,7 +45,8 @@ export function createAuctionActivity(
 
 export function createBidActivity(
   bid: Bid,
-  nft: Nft,
+  nftId: string | null,
+  nftContractId: string | null,
   type: string,
   actor: Bytes,
   event: ethereum.Event
@@ -56,7 +57,8 @@ export function createBidActivity(
   activity.bidBidder = bid.bidder;
   activity.bidPrice = bid.price;
   activity.createdAt = event.block.timestamp;
-  activity.nft = nft.id;
+  activity.nft = nftId;
+  activity.nftContract = nftContractId;
   activity.transactionHash = event.transaction.hash;
   activity.from = actor.toHexString();
 

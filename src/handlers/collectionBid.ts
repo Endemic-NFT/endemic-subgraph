@@ -1,38 +1,46 @@
 import { log, store } from '@graphprotocol/graph-ts';
-import { BidAccepted, BidCancelled, BidCreated } from '../../generated/Bid/Bid';
-import { Bid, Nft } from '../../generated/schema';
-import { createNftId } from '../modules/nft';
+import {
+  BidAccepted,
+  BidCancelled,
+  BidCreated,
+} from '../../generated/CollectionBid/CollectionBid';
+import { Bid, Nft, NftContract } from '../../generated/schema';
 import { createBidActivity } from '../modules/activity';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { createAccount } from '../modules/account';
 
 export function handleBidCreated(event: BidCreated): void {
-  let nftId = createNftId(
-    event.params.nftContract.toHexString(),
-    event.params.tokenId.toString()
-  );
-
   let bidId = event.params.id.toHexString();
   let bid = new Bid(bidId);
 
-  let nft = Nft.load(nftId);
-  if (nft == null) {
-    log.info('NFT not found {} for bid {}', [nftId, bidId]);
+  let nftContract = NftContract.load(event.params.nftContract.toHexString());
+  if (nftContract == null) {
+    log.info('NFT contract not found {} for bid {}', [
+      event.params.nftContract.toHexString(),
+      bidId,
+    ]);
     return;
   }
 
-  bid.nft = nftId;
+  bid.nftContract = event.params.nftContract.toHexString();
   bid.bidder = event.params.bidder.toHexString();
   bid.price = event.params.price;
   bid.expiresAt = event.params.expiresAt;
   bid.createdAt = event.block.timestamp;
-  bid.isCollectionOffer = false;
+  bid.isCollectionOffer = true;
 
   bid.save();
 
   createAccount(event.params.bidder);
-  createBidActivity(bid, nft.id, null, 'bidCreate', event.params.bidder, event);
+  createBidActivity(
+    bid,
+    null,
+    event.params.nftContract.toHexString(),
+    'bidCreate',
+    event.params.bidder,
+    event
+  );
 }
 
 export function handleBidAccepted(event: BidAccepted): void {
@@ -44,9 +52,12 @@ export function handleBidAccepted(event: BidAccepted): void {
     return;
   }
 
-  let nft = Nft.load(bid.nft!);
-  if (nft == null) {
-    log.info('NFT not found {} for bid {}', [nft!.id, bidId]);
+  let nftContract = NftContract.load(event.params.nftContract.toHexString());
+  if (nftContract == null) {
+    log.info('NFT contract not found {} for bid {}', [
+      event.params.nftContract.toHexString(),
+      bidId,
+    ]);
     return;
   }
 
@@ -65,16 +76,23 @@ export function handleBidAccepted(event: BidAccepted): void {
   );
 
   collectionData.updateHistoricDataForBidAccepted(
-    nft.contractId,
+    event.params.nftContract,
     event.params.price
   );
   collectionData.updateDayData(
     event.block.timestamp,
-    nft.contractId,
+    event.params.nftContract,
     event.params.price
   );
 
-  createBidActivity(bid, nft.id, null, 'bidAccept', event.params.seller, event);
+  createBidActivity(
+    bid,
+    null,
+    event.params.nftContract.toHexString(),
+    'bidAccept',
+    event.params.seller,
+    event
+  );
 }
 
 export function handleBidCanceled(event: BidCancelled): void {
@@ -86,13 +104,23 @@ export function handleBidCanceled(event: BidCancelled): void {
     return;
   }
 
-  let nft = Nft.load(bid.nft!);
-  if (nft == null) {
-    log.info('NFT not found {} for bid {}', [nft!.id, bidId]);
+  let nftContract = NftContract.load(event.params.nftContract.toHexString());
+  if (nftContract == null) {
+    log.info('NFT contract not found {} for bid {}', [
+      event.params.nftContract.toHexString(),
+      bidId,
+    ]);
     return;
   }
 
   store.remove('Bid', bid.id);
 
-  createBidActivity(bid, nft.id, null, 'bidCancel', event.params.bidder, event);
+  createBidActivity(
+    bid,
+    null,
+    event.params.nftContract.toHexString(),
+    'bidCancel',
+    event.params.bidder,
+    event
+  );
 }
