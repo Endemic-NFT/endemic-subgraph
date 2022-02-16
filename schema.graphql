@@ -62,6 +62,7 @@ type Nft @entity {
   listedAt: BigInt!
   isOnSale: Boolean!
   price: BigInt!
+  priceWithFees: BigInt!
   lastSalePrice: BigInt
   auctionIds: [String!]!
 

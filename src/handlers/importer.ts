@@ -105,6 +105,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.contract = event.params.contractAddress.toHexString();
     nft.updatedAt = event.block.timestamp;
     nft.price = ZERO_BI;
+    nft.priceWithFees = ZERO_BI;
     nft.burned = false;
     nft.isOnSale = false;
     nft.createdAt = event.block.timestamp;

@@ -44,6 +44,7 @@ export function handleTransfer(event: Transfer): void {
   nft.contract = event.address.toHexString();
   nft.updatedAt = event.block.timestamp;
   nft.price = ZERO_BI;
+  nft.priceWithFees = ZERO_BI;
   nft.burned = false;
   nft.isOnSale = false;
   nft.listedAt = ZERO_BI;

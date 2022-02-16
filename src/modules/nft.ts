@@ -12,6 +12,7 @@ import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/Endemic
 import * as addresses from '../utils/addresses';
 import { filter } from '../utils/array';
 import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
+import { addTakerPercentage } from '../utils/numbers';
 
 export function isMarketplaceAddress(address: String): boolean {
   return (
@@ -163,10 +164,12 @@ export function handleAuctionCreatedForNFT(
   if (nft.type == 'ERC-1155') {
     if (nft.price === null || nft.price > auction.startingPrice) {
       nft.price = auction.startingPrice;
+      nft.priceWithFees = addTakerPercentage(auction.startingPrice);
     }
   } else {
     // we only support immutable price for now. Starting and ending prices will always be the same in the contract
     nft.price = auction.startingPrice;
+    nft.priceWithFees = addTakerPercentage(auction.startingPrice);
   }
 
   return nft;
@@ -186,15 +189,18 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
         }
       }
       nft.price = lowestPrice;
+      nft.priceWithFees = addTakerPercentage(lowestPrice);
     } else {
       nft.isOnSale = false;
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
+      nft.priceWithFees = ZERO_BI;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
+    nft.priceWithFees = ZERO_BI;
   }
 
   return nft;

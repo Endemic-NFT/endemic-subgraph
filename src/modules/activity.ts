@@ -3,6 +3,7 @@ import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, Nft, Auction, Bid } from '../../generated/schema';
 import { isMintEvent, isBurnEvent } from './nft';
+import { addTakerPercentage } from '../utils/numbers';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -23,8 +24,8 @@ export function createAuctionActivity(
 ): void {
   let id = 'auction/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
-  activity.auctionTotalPrice = auction.totalPrice;
-  activity.auctionStartingPrice = auction.startingPrice;
+  activity.auctionTotalPrice = addTakerPercentage(auction.totalPrice);
+  activity.auctionStartingPrice = addTakerPercentage(auction.startingPrice);
   activity.auctionSeller = auction.seller;
   activity.auctionBuyer = null;
   activity.type = type;
