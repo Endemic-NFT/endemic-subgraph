@@ -10,6 +10,10 @@ export function getEndemicMarketplaceAddress(): string {
     return '0xDd29A2E65c01B75d74A53a469bF90371697846BF';
   }
 
+  if (network == 'rinkeby') {
+    return '0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6';
+  }
+
   log.debug('Could not find Endemic Marketplace address for network {}', [
     network,
   ]);
