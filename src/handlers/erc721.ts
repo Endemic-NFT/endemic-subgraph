@@ -64,6 +64,9 @@ export function handleTransfer(event: Transfer): void {
     }
   } else if (isBurnEvent(event.params.to)) {
     nft.burned = true;
+    if (nft.artistId) {
+      userData.updateHistoricDataForBurn(nft.artistId!.toHexString(), ONE_BI);
+    }
   }
 
   if (

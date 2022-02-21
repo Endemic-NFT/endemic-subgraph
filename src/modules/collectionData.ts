@@ -62,6 +62,7 @@ export function updateHistoricDataForTransfer(
     }
     collectionStats.totalCount = collectionStats.totalCount.minus(tokenAmount);
     collectionStats.save();
+    fromOwnershipPerContract.save();
   } else {
     // it's transfer event
     let fromOwnershipPerContract = getOrCreateOwnershipPerContract(
