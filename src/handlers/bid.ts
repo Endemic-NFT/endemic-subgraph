@@ -77,7 +77,7 @@ export function handleBidAccepted(event: BidAccepted): void {
   createBidActivity(bid, nft.id, null, 'bidAccept', event.params.seller, event);
 }
 
-export function handleBidCanceled(event: BidCancelled): void {
+export function handleBidCancelled(event: BidCancelled): void {
   let bidId = event.params.id.toHexString();
 
   let bid = Bid.load(bidId);
