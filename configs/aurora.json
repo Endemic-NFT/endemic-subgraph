@@ -1,6 +1,6 @@
 {
     "network": "aurora",
-    "bidAddress": "0x44381Fe6981aad3bC1fD81b252c4546Ff0f46507",
+    "offerAddress": "0x44381Fe6981aad3bC1fD81b252c4546Ff0f46507",
     "collectionBidAddress":"",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",

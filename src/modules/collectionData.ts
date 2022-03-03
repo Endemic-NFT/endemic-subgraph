@@ -123,7 +123,7 @@ export function updateHistoricDataForAuctionCompleted(
   collectionStats.save();
 }
 
-export function updateHistoricDataForBidAccepted(
+export function updateHistoricDataForOfferAccepted(
   contractAddress: Bytes,
   volumeTraded: BigInt
 ): void {

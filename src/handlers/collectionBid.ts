@@ -37,7 +37,7 @@ export function handleBidCreated(event: BidCreated): void {
     bid,
     null,
     event.params.nftContract.toHexString(),
-    'bidCreate',
+    'offerCreate',
     event.params.bidder,
     event
   );
@@ -119,7 +119,7 @@ export function handleBidCanceled(event: BidCancelled): void {
     bid,
     null,
     event.params.nftContract.toHexString(),
-    'bidCancel',
+    'offerCancel',
     event.params.bidder,
     event
   );

@@ -4,7 +4,7 @@ type Account @entity {
   nftOwnership: [NftOwnership!] @derivedFrom(field: "account")
   createdNfts: [Nft!] @derivedFrom(field: "artist")
   auctions: [Auction!] @derivedFrom(field: "seller")
-  bids: [Bid!] @derivedFrom(field: "bidder")
+  offers: [Offer!] @derivedFrom(field: "bidder")
 }
 
 type NftContract @entity {
@@ -17,7 +17,7 @@ type NftContract @entity {
   royalties: BigInt
   royaltiesRecipient: Bytes
   nfts: [Nft!]! @derivedFrom(field: "contract")
-  bids: [Bid!] @derivedFrom(field: "nftContract")
+  offers: [Offer!] @derivedFrom(field: "nftContract")
 }
 
 type NftOwnershipPerContract @entity {
@@ -84,7 +84,7 @@ type Nft @entity {
 
   ownership: [NftOwnership!] @derivedFrom(field: "nft")
   auctions: [Auction!] @derivedFrom(field: "nft")
-  bids: [Bid!] @derivedFrom(field: "nft")
+  offers: [Offer!] @derivedFrom(field: "nft")
 }
 
 type NftAttribute @entity {
@@ -109,7 +109,7 @@ type Auction @entity {
   totalPrice: BigInt
 }
 
-type Bid @entity {
+type Offer @entity {
   id: ID!
   nft: Nft
   nftContract: NftContract
@@ -137,9 +137,9 @@ type Activity @entity {
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
   auctionFee: BigInt
-  #bid activity
-  bidBidder: Account
-  bidPrice: BigInt
+  #offer activity
+  offerBidder: Account
+  offerPrice: BigInt
 }
 
 type CollectionHistoricData @entity {
@@ -181,7 +181,7 @@ enum ActivityType @entity {
   auctionCreate
   auctionSuccess
   auctionCancel
-  bidCreate
-  bidAccept
-  bidCancel
+  offerCreate
+  offerAccept
+  offerCancel
 }

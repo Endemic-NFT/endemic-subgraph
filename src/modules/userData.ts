@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { UserHistoricData, UserDayData } from '../../generated/schema';
 import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
@@ -89,7 +89,7 @@ export function updateHistoricDataForAuctionCompleted(
   sellerStats.save();
 }
 
-export function updateHistoricDataForBidAccepted(
+export function updateHistoricDataForOfferAccepted(
   buyerAddress: string,
   sellerAddress: string,
   volumeTraded: BigInt

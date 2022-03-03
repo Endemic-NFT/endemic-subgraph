@@ -31,11 +31,11 @@ dataSources:
 {{/marketplaces}}
 
   - kind: ethereum/contract
-    name: Bid
+    name: Offer
     network: {{network}}
     source:
-      address: "{{bidAddress}}"
-      abi: Bid
+      address: "{{offerAddress}}"
+      abi: Offer
       startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
@@ -45,16 +45,16 @@ dataSources:
         - NFT
         - Account
       abis:
-        - name: Bid
-          file: ./abis/Bid.json
+        - name: Offer
+          file: ./abis/Offer.json
       eventHandlers:
-        - event: BidCreated(bytes32,indexed address,indexed uint256,indexed address,uint256,uint256)
-          handler: handleBidCreated
-        - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
-          handler: handleBidAccepted
-        - event: BidCancelled(bytes32,indexed address,indexed uint256,indexed address)
-          handler: handleBidCancelled
-      file: ./src/handlers/bid.ts
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
+          handler: handleOfferCreated
+        - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
+          handler: handleOfferAccepted
+        - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
+          handler: handleOfferCancelled
+      file: ./src/handlers/offer.ts
 
   # - kind: ethereum/contract
   #   name: CollectionBid

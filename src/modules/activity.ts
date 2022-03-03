@@ -1,7 +1,7 @@
 import { Address, Bytes, ethereum, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
-import { Activity, Nft, Auction, Bid } from '../../generated/schema';
+import { Activity, Nft, Auction, Offer } from '../../generated/schema';
 import { isMintEvent, isBurnEvent } from './nft';
 
 function getTransferActivityType(from: Address, to: Address): string {
@@ -43,22 +43,24 @@ export function createAuctionActivity(
   activity.save();
 }
 
-export function createBidActivity(
-  bid: Bid,
+export function createOfferActivity(
+  offer: Offer,
   nftId: string | null,
   nftContractId: string | null,
+  totalFee: BigInt,
   type: string,
   actor: Bytes,
   event: ethereum.Event
 ): void {
-  let id = 'bid/' + event.transaction.hash.toHex() + event.logIndex.toHex();
+  let id = 'offer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
   activity.type = type;
-  activity.bidBidder = bid.bidder;
-  activity.bidPrice = bid.price;
+  activity.offerBidder = offer.bidder;
+  activity.offerPrice = offer.price;
   activity.createdAt = event.block.timestamp;
   activity.nft = nftId;
   activity.nftContract = nftContractId;
+  activity.auctionFee = totalFee;
   activity.transactionHash = event.transaction.hash;
   activity.from = actor.toHexString();
 
