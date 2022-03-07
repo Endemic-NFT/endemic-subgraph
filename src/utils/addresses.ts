@@ -1,6 +1,6 @@
 import { dataSource, log } from '@graphprotocol/graph-ts';
 
-export function getEndemicMarketplaceAddress(): string {
+export function getEndemicExchangeAddress(): string {
   let network = dataSource.network();
   if (network == 'aurora') {
     return '0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7';
@@ -14,9 +14,7 @@ export function getEndemicMarketplaceAddress(): string {
     return '0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6';
   }
 
-  log.debug('Could not find Endemic Marketplace address for network {}', [
-    network,
-  ]);
+  log.debug('Could not find EndemicExchange address for network {}', [network]);
 
   return '';
 }

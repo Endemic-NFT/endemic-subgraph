@@ -4,12 +4,10 @@
   "scripts": {
     "codegen": "npx graph codegen",
     "build": "npx graph build",
-    "prepare:rinkeby": "mustache configs/rinkeby.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:aurora_testnet": "mustache configs/aurora_testnet.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:aurora": "mustache configs/aurora.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:aurora-testnet": "mustache configs/rinkeby.json templates/aurora.template.yaml > subgraph.yaml",
+    "prepare:aurora": "mustache configs/aurora.json templates/aurora.template.yaml > subgraph.yaml",
     "deploy:aurora": "npm run prepare:aurora && npx graph deploy endemic-nft/endemic-aurora --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:aurora_testnet": "npm run prepare:aurora_testnet && npx graph deploy endemic-nft/endemic-aurora-t3stnet --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:rinkeby": "npm run prepare:rinkeby && npx graph deploy endemic-nft/endemic-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
+    "deploy:aurora-testnet": "npm run prepare:aurora-testnet && npx graph deploy endemic-nft/endemic-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.25.3",

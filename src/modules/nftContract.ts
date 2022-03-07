@@ -1,6 +1,6 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { NftContract } from '../../generated/schema';
-import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
+import { Collection } from '../../generated/templates/Collection/Collection';
 
 const DEFAULT_CATEGORY = 'Collectibles';
 
@@ -9,7 +9,7 @@ export function createNFTContract(id: Address, createdAt: BigInt): NftContract {
   nftContract.category = DEFAULT_CATEGORY;
   nftContract.createdAt = createdAt;
 
-  let instance = EndemicNFT.bind(id);
+  let instance = Collection.bind(id);
 
   let name = instance.try_name();
   if (!name.reverted) {

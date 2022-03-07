@@ -8,7 +8,7 @@ import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC1155TokenURI,
   createNftId,
-  isMarketplaceAddress,
+  isExchangeAddress,
   isMintEvent,
   updateTokenMetadataFromIPFS,
 } from '../modules/nft';
@@ -34,7 +34,7 @@ export function handleTransferSingle(event: TransferSingle): void {
 
   if (
     event.transaction.to !== null &&
-    !isMarketplaceAddress(event.transaction.to!.toHexString()) &&
+    !isExchangeAddress(event.transaction.to!.toHexString()) &&
     !isMintEvent(event.params.from)
   ) {
     removeActiveAuction(nft, event.params.from, event.params.value);

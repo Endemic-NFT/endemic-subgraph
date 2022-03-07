@@ -2,13 +2,13 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-{{#marketplaces}}
+{{#exchanges}}
   - kind: ethereum/contract
     name: {{name}}
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: Marketplace
+      abi: EndemicExchange
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
@@ -18,8 +18,8 @@ dataSources:
         - NFT
         - Account
       abis:
-        - name: Marketplace
-          file: ./abis/Marketplace.json
+        - name: EndemicExchange
+          file: ./abis/EndemicExchange.json
       eventHandlers:
         - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
           handler: handleAuctionCreated
@@ -27,8 +27,8 @@ dataSources:
           handler: handleAuctionSuccessful
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
-      file: ./src/handlers/marketplace.ts
-{{/marketplaces}}
+      file: ./src/handlers/exchange.ts
+{{/exchanges}}
 
   - kind: ethereum/contract
     name: Offer
@@ -54,7 +54,7 @@ dataSources:
           handler: handleOfferAccepted
         - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
           handler: handleOfferCancelled
-      file: ./src/handlers/offer.ts
+      file: ./src/handlers/aurora/offer.ts
 
   # - kind: ethereum/contract
   #   name: CollectionBid
@@ -81,7 +81,7 @@ dataSources:
   #         handler: handleBidAccepted
   #       - event: BidCancelled(bytes32,indexed address,indexed address)
   #         handler: handleBidCancelled
-  #     file: ./src/handlers/collectionBid.ts
+  #     file: ./src/handlers/aurora/collectionBid.ts
 
     
 {{#erc721Factories}}
@@ -105,7 +105,7 @@ dataSources:
       eventHandlers:
         - event: NFTContractCreated(indexed address,indexed address,string,string,string)
           handler: handleCreated
-      file: ./src/handlers/erc721Factory.ts
+      file: ./src/handlers/aurora/erc721Factory.ts
 {{/erc721Factories}}
 
   # - kind: ethereum/contract
@@ -171,12 +171,12 @@ dataSources:
       abis:
         - name: ContractImporter
           file: ./abis/ContractImporter.json
-        - name: EndemicNFT
-          file: ./abis/EndemicNFT.json
+        - name: Collection
+          file: ./abis/Collection.json
       eventHandlers:
         - event: CollectionAdded(address,string)
           handler: handleCollectionAdded
-      file: ./src/handlers/importer.ts
+      file: ./src/handlers/aurora/importer.ts
 
 {{#collections}}
   - kind: ethereum/contract
@@ -184,7 +184,7 @@ dataSources:
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: EndemicNFT
+      abi: Collection
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
@@ -194,24 +194,24 @@ dataSources:
         - NFT
         - Account
       abis:
-        - name: EndemicNFT
-          file: ./abis/EndemicNFT.json
-        - name: Marketplace
-          file: ./abis/Marketplace.json
+        - name: Collection
+          file: ./abis/Collection.json
+        - name: Exchange
+          file: ./abis/EndemicExchange.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - event: Mint(indexed uint256,address)
+        - event: Mint(indexed uint256,indexed address)
           handler: handleMint
       file: ./src/handlers/erc721.ts
 {{/collections}}
 
 templates:
   - kind: ethereum/contract
-    name: EndemicNFT
+    name: Collection
     network: {{network}}
     source:
-      abi: EndemicNFT
+      abi: Collection
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -220,10 +220,10 @@ templates:
         - NFT
         - Account
       abis:
-        - name: EndemicNFT
-          file: ./abis/EndemicNFT.json
-        - name: Marketplace
-          file: ./abis/Marketplace.json
+        - name: Collection
+          file: ./abis/AuroraCollection.json
+        - name: Exchange
+          file: ./abis/EndemicExchange.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -245,8 +245,8 @@ templates:
       abis:
         - name: EndemicERC1155
           file: ./abis/EndemicERC1155.json
-        - name: Marketplace
-          file: ./abis/Marketplace.json  
+        - name: Exchange
+          file: ./abis/EndemicExchange.json  
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
