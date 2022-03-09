@@ -3,10 +3,14 @@ import { Collection } from '../../../generated/templates';
 import { NftContract } from '../../../generated/schema';
 import { toLowerCase } from '../../utils/string';
 import { createAccount } from '../../modules/account';
-import { blacklistedCollections } from '../../data/blacklist';
+import { blacklistedAuroraCollections } from '../../data/blacklist';
 
 export function handleCreated(event: NFTContractCreated): void {
-  if (blacklistedCollections.includes(event.params.nftContract.toHexString())) {
+  if (
+    blacklistedAuroraCollections.includes(
+      event.params.nftContract.toHexString()
+    )
+  ) {
     return;
   }
 

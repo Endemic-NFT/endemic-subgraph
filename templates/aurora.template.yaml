@@ -172,11 +172,11 @@ dataSources:
         - name: ContractImporter
           file: ./abis/ContractImporter.json
         - name: Collection
-          file: ./abis/Collection.json
+          file: ./abis/ERC721Enumerable.json
       eventHandlers:
         - event: CollectionAdded(address,string)
           handler: handleCollectionAdded
-      file: ./src/handlers/aurora/importer.ts
+      file: ./src/handlers/importer.ts
 
 {{#collections}}
   - kind: ethereum/contract
@@ -196,7 +196,7 @@ dataSources:
       abis:
         - name: Collection
           file: ./abis/Collection.json
-        - name: Exchange
+        - name: EndemicExchange
           file: ./abis/EndemicExchange.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
@@ -221,8 +221,8 @@ templates:
         - Account
       abis:
         - name: Collection
-          file: ./abis/AuroraCollection.json
-        - name: Exchange
+          file: ./abis/ERC721Enumerable.json
+        - name: EndemicExchange
           file: ./abis/EndemicExchange.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
@@ -245,7 +245,7 @@ templates:
       abis:
         - name: EndemicERC1155
           file: ./abis/EndemicERC1155.json
-        - name: Exchange
+        - name: EndemicExchange
           file: ./abis/EndemicExchange.json  
       eventHandlers:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
