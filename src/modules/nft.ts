@@ -7,16 +7,15 @@ import {
   JSONValue,
 } from '@graphprotocol/graph-ts';
 import { Auction, Nft, NftAttribute } from '../../generated/schema';
-import { EndemicNFT } from '../../generated/templates/EndemicNFT/EndemicNFT';
+import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import * as addresses from '../utils/addresses';
 import { filter } from '../utils/array';
 import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
 
-export function isMarketplaceAddress(address: String): boolean {
+export function isExchangeAddress(address: String): boolean {
   return (
-    address.toLowerCase() ==
-    addresses.getEndemicMarketplaceAddress().toLowerCase()
+    address.toLowerCase() == addresses.getEndemicExchangeAddress().toLowerCase()
   );
 }
 
@@ -40,7 +39,7 @@ export function createNftId(contractAddress: string, tokenId: string): string {
 }
 
 export function getERC721TokenURI(address: Address, tokenId: BigInt): string {
-  let erc721 = EndemicNFT.bind(address);
+  let erc721 = Collection.bind(address);
   let tokenURICallResult = erc721.try_tokenURI(tokenId);
 
   let tokenURI = '';

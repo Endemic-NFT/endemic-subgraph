@@ -1,7 +1,8 @@
 import {
   Transfer,
   Mint,
-} from '../../generated/templates/EndemicNFT/EndemicNFT';
+  RoyaltiesUpdated,
+} from '../../generated/templates/Collection/Collection';
 import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC721TokenURI,
@@ -9,7 +10,7 @@ import {
   updateTokenMetadataFromIPFS,
   isBurnEvent,
   isMintEvent,
-  isMarketplaceAddress,
+  isExchangeAddress,
 } from '../modules/nft';
 import { removeActiveAuction } from '../modules/auction';
 import { createERC721TransferActivity } from '../modules/activity';
@@ -71,7 +72,7 @@ export function handleTransfer(event: Transfer): void {
 
   if (
     event.transaction.to !== null &&
-    !isMarketplaceAddress(event.transaction.to!.toHexString()) &&
+    !isExchangeAddress(event.transaction.to!.toHexString()) &&
     !isMintEvent(event.params.from)
   ) {
     removeActiveAuction(nft, event.params.from, ONE_BI);
@@ -110,3 +111,5 @@ export function handleMint(event: Mint): void {
 
   userData.updateHistoricDataForCreate(event.params.artistId, ONE_BI);
 }
+
+export function handleRoyaltiesUpdated(event: RoyaltiesUpdated): void {}

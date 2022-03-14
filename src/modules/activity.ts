@@ -1,5 +1,5 @@
 import { Address, Bytes, ethereum, BigInt } from '@graphprotocol/graph-ts';
-import { Transfer } from '../../generated/templates/EndemicNFT/EndemicNFT';
+import { Transfer } from '../../generated/templates/Collection/Collection';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, Nft, Auction, Offer } from '../../generated/schema';
 import { isMintEvent, isBurnEvent } from './nft';

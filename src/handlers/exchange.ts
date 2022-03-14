@@ -2,7 +2,7 @@ import {
   AuctionCancelled,
   AuctionCreated,
   AuctionSuccessful,
-} from '../../generated/Marketplace/Marketplace';
+} from '../../generated/EndemicExchange/EndemicExchange';
 import { Nft, Auction } from '../../generated/schema';
 import {
   createNftId,

@@ -138,6 +138,7 @@ type Activity @entity {
   auctionTotalPrice: BigInt
   auctionFee: BigInt
   #offer activity
+  offerAccepter: Account
   offerBidder: Account
   offerPrice: BigInt
 }

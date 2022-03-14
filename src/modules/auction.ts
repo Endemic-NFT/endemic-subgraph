@@ -1,6 +1,6 @@
 import { Address, BigInt, store } from '@graphprotocol/graph-ts';
 import { Auction, Nft } from '../../generated/schema';
-import { Marketplace } from '../../generated/Marketplace/Marketplace';
+import { EndemicExchange } from '../../generated/EndemicExchange/EndemicExchange';
 import * as addresses from '../utils/addresses';
 import { handleAuctionCompletedForNFT } from './nft';
 import * as userData from './userData';
@@ -11,11 +11,11 @@ export function removeActiveAuction(
   seller: Address,
   amount: BigInt
 ): void {
-  let marketplace = Marketplace.bind(
-    Address.fromString(addresses.getEndemicMarketplaceAddress())
+  let exchange = EndemicExchange.bind(
+    Address.fromString(addresses.getEndemicExchangeAddress())
   );
 
-  let auctionId = marketplace.try_createAuctionId(
+  let auctionId = exchange.try_createAuctionId(
     Address.fromString(nft.contractId.toHexString()),
     nft.tokenId,
     seller

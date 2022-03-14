@@ -1,6 +1,6 @@
 {
     "network": "aurora",
-    "offerAddress": "0x44381Fe6981aad3bC1fD81b252c4546Ff0f46507",
+    "offerAddress": "0x0eFd38A98FaaDDBc078FEcA76D1D20857b1Be5F5",
     "collectionBidAddress":"",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
@@ -18,9 +18,9 @@
             "block": 54570015
         }
     ],
-    "marketplaces": [
+    "exchanges": [
         {
-            "name": "Marketplace",
+            "name": "EndemicExchange",
             "address": "0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7",
             "block": 57246873
         }

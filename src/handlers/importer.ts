@@ -1,7 +1,6 @@
-import { Address } from '@graphprotocol/graph-ts';
 import { CollectionAdded } from '../../generated/ContractImporter/ContractImporter';
-import { EndemicNFT } from '../../generated/templates';
-import { EndemicNFT as EndemicNFTTemplate } from '../../generated/templates/EndemicNFT/EndemicNFT';
+import { Collection } from '../../generated/templates';
+import { Collection as CollectionTemplate } from '../../generated/templates/Collection/Collection';
 import { Nft, NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 import { log } from '@graphprotocol/graph-ts';
@@ -20,7 +19,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     ]);
     return;
   }
-  let erc721 = EndemicNFTTemplate.bind(event.params.contractAddress);
+  let erc721 = CollectionTemplate.bind(event.params.contractAddress);
 
   let name = erc721.try_name();
   if (name.reverted) {
@@ -46,7 +45,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
   nftContract.searchText = toLowerCase(nftContract.name);
   nftContract.save();
 
-  EndemicNFT.create(event.params.contractAddress);
+  Collection.create(event.params.contractAddress);
 
   let owner = erc721.try_owner();
   if (owner.reverted) {
