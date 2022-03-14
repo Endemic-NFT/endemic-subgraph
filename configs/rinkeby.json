@@ -1,5 +1,5 @@
 {
-    "network": "aurora",
+    "network": "rinkeby",
     "offerAddress": "0x44381Fe6981aad3bC1fD81b252c4546Ff0f46507",
     "collectionBidAddress":"",
     "erc1155FactoryAddress": "",
