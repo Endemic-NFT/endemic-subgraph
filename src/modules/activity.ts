@@ -30,6 +30,7 @@ export function createAuctionActivity(
   activity.type = type;
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
+  activity.nftContract = nft.contractId.toHexString();
   activity.transactionHash = event.transaction.hash;
   activity.auctionFee = totalFee;
 
@@ -72,6 +73,7 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
     'transfer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
   activity.nft = nft.id;
+  activity.nftContract = nft.contractId.toHexString();
   activity.type = getTransferActivityType(event.params.from, event.params.to);
   activity.transferFrom = event.params.from.toHexString();
   activity.transferTo = event.params.to.toHexString();
@@ -95,6 +97,7 @@ export function createERC1155TransferActivity(
     'transfer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
   activity.nft = nft.id;
+  activity.nftContract = nft.contractId.toHexString();
   activity.type = getTransferActivityType(event.params.from, event.params.to);
   activity.transferFrom = event.params.from.toHexString();
   activity.transferTo = event.params.to.toHexString();
