@@ -23,22 +23,24 @@ export function createAuctionActivity(
 ): void {
   let id = 'auction/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
+  activity.from = auction.seller;
+  activity.to = null;
+  activity.type = type;
+  activity.fee = totalFee;
+
   activity.auctionTotalPrice = auction.totalPrice;
   activity.auctionStartingPrice = auction.startingPrice;
-  activity.auctionSeller = auction.seller;
-  activity.auctionBuyer = null;
-  activity.type = type;
+
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
   activity.nftContract = nft.contractId.toHexString();
   activity.transactionHash = event.transaction.hash;
-  activity.auctionFee = totalFee;
 
   if (type == 'auctionCreate' || type == 'auctionCancel') {
-    activity.from = auction.seller;
+    activity.initiator = auction.seller;
   } else if (type == 'auctionSuccess') {
-    activity.auctionBuyer = auction.buyer!.toHexString();
-    activity.from = auction.buyer!.toHexString();
+    activity.to = auction.buyer!.toHexString();
+    activity.initiator = auction.buyer!.toHexString();
   }
 
   activity.save();
@@ -56,14 +58,19 @@ export function createOfferActivity(
   let id = 'offer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
   activity.type = type;
-  activity.offerBidder = offer.bidder;
+  activity.from = null;
+  activity.to = offer.bidder;
+  activity.fee = totalFee;
   activity.offerPrice = offer.price;
   activity.createdAt = event.block.timestamp;
   activity.nft = nftId;
   activity.nftContract = nftContractId;
-  activity.auctionFee = totalFee;
   activity.transactionHash = event.transaction.hash;
-  activity.from = actor.toHexString();
+  activity.initiator = actor.toHexString();
+
+  if (type == 'offerAccept') {
+    activity.from = actor.toHexString();
+  }
 
   activity.save();
 }
@@ -75,15 +82,15 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   activity.nft = nft.id;
   activity.nftContract = nft.contractId.toHexString();
   activity.type = getTransferActivityType(event.params.from, event.params.to);
-  activity.transferFrom = event.params.from.toHexString();
-  activity.transferTo = event.params.to.toHexString();
+  activity.from = event.params.from.toHexString();
+  activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
 
   if (activity.type == 'mint') {
-    activity.from = activity.transferTo!;
+    activity.initiator = activity.to!;
   } else if (activity.type == 'burn' || activity.type == 'transfer') {
-    activity.from = activity.transferFrom!;
+    activity.initiator = activity.from!;
   }
 
   activity.save();
@@ -99,15 +106,15 @@ export function createERC1155TransferActivity(
   activity.nft = nft.id;
   activity.nftContract = nft.contractId.toHexString();
   activity.type = getTransferActivityType(event.params.from, event.params.to);
-  activity.transferFrom = event.params.from.toHexString();
-  activity.transferTo = event.params.to.toHexString();
+  activity.from = event.params.from.toHexString();
+  activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
 
   if (activity.type == 'mint') {
-    activity.from = activity.transferTo!;
+    activity.initiator = activity.to!;
   } else if (activity.type == 'burn' || activity.type == 'transfer') {
-    activity.from = activity.transferFrom!;
+    activity.initiator = activity.from!;
   }
 
   activity.save();
