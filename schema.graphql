@@ -127,19 +127,14 @@ type Activity @entity {
   type: ActivityType!
   createdAt: BigInt!
   transactionHash: Bytes!
-  from: Account! #address of user who initiated activity
-  #transfer activity
-  transferFrom: Account
-  transferTo: Account
-  #auction activity
-  auctionSeller: Account
-  auctionBuyer: Account
+  initiator: Account! #address of user who initiated activity
+  from: Account #This field is account that unifies “transferFrom, auctionSeller and offerAccepter depending of activity type
+  to: Account #This field is account that unifies “transferTo, auctionBuyer and offerBidder depending of activity type
+  fee: BigInt #This field is fee that we get after auctionSuccess or offerAccept events
+  #auction activityxw
   auctionStartingPrice: BigInt
   auctionTotalPrice: BigInt
-  auctionFee: BigInt
   #offer activity
-  offerAccepter: Account
-  offerBidder: Account
   offerPrice: BigInt
 }
 
