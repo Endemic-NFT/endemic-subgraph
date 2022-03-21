@@ -26,7 +26,7 @@ jobs:
         yarn install
     - name: Prepare
       run: |
-        yarn prepare:aurora_testnet
+        yarn prepare:aurora-testnet
     - name: Codegen
       run: |
         yarn codegen
