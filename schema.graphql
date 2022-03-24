@@ -144,6 +144,8 @@ type CollectionHistoricData @entity {
   onSaleCount: BigInt!
   volumeTraded: BigInt!
   ownersCount: BigInt!
+  floorPrice: BigInt!
+  floorPriceTracker: [BigInt!]
 }
 
 type UserHistoricData @entity {
