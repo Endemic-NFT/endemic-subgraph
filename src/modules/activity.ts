@@ -2,7 +2,7 @@ import { Address, Bytes, ethereum, BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../../generated/templates/Collection/Collection';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, Nft, Auction, Offer } from '../../generated/schema';
-import { isMintEvent, isBurnEvent } from './nft';
+import { isMintEvent, isBurnEvent, createNftId } from './nft';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -28,8 +28,9 @@ export function createAuctionActivity(
   activity.type = type;
   activity.fee = totalFee;
 
-  activity.auctionTotalPrice = auction.totalPrice;
   activity.auctionStartingPrice = auction.startingPrice;
+  activity.price = auction.startingPrice;
+  activity.totalPrice = auction.totalPrice;
 
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
@@ -61,7 +62,8 @@ export function createOfferActivity(
   activity.from = null;
   activity.to = offer.bidder;
   activity.fee = totalFee;
-  activity.offerPrice = offer.price;
+  activity.price = offer.price;
+  activity.totalPrice = offer.price.plus(totalFee);
   activity.createdAt = event.block.timestamp;
   activity.nft = nftId;
   activity.nftContract = nftContractId;
@@ -116,6 +118,34 @@ export function createERC1155TransferActivity(
   } else if (activity.type == 'burn' || activity.type == 'transfer') {
     activity.initiator = activity.from!;
   }
+
+  activity.save();
+}
+
+export function createPrivateSaleActivity(
+  nftContract: Address,
+  tokenId: BigInt,
+  sellerAddress: string,
+  buyerAddress: string,
+  price: BigInt,
+  totalFees: BigInt,
+  event: ethereum.Event
+): void {
+  let id = 'offer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
+  let activity = new Activity(id);
+
+  const nftId = createNftId(nftContract.toHexString(), tokenId.toString());
+
+  activity.type = 'privateSaleSuccess';
+  activity.nft = nftId;
+  activity.from = sellerAddress;
+  activity.to = buyerAddress;
+  activity.price = price;
+  activity.fee = totalFees;
+  activity.totalPrice = price.plus(totalFees);
+  activity.initiator = buyerAddress;
+  activity.createdAt = event.block.timestamp;
+  activity.transactionHash = event.transaction.hash;
 
   activity.save();
 }
