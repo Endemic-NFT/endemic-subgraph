@@ -3,7 +3,7 @@ import {
   CollectionDayData,
   CollectionHistoricData,
 } from '../../generated/schema';
-import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { MILION_BI, ONE_BI, ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isMintEvent } from './nft';
 import { getOrCreateOwnershipPerContract } from './ownership';
 
@@ -18,6 +18,7 @@ export function getOrCreateColectionHistoricData(
     stats.totalCount = ZERO_BI;
     stats.volumeTraded = ZERO_BI;
     stats.ownersCount = ZERO_BI;
+    stats.floorPrice = MILION_BI;
     stats.save();
   }
 
@@ -95,31 +96,52 @@ export function updateHistoricDataForTransfer(
 
 export function updateHistoricDataForAuctionCreate(
   contractAddress: Bytes,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.plus(tokenAmount);
+
+  if (auctionPrice < collectionStats.floorPrice) {
+    const currentFloorPrice = collectionStats.floorPrice;
+
+    collectionStats.floorPrice = auctionPrice;
+    collectionStats.prevFloorPrice = currentFloorPrice;
+  }
+
   collectionStats.save();
 }
 
 export function updateHistoricDataForAuctionCancel(
   contractAddress: Bytes,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
+
+  if (auctionPrice < collectionStats.floorPrice) {
+    collectionStats.floorPrice = collectionStats.prevFloorPrice;
+  }
+
   collectionStats.save();
 }
 
 export function updateHistoricDataForAuctionCompleted(
   contractAddress: Bytes,
   volumeTraded: BigInt,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
+
+  if (auctionPrice < collectionStats.floorPrice) {
+    collectionStats.floorPrice = collectionStats.prevFloorPrice;
+  }
+
   collectionStats.save();
 }
 

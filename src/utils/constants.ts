@@ -6,3 +6,4 @@ export const NULL_ADDRESS = Address.fromString(
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);
+export let MILION_BI = BigInt.fromI32(1000000);
