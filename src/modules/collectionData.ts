@@ -110,15 +110,17 @@ export function updateHistoricDataForAuctionCreate(
     auctionPrice < collectionStats.floorPrice ||
     !collectionStats.floorPrice
   ) {
-    collectionStats = updateFloorPrice(AUCTION_MODE.CREATE, {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.CREATE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   } else {
-    collectionStats = updatePriceTracker(AUCTION_MODE.CREATE, {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.CREATE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   }
 
   collectionStats.save();
@@ -133,15 +135,17 @@ export function updateHistoricDataForAuctionCancel(
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
 
   if (auctionPrice === collectionStats.floorPrice) {
-    collectionStats = updateFloorPrice(AUCTION_MODE.FINALIZE, {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.FINALIZE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   } else {
-    collectionStats = updatePriceTracker(AUCTION_MODE.FINALIZE, {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.FINALIZE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   }
 
   collectionStats.save();
@@ -159,15 +163,17 @@ export function updateHistoricDataForAuctionCompleted(
     collectionStats.volumeTraded.plus(volumeTraded);
 
   if (auctionPrice === collectionStats.floorPrice) {
-    collectionStats = updateFloorPrice(AUCTION_MODE.FINALIZE, {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.FINALIZE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   } else {
-    collectionStats = updatePriceTracker(AUCTION_MODE.FINALIZE, {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.FINALIZE,
       collectionStats,
-      auctionPrice,
-    });
+      auctionPrice
+    );
   }
 
   collectionStats.save();

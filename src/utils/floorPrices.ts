@@ -1,39 +1,50 @@
 import { add, removeFirst } from './array';
+import { CollectionHistoricData } from '../../generated/schema';
+import { BigInt } from '@graphprotocol/graph-ts';
 
-export const AUCTION_MODE = {
-  CREATE: 'Create',
-  FINALIZE: 'Finalize',
-};
+export enum AUCTION_MODE {
+  CREATE,
+  FINALIZE,
+}
 
-export function updateFloorPrice(type, data) {
+export function updateFloorPrice(
+  type: AUCTION_MODE,
+  collectionStats: CollectionHistoricData,
+  auctionPrice: BigInt
+): CollectionHistoricData {
   switch (type) {
     case AUCTION_MODE.CREATE:
-      return updateFloorPriceOnCreate(data);
+      return updateFloorPriceOnCreate(collectionStats, auctionPrice);
     case AUCTION_MODE.FINALIZE:
-      return updateFloorPriceOnFinalize(data);
+      return updateFloorPriceOnFinalize(collectionStats);
     default:
-      return null;
+      return collectionStats;
   }
 }
 
-export function updatePriceTracker(type, data) {
+export function updatePriceTracker(
+  type: AUCTION_MODE,
+  collectionStats: CollectionHistoricData,
+  auctionPrice: BigInt
+): CollectionHistoricData {
   switch (type) {
     case AUCTION_MODE.CREATE:
-      return updatePriceTrackerOnCreate(data);
+      return updatePriceTrackerOnCreate(collectionStats, auctionPrice);
     case AUCTION_MODE.FINALIZE:
-      return updatePriceTrackerOnFinalize(data);
+      return updatePriceTrackerOnFinalize(collectionStats, auctionPrice);
     default:
-      return null;
+      return collectionStats;
   }
 }
 
-function updateFloorPriceOnCreate(data) {
-  const { collectionStats, newFloorPrice } = data;
-
+function updateFloorPriceOnCreate(
+  collectionStats: CollectionHistoricData,
+  newFloorPrice: BigInt
+): CollectionHistoricData {
   const currentFloorPrice = collectionStats.floorPrice;
   const floorPriceTracker = collectionStats.floorPriceTracker;
 
-  floorPriceTracker.push(currentFloorPrice);
+  floorPriceTracker!.push(currentFloorPrice);
 
   collectionStats.floorPrice = newFloorPrice;
   collectionStats.floorPriceTracker = floorPriceTracker;
@@ -41,32 +52,35 @@ function updateFloorPriceOnCreate(data) {
   return collectionStats;
 }
 
-function updateFloorPriceOnFinalize(data) {
-  const { collectionStats } = data;
+function updateFloorPriceOnFinalize(
+  collectionStats: CollectionHistoricData
+): CollectionHistoricData {
   const floorPriceTracker = collectionStats.floorPriceTracker;
 
-  collectionStats.floorPrice = floorPriceTracker.pop();
+  collectionStats.floorPrice = floorPriceTracker!.pop();
   collectionStats.floorPriceTracker = floorPriceTracker;
 
   return collectionStats;
 }
 
-function updatePriceTrackerOnCreate(data) {
-  const { collectionStats, newPrice } = data;
-
+function updatePriceTrackerOnCreate(
+  collectionStats: CollectionHistoricData,
+  newPrice: BigInt
+): CollectionHistoricData {
   collectionStats.floorPriceTracker = add(
-    collectionStats.floorPriceTracker,
+    collectionStats.floorPriceTracker!,
     newPrice
   );
 
   return collectionStats;
 }
 
-function updatePriceTrackerOnFinalize(data) {
-  const { collectionStats, priceToRemove } = data;
-
+function updatePriceTrackerOnFinalize(
+  collectionStats: CollectionHistoricData,
+  priceToRemove: BigInt
+): CollectionHistoricData {
   collectionStats.floorPriceTracker = removeFirst(
-    collectionStats.floorPriceTracker,
+    collectionStats.floorPriceTracker!,
     priceToRemove
   );
 

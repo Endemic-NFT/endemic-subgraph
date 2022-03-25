@@ -16,26 +16,28 @@ export const filter = (array: string[], value: string): string[] => {
   return array;
 };
 
-export const removeFirst = (array: BigInt[], value: BigInt) => {
-  array.find((item, i) => {
-    if (item === value) {
-      array.splice(i, 1);
-      return true;
+export const removeFirst = (array: BigInt[], value: BigInt): BigInt[] => {
+  let index = -1;
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] == value) {
+      index = i;
+      break;
     }
-    return false;
-  });
+  }
+  if (index >= 0) {
+    array.splice(index, 1);
+  }
 
   return array;
 };
 
-export function add(array: BigInt[], value) {
+export function add(array: BigInt[], value: BigInt): BigInt[] {
   const idx = findIndex(array, value);
-  array.splice(idx, value);
 
-  return array;
+  return insert(array, idx, value);
 }
 
-function findIndex(array: BigInt[], value: BigInt) {
+function findIndex(array: BigInt[], value: BigInt): number {
   let i = 0;
 
   while (i < array.length) {
@@ -45,3 +47,10 @@ function findIndex(array: BigInt[], value: BigInt) {
 
   return array.length;
 }
+
+const insert = (array: BigInt[], index: number, newItem: BigInt): BigInt[] => {
+  return array
+    .slice(0, index as i32)
+    .concat([newItem])
+    .concat(array.slice(index as i32));
+};
