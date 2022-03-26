@@ -44,7 +44,9 @@ function updateFloorPriceOnCreate(
   const currentFloorPrice = collectionStats.floorPrice;
   const floorPriceTracker = collectionStats.floorPriceTracker;
 
-  floorPriceTracker!.push(currentFloorPrice);
+  if (currentFloorPrice) {
+    floorPriceTracker!.push(currentFloorPrice);
+  }
 
   collectionStats.floorPrice = newFloorPrice;
   collectionStats.floorPriceTracker = floorPriceTracker;
