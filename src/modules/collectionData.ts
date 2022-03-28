@@ -102,27 +102,30 @@ export function updateHistoricDataForTransfer(
 
 export function updateHistoricDataForAuctionCreate(
   contractAddress: Bytes,
+  isOnSale: boolean,
   auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.plus(tokenAmount);
 
-  if (
-    !collectionStats.floorPrice ||
-    auctionPrice < collectionStats.floorPrice!
-  ) {
-    collectionStats = updateFloorPrice(
-      AUCTION_MODE.CREATE,
-      collectionStats,
-      auctionPrice
-    );
-  } else {
-    collectionStats = updatePriceTracker(
-      AUCTION_MODE.CREATE,
-      collectionStats,
-      auctionPrice
-    );
+  if (isOnSale) {
+    if (
+      !collectionStats.floorPrice ||
+      auctionPrice < collectionStats.floorPrice!
+    ) {
+      collectionStats = updateFloorPrice(
+        AUCTION_MODE.CREATE,
+        collectionStats,
+        auctionPrice
+      );
+    } else {
+      collectionStats = updatePriceTracker(
+        AUCTION_MODE.CREATE,
+        collectionStats,
+        auctionPrice
+      );
+    }
   }
 
   collectionStats.save();
@@ -130,24 +133,27 @@ export function updateHistoricDataForAuctionCreate(
 
 export function updateHistoricDataForAuctionCancel(
   contractAddress: Bytes,
+  isOnSale: boolean,
   auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
 
-  if (auctionPrice === collectionStats.floorPrice) {
-    collectionStats = updateFloorPrice(
-      AUCTION_MODE.FINALIZE,
-      collectionStats,
-      auctionPrice
-    );
-  } else {
-    collectionStats = updatePriceTracker(
-      AUCTION_MODE.FINALIZE,
-      collectionStats,
-      auctionPrice
-    );
+  if (isOnSale) {
+    if (auctionPrice === collectionStats.floorPrice) {
+      collectionStats = updateFloorPrice(
+        AUCTION_MODE.FINALIZE,
+        collectionStats,
+        auctionPrice
+      );
+    } else {
+      collectionStats = updatePriceTracker(
+        AUCTION_MODE.FINALIZE,
+        collectionStats,
+        auctionPrice
+      );
+    }
   }
 
   collectionStats.save();
@@ -155,6 +161,7 @@ export function updateHistoricDataForAuctionCancel(
 
 export function updateHistoricDataForAuctionCompleted(
   contractAddress: Bytes,
+  isOnSale: boolean,
   volumeTraded: BigInt,
   auctionPrice: BigInt,
   tokenAmount: BigInt
@@ -164,18 +171,20 @@ export function updateHistoricDataForAuctionCompleted(
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
 
-  if (auctionPrice === collectionStats.floorPrice) {
-    collectionStats = updateFloorPrice(
-      AUCTION_MODE.FINALIZE,
-      collectionStats,
-      auctionPrice
-    );
-  } else {
-    collectionStats = updatePriceTracker(
-      AUCTION_MODE.FINALIZE,
-      collectionStats,
-      auctionPrice
-    );
+  if (isOnSale) {
+    if (auctionPrice === collectionStats.floorPrice) {
+      collectionStats = updateFloorPrice(
+        AUCTION_MODE.FINALIZE,
+        collectionStats,
+        auctionPrice
+      );
+    } else {
+      collectionStats = updatePriceTracker(
+        AUCTION_MODE.FINALIZE,
+        collectionStats,
+        auctionPrice
+      );
+    }
   }
 
   collectionStats.save();

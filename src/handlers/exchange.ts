@@ -42,6 +42,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
     );
     collectionData.updateHistoricDataForAuctionCancel(
       nft.contractId,
+      nft.isOnSale,
       auction.endingPrice,
       auction.tokenAmount
     );
@@ -73,6 +74,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   );
   collectionData.updateHistoricDataForAuctionCreate(
     nft.contractId,
+    nft.isOnSale,
     auction.endingPrice,
     auction.tokenAmount
   );
@@ -119,6 +121,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
   );
   collectionData.updateHistoricDataForAuctionCompleted(
     nft.contractId,
+    nft.isOnSale,
     auction.totalPrice!,
     auction.endingPrice,
     event.params.amount
@@ -167,6 +170,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
 
   collectionData.updateHistoricDataForAuctionCancel(
     nft.contractId,
+    nft.isOnSale,
     auction.endingPrice,
     auction.tokenAmount
   );
