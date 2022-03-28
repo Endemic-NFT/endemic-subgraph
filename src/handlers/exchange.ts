@@ -73,6 +73,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   );
   collectionData.updateHistoricDataForAuctionCreate(
     nft.contractId,
+    nft.id,
     auction.endingPrice,
     auction.tokenAmount
   );

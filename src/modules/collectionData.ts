@@ -2,6 +2,7 @@ import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
   CollectionDayData,
   CollectionHistoricData,
+  NftContract,
 } from '../../generated/schema';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
 import {
@@ -102,27 +103,34 @@ export function updateHistoricDataForTransfer(
 
 export function updateHistoricDataForAuctionCreate(
   contractAddress: Bytes,
+  nftId: string,
   auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
+  const nftContract = NftContract.load(contractAddress.toHexString());
+
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.plus(tokenAmount);
 
-  if (
-    !collectionStats.floorPrice ||
-    auctionPrice < collectionStats.floorPrice!
-  ) {
-    collectionStats = updateFloorPrice(
-      AUCTION_MODE.CREATE,
-      collectionStats,
-      auctionPrice
-    );
-  } else {
-    collectionStats = updatePriceTracker(
-      AUCTION_MODE.CREATE,
-      collectionStats,
-      auctionPrice
-    );
+  const isNewNft = !nftContract.nfts.includes(nftId);
+
+  if (isNewNft) {
+    if (
+      !collectionStats.floorPrice ||
+      auctionPrice < collectionStats.floorPrice!
+    ) {
+      collectionStats = updateFloorPrice(
+        AUCTION_MODE.CREATE,
+        collectionStats,
+        auctionPrice
+      );
+    } else {
+      collectionStats = updatePriceTracker(
+        AUCTION_MODE.CREATE,
+        collectionStats,
+        auctionPrice
+      );
+    }
   }
 
   collectionStats.save();
