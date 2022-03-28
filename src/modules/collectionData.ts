@@ -23,6 +23,8 @@ export function getOrCreateColectionHistoricData(
     stats.totalCount = ZERO_BI;
     stats.volumeTraded = ZERO_BI;
     stats.ownersCount = ZERO_BI;
+    stats.floorPrice = null;
+    stats.floorPriceTracker = [];
     stats.save();
   }
 
@@ -107,8 +109,8 @@ export function updateHistoricDataForAuctionCreate(
   collectionStats.onSaleCount = collectionStats.onSaleCount.plus(tokenAmount);
 
   if (
-    auctionPrice < collectionStats.floorPrice ||
-    !collectionStats.floorPrice
+    !collectionStats.floorPrice ||
+    auctionPrice < collectionStats.floorPrice!
   ) {
     collectionStats = updateFloorPrice(
       AUCTION_MODE.CREATE,
