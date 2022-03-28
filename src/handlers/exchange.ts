@@ -171,38 +171,39 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
 }
 
 export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
-  const { nftContract, tokenId, seller, buyer, price, totalFees } =
-    event.params;
-
   userData.updateHistoricDataForOfferAccepted(
-    buyer!.toHexString(),
-    seller!.toHexString(),
-    totalFees!
+    event.params.buyer.toHexString(),
+    event.params.seller.toHexString(),
+    event.params.totalFees
   );
 
   userData.updateDayDataForSaleCompleted(
     event.block.timestamp,
-    totalFees,
-    buyer.toHexString(),
-    seller.toHexString()
+    event.params.totalFees,
+    event.params.buyer.toHexString(),
+    event.params.seller.toHexString()
   );
 
-  collectionData.updateDayData(event.block.timestamp, nftContract, totalFees);
+  collectionData.updateDayData(
+    event.block.timestamp,
+    event.params.nftContract,
+    event.params.totalFees
+  );
 
   collectionData.updateHistoricDataForTransfer(
-    nftContract,
-    seller,
-    buyer,
-    totalFees
+    event.params.nftContract,
+    event.params.seller,
+    event.params.buyer,
+    event.params.totalFees
   );
 
   createPrivateSaleActivity(
-    nftContract,
-    tokenId,
-    seller.toHexString(),
-    buyer.toHexString(),
-    price,
-    totalFees,
+    event.params.nftContract,
+    event.params.tokenId,
+    event.params.seller.toHexString(),
+    event.params.buyer.toHexString(),
+    event.params.price,
+    event.params.totalFees,
     event
   );
 }

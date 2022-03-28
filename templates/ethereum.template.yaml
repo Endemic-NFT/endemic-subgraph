@@ -33,7 +33,7 @@ dataSources:
           handler: handleOfferAccepted
         - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
           handler: handleOfferCancelled
-        - event: PrivateSaleSuccess(indexed address,indexed address,address,indexed uint256,uint256,uint256)
+        - event: PrivateSaleSuccess(indexed address,indexed uint256,indexed address,address,uint256,uint256)
           handler: handlePrivateSaleSuccess
       file: ./src/handlers/exchange.ts
 {{/exchanges}}
