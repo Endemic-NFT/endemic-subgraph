@@ -36,7 +36,11 @@ export function removeActiveAuction(
   }
 
   userData.updateHistoricDataForAuctionCancel(auction.seller, amount);
-  collectionData.updateHistoricDataForAuctionCancel(nft.contractId, amount);
+  collectionData.updateHistoricDataForAuctionCancel(
+    nft.contractId,
+    auction.endingPrice,
+    amount
+  );
 
   handleAuctionCompletedForNFT(nft, auctionIdValue);
 }

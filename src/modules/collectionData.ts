@@ -4,6 +4,11 @@ import {
   CollectionHistoricData,
 } from '../../generated/schema';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
+import {
+  updateFloorPrice,
+  updatePriceTracker,
+  AUCTION_MODE,
+} from '../utils/floorPrices';
 import { isBurnEvent, isMintEvent } from './nft';
 import { getOrCreateOwnershipPerContract } from './ownership';
 
@@ -18,6 +23,8 @@ export function getOrCreateColectionHistoricData(
     stats.totalCount = ZERO_BI;
     stats.volumeTraded = ZERO_BI;
     stats.ownersCount = ZERO_BI;
+    stats.floorPrice = null;
+    stats.floorPriceTracker = [];
     stats.save();
   }
 
@@ -95,31 +102,82 @@ export function updateHistoricDataForTransfer(
 
 export function updateHistoricDataForAuctionCreate(
   contractAddress: Bytes,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.plus(tokenAmount);
+
+  if (
+    !collectionStats.floorPrice ||
+    auctionPrice < collectionStats.floorPrice!
+  ) {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.CREATE,
+      collectionStats,
+      auctionPrice
+    );
+  } else {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.CREATE,
+      collectionStats,
+      auctionPrice
+    );
+  }
+
   collectionStats.save();
 }
 
 export function updateHistoricDataForAuctionCancel(
   contractAddress: Bytes,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
+
+  if (auctionPrice === collectionStats.floorPrice) {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.FINALIZE,
+      collectionStats,
+      auctionPrice
+    );
+  } else {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.FINALIZE,
+      collectionStats,
+      auctionPrice
+    );
+  }
+
   collectionStats.save();
 }
 
 export function updateHistoricDataForAuctionCompleted(
   contractAddress: Bytes,
   volumeTraded: BigInt,
+  auctionPrice: BigInt,
   tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
+
+  if (auctionPrice === collectionStats.floorPrice) {
+    collectionStats = updateFloorPrice(
+      AUCTION_MODE.FINALIZE,
+      collectionStats,
+      auctionPrice
+    );
+  } else {
+    collectionStats = updatePriceTracker(
+      AUCTION_MODE.FINALIZE,
+      collectionStats,
+      auctionPrice
+    );
+  }
+
   collectionStats.save();
 }
 
