@@ -59,7 +59,8 @@ function updateFloorPriceOnFinalize(
 ): CollectionHistoricData {
   const floorPriceTracker = collectionStats.floorPriceTracker;
 
-  collectionStats.floorPrice = floorPriceTracker!.pop();
+  collectionStats.floorPrice =
+    floorPriceTracker!.length !== 0 ? floorPriceTracker!.pop() : null;
   collectionStats.floorPriceTracker = floorPriceTracker;
 
   return collectionStats;
