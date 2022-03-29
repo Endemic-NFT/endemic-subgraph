@@ -1,19 +1,12 @@
 {
     "network": "rinkeby",
-    "offerAddress": "0x44381Fe6981aad3bC1fD81b252c4546Ff0f46507",
-    "collectionBidAddress":"",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
     "contractImporterAddress":"0x427f522121534EB79d40Cbeeb5C62e172c05979d",
     "startBlock": 54570015,
     "erc721Factories": [
         {
-            "name": "EndemicNFTFactoryV1",
-            "address": "0x7e4fD7d4bb0e31A14B76a396F840b6FE08A51da3",
-            "block": 54570015
-        },
-        {
-            "name": "EndemicNFTFactory",
+            "name": "EndemicCollectionFactory",
             "address": "0x6621bDA8656cA6dbE5Fe51D736587eb91C42AE82",
             "block": 54570015
         }
