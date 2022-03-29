@@ -136,7 +136,10 @@ export function updateHistoricDataForAuctionCancel(
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
 
-  if (auctionPrice === collectionStats.floorPrice) {
+  if (
+    collectionStats.floorPrice &&
+    auctionPrice == collectionStats.floorPrice!
+  ) {
     collectionStats = updateFloorPrice(
       AUCTION_MODE.FINALIZE,
       collectionStats,
@@ -164,7 +167,10 @@ export function updateHistoricDataForAuctionCompleted(
   collectionStats.volumeTraded =
     collectionStats.volumeTraded.plus(volumeTraded);
 
-  if (auctionPrice === collectionStats.floorPrice) {
+  if (
+    collectionStats.floorPrice &&
+    auctionPrice == collectionStats.floorPrice!
+  ) {
     collectionStats = updateFloorPrice(
       AUCTION_MODE.FINALIZE,
       collectionStats,
