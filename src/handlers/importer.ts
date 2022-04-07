@@ -1,6 +1,6 @@
 import { CollectionAdded } from '../../generated/ContractImporter/ContractImporter';
 import { Collection } from '../../generated/templates';
-import { Collection as CollectionTemplate } from '../../generated/templates/Collection/Collection';
+import { ERC721Enumerable } from '../../generated/ContractImporter/ERC721Enumerable';
 import { Nft, NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
 import { log } from '@graphprotocol/graph-ts';
@@ -19,7 +19,7 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     ]);
     return;
   }
-  let erc721 = CollectionTemplate.bind(event.params.contractAddress);
+  let erc721 = ERC721Enumerable.bind(event.params.contractAddress);
 
   let name = erc721.try_name();
   if (name.reverted) {

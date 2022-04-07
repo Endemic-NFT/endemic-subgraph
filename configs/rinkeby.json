@@ -1,21 +1,21 @@
 {
     "network": "rinkeby",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
-    "contractImporterAddress":"0x427f522121534EB79d40Cbeeb5C62e172c05979d",
-    "startBlock": 54570015,
+    "royaltiesProviderAddress": "0xD26379F5dcb89E257cDB7F5Ce46b98B98Cab6752",
+    "contractImporterAddress":"0x8350146089b4B4B591439953fF36D22Fc07ebf18",
+    "startBlock": 10461850,
     "erc721Factories": [
         {
             "name": "EndemicCollectionFactory",
-            "address": "0x6621bDA8656cA6dbE5Fe51D736587eb91C42AE82",
-            "block": 54570015
+            "address": "0x8A2619ff673EeA38324Bf03d212d23e50831E182",
+            "block": 10461850
         }
     ],
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7",
-            "block": 57246873
+            "address": "0x9DaBd7D44BBf227e51eBe3d05E070851edD572cC",
+            "block": 10461850
         }
     ],
     "collections": []

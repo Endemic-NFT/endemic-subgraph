@@ -125,7 +125,7 @@ dataSources:
       abis:
         - name: ContractImporter
           file: ./abis/ContractImporter.json
-        - name: Collection
+        - name: ERC721Enumerable
           file: ./abis/ERC721Enumerable.json
       eventHandlers:
         - event: CollectionAdded(address,string)

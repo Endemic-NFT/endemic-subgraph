@@ -9,7 +9,8 @@
     "prepare:ethereum-testnet": "mustache configs/rinkeby.json templates/ethereum.template.yaml > subgraph.yaml && npx graph codegen",
     "deploy:aurora": "npm run prepare:aurora && npx graph deploy endemic-nft/endemic-aurora --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
     "deploy:aurora-staging": "npm run prepare:aurora && npx graph deploy endemic-nft/endemic-aurora-staging --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:aurora-testnet": "npm run prepare:aurora-testnet && npx graph deploy endemic-nft/endemic-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
+    "deploy:aurora-testnet": "npm run prepare:aurora-testnet && npx graph deploy endemic-nft/endemic-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy:ethereum-testnet": "npm run prepare:ethereum-testnet && npx graph deploy endemic-nft/endemic-ethereum-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.25.3",
