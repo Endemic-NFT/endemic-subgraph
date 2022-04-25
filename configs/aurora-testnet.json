@@ -6,10 +6,17 @@
     "royaltiesProviderAddress": "0xEF2f8d2f9330E46f46F8363aa83413BFc4A366Bf",
     "contractImporterAddress":"0x26a033078618206595D9461132736B0F17d96DEf",
     "startBlock": 10172998,
+    "legacyErc721Factories": [
+        {
+            "name": "EndemicNFTFactoryV1",
+            "address": "0x6891e2695c88aB0B9F27ee45C9Dc43Ff35864067",
+            "block": 10172998
+        }
+    ],
     "erc721Factories": [
         {
-            "name": "EndemicNFTFactory",
-            "address": "0x6891e2695c88aB0B9F27ee45C9Dc43Ff35864067",
+            "name": "EndemicCollectionFactory",
+            "address": "0x21aAB5F1458BC5BDaeC902683fd518A647eF52d4",
             "block": 10172998
         }
     ],

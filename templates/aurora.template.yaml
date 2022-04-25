@@ -84,7 +84,7 @@ dataSources:
   #     file: ./src/handlers/aurora/collectionBid.ts
 
     
-{{#erc721Factories}}
+{{#legacyErc721Factories}}
   - kind: ethereum/contract
     name: {{name}}
     network: {{network}}
@@ -106,6 +106,30 @@ dataSources:
         - event: NFTContractCreated(indexed address,indexed address,string,string,string)
           handler: handleCreated
       file: ./src/handlers/aurora/erc721Factory.ts
+{{/legacyErc721Factories}}
+    
+{{#erc721Factories}}
+  - kind: ethereum/contract
+    name: {{name}}
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: EndemicCollectionFactory
+      startBlock: {{block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFTContract
+        - Account
+      abis:
+        - name: EndemicCollectionFactory
+          file: ./abis/EndemicCollectionFactory.json
+      eventHandlers:
+        - event: NFTContractCreated(indexed address,indexed address,string,string,string,uint256)
+          handler: handleCreated
+      file: ./src/handlers/collectionFactory.ts
 {{/erc721Factories}}
 
   # - kind: ethereum/contract

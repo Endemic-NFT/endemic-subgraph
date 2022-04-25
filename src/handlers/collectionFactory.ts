@@ -1,8 +1,8 @@
-import { NFTContractCreated } from '../../../generated/EndemicCollectionFactory/EndemicCollectionFactory';
-import { Collection } from '../../../generated/templates';
-import { NftContract } from '../../../generated/schema';
-import { toLowerCase } from '../../utils/string';
-import { createAccount } from '../../modules/account';
+import { NFTContractCreated } from '../../generated/EndemicCollectionFactory/EndemicCollectionFactory';
+import { Collection } from '../../generated/templates';
+import { NftContract } from '../../generated/schema';
+import { toLowerCase } from '../utils/string';
+import { createAccount } from '../modules/account';
 
 export function handleCreated(event: NFTContractCreated): void {
   let nftContract = NftContract.load(event.params.nftContract.toHexString());

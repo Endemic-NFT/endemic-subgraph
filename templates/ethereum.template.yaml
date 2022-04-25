@@ -59,7 +59,7 @@ dataSources:
       eventHandlers:
         - event: NFTContractCreated(indexed address,indexed address,string,string,string,uint256)
           handler: handleCreated
-      file: ./src/handlers/ethereum/collectionFactory.ts
+      file: ./src/handlers/collectionFactory.ts
 {{/erc721Factories}}
 
   # - kind: ethereum/contract
