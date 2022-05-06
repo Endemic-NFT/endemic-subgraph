@@ -131,10 +131,9 @@ type Activity @entity {
   from: Account #This field is account that unifies “transferFrom, auctionSeller and offerAccepter depending of activity type
   to: Account #This field is account that unifies “transferTo, auctionBuyer and offerBidder depending of activity type
   price: BigInt #This field is price that unifies "offerPrice, privatePrice and auction starting price (if dutch auction); Depending on activity type"
+  endingPrice: BigInt #This field is price for dutch auction ending
   totalPrice: BigInt #This field is total price that unifies "offerPrice, privatePrice and auction starting price (if dutch auction); Plus fee depending on activity type"
   fee: BigInt #This field is fee that we get after auctionSuccess, offerAccept or privateSaleSuccess events
-  #auction activity
-  auctionStartingPrice: BigInt
 }
 
 type CollectionHistoricData @entity {
