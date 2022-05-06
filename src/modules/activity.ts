@@ -28,8 +28,8 @@ export function createAuctionActivity(
   activity.type = type;
   activity.fee = totalFee;
 
+  activity.auctionStartingPrice = auction.startingPrice;
   activity.price = auction.startingPrice;
-  activity.endingPrice = auction.endingPrice;
   activity.totalPrice = auction.totalPrice;
 
   activity.createdAt = event.block.timestamp;
