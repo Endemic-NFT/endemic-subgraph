@@ -5,6 +5,7 @@
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
     "contractImporterAddress":"0x427f522121534EB79d40Cbeeb5C62e172c05979d",
+    "metadataUpdaterAddress": "0x8C7C8539e48e0808E89acecEEFabd85FC2875599",
     "startBlock": 54570015,
     "erc721Factories": [
         {
