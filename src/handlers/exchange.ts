@@ -111,7 +111,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     auction.totalPrice!,
     event.params.amount
   );
-  userData.updateDayDataForSaleCompleted(
+  userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
     auction.totalPrice!,
     auction.buyer!.toHexString(),
@@ -123,7 +123,7 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     auction.endingPrice,
     event.params.amount
   );
-  collectionData.updateDayData(
+  collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
     auction.totalPrice!
@@ -181,14 +181,14 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
     event.params.totalFees
   );
 
-  userData.updateDayDataForSaleCompleted(
+  userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
     event.params.totalFees,
     event.params.buyer.toHexString(),
     event.params.seller.toHexString()
   );
 
-  collectionData.updateDayData(
+  collectionData.updateHourData(
     event.block.timestamp,
     event.params.nftContract,
     event.params.totalFees

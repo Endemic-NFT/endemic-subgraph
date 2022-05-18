@@ -156,16 +156,18 @@ type UserHistoricData @entity {
   takerVolume: BigInt!
 }
 
-type CollectionDayData @entity {
-  id: ID! # timestamp rounded to current day by dividing by 86400
-  date: Int!
+type CollectionHourData @entity {
+  ##timestamp rounded to nearest hour
+  id: ID!
+  epoch: Int!
   contractId: Bytes!
   volumeTraded: BigInt!
 }
 
-type UserDayData @entity {
-  id: ID! # timestamp rounded to current day by dividing by 86400
-  date: Int!
+type UserHourData @entity {
+  ##timestamp rounded to nearest hour
+  id: ID!
+  epoch: Int!
   accountId: Account!
   makerVolume: BigInt!
   takerVolume: BigInt!
