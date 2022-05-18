@@ -1,5 +1,5 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { UserHistoricData, UserDayData } from '../../generated/schema';
+import { UserHistoricData, UserHourData } from '../../generated/schema';
 import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
 
@@ -103,38 +103,43 @@ export function updateHistoricDataForOfferAccepted(
   sellerStats.save();
 }
 
-export function updateDayDataForSaleCompleted(
-  blockTimestamp: BigInt,
+export function updateHourDataForSaleCompleted(
+  timestamp: BigInt,
   volume: BigInt,
   buyerAddress: string,
   sellerAddress: string
 ): void {
-  updateDayData(blockTimestamp, buyerAddress, BigInt.fromU32(0), volume);
-  updateDayData(blockTimestamp, sellerAddress, volume, BigInt.fromU32(0));
+  updateHourData(timestamp, buyerAddress, BigInt.fromU32(0), volume);
+  updateHourData(timestamp, sellerAddress, volume, BigInt.fromU32(0));
 }
 
-export function updateDayData(
+export function updateHourData(
   blockTimestamp: BigInt,
   userAddress: string,
   makerVolume: BigInt,
   takerVolume: BigInt
 ): void {
   const timestamp = blockTimestamp.toI32();
-  const dayID = timestamp / 86400;
-  const dayStartTimestamp = dayID * 86400;
-  const dayDataId = userAddress + '-' + dayID.toString();
 
-  let userDayData = UserDayData.load(dayDataId);
-  if (userDayData == null) {
-    userDayData = new UserDayData(dayDataId);
-    userDayData.date = dayStartTimestamp;
-    userDayData.accountId = userAddress;
-    userDayData.makerVolume = ZERO_BI;
-    userDayData.takerVolume = ZERO_BI;
+  const hourID = Math.floor(timestamp / 3600000) * 3600000;
+
+  const hourDataId = userAddress + '-' + hourID.toString();
+
+  let userHourVolumeData = UserHourData.load(hourDataId);
+
+  if (userHourVolumeData == null) {
+    userHourVolumeData = new UserHourData(hourDataId);
+
+    userHourVolumeData.epoch = timestamp;
+    userHourVolumeData.accountId = userAddress;
+    userHourVolumeData.makerVolume = ZERO_BI;
+    userHourVolumeData.takerVolume = ZERO_BI;
   }
 
-  userDayData.makerVolume = userDayData.makerVolume.plus(makerVolume);
-  userDayData.takerVolume = userDayData.takerVolume.plus(takerVolume);
+  userHourVolumeData.makerVolume =
+    userHourVolumeData.makerVolume.plus(makerVolume);
+  userHourVolumeData.takerVolume =
+    userHourVolumeData.takerVolume.plus(takerVolume);
 
-  userDayData.save();
+  userHourVolumeData.save();
 }

@@ -70,7 +70,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
     event.params.seller.toHexString(),
     event.params.price
   );
-  userData.updateDayDataForSaleCompleted(
+  userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
     event.params.price,
     event.params.bidder.toHexString(),
@@ -81,7 +81,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
     nft.contractId,
     event.params.price
   );
-  collectionData.updateDayData(
+  collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
     event.params.price

@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import {
-  CollectionDayData,
   CollectionHistoricData,
+  CollectionHourData,
 } from '../../generated/schema';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
 import {
@@ -197,26 +197,29 @@ export function updateHistoricDataForOfferAccepted(
   collectionStats.save();
 }
 
-export function updateDayData(
+export function updateHourData(
   blockTimestamp: BigInt,
   contractAddress: Bytes,
   volumeTraded: BigInt
 ): void {
   const timestamp = blockTimestamp.toI32();
-  const dayID = timestamp / 86400;
-  const dayStartTimestamp = dayID * 86400;
-  const dayDataId = contractAddress.toHexString() + '-' + dayID.toString();
 
-  let collectionDayData = CollectionDayData.load(dayDataId);
-  if (collectionDayData == null) {
-    collectionDayData = new CollectionDayData(dayDataId);
-    collectionDayData.date = dayStartTimestamp;
-    collectionDayData.volumeTraded = ZERO_BI;
-    collectionDayData.contractId = contractAddress;
+  const hourID = Math.floor(timestamp / 3600000) * 3600000;
+
+  const hourDataId = contractAddress.toHexString() + '-' + hourID.toString();
+
+  let collectionHourData = CollectionHourData.load(hourDataId);
+
+  if (collectionHourData == null) {
+    collectionHourData = new CollectionHourData(hourDataId);
+
+    collectionHourData.epoch = timestamp;
+    collectionHourData.volumeTraded = ZERO_BI;
+    collectionHourData.contractId = contractAddress;
   }
 
-  collectionDayData.volumeTraded =
-    collectionDayData.volumeTraded.plus(volumeTraded);
+  collectionHourData.volumeTraded =
+    collectionHourData.volumeTraded.plus(volumeTraded);
 
-  collectionDayData.save();
+  collectionHourData.save();
 }
