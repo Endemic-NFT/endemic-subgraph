@@ -121,16 +121,20 @@ export function updateHourData(
 ): void {
   const timestamp = blockTimestamp.toI32();
 
-  const hourID = Math.floor(timestamp / 3600000) * 3600000;
+  const hour = timestamp / 3600;
 
-  const hourDataId = userAddress + '-' + hourID.toString();
+  const epoch = hour * 3600;
+
+  const hourDataId = userAddress
+    .concat('-')
+    .concat(BigInt.fromI32(hour).toString());
 
   let userHourVolumeData = UserHourData.load(hourDataId);
 
   if (userHourVolumeData == null) {
     userHourVolumeData = new UserHourData(hourDataId);
 
-    userHourVolumeData.epoch = timestamp;
+    userHourVolumeData.epoch = epoch;
     userHourVolumeData.accountId = userAddress;
     userHourVolumeData.makerVolume = ZERO_BI;
     userHourVolumeData.takerVolume = ZERO_BI;
