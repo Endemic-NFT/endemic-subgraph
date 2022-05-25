@@ -204,16 +204,21 @@ export function updateHourData(
 ): void {
   const timestamp = blockTimestamp.toI32();
 
-  const hourID = Math.floor(timestamp / 3600000) * 3600000;
+  const hour = timestamp / 3600;
 
-  const hourDataId = contractAddress.toHexString() + '-' + hourID.toString();
+  const epoch = hour * 3600;
+
+  const hourDataId = contractAddress
+    .toHexString()
+    .concat('-')
+    .concat(BigInt.fromI32(hour).toString());
 
   let collectionHourData = CollectionHourData.load(hourDataId);
 
   if (collectionHourData == null) {
     collectionHourData = new CollectionHourData(hourDataId);
 
-    collectionHourData.epoch = timestamp;
+    collectionHourData.epoch = epoch;
     collectionHourData.volumeTraded = ZERO_BI;
     collectionHourData.contractId = contractAddress;
   }
