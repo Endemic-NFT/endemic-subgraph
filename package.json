@@ -13,7 +13,7 @@
     "deploy:ethereum-testnet": "npm run prepare:ethereum-testnet && npx graph deploy endemic-nft/endemic-ethereum-rinkeby --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.25.3",
+    "@graphprotocol/graph-cli": "^0.30.1",
     "@graphprotocol/graph-ts": "^0.24.1",
     "mustache": "^4.2.0",
     "prettier": "^2.6.2"
