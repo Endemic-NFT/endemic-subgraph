@@ -101,6 +101,7 @@ type Auction @entity {
   buyer: Bytes
   startingPrice: BigInt!
   endingPrice: BigInt!
+  isDutch: Boolean!
   duration: BigInt!
   startedAt: BigInt!
   nft: Nft!
