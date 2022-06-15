@@ -19,6 +19,13 @@
             "block": 54570015
         }
     ],
+    "exchangesLegacy": [
+        {
+            "name": "EndemicExchangeLegacy",
+            "address": "0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7",
+            "block": 57246873
+        }
+    ],
     "exchanges": [
         {
             "name": "EndemicExchange",
