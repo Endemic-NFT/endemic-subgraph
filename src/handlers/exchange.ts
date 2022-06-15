@@ -51,7 +51,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.seller = event.params.seller.toHexString();
   auction.startingPrice = event.params.startingPrice;
   auction.endingPrice = event.params.endingPrice;
-  auction.isDutch = event.params.startingPrice !== event.params.endingPrice
+  auction.isDutch = event.params.startingPrice != event.params.endingPrice;
   auction.duration = event.params.duration;
   auction.nft = nftId;
   auction.tokenAmount = event.params.amount;
