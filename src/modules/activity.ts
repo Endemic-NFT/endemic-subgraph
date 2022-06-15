@@ -31,6 +31,7 @@ export function createAuctionActivity(
   activity.auctionStartingPrice = auction.startingPrice;
   activity.price = auction.startingPrice;
   activity.totalPrice = auction.totalPrice;
+  activity.isDutch = auction.startingPrice != auction.endingPrice;
 
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
