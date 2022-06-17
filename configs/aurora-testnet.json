@@ -14,10 +14,17 @@
             "block": 10172998
         }
     ],
+    "exchangesLegacy": [
+        {
+            "name": "EndemicExchangeLegacy",
+            "address": "0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6",
+            "block": 10172998
+        }
+    ],
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6",
+            "address": "0x9DaBd7D44BBf227e51eBe3d05E070851edD572cC",
             "block": 10172998
         }
     ],
