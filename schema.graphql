@@ -136,6 +136,7 @@ type Activity @entity {
   fee: BigInt #This field is fee that we get after auctionSuccess, offerAccept or privateSaleSuccess events
   #auction activity
   auctionStartingPrice: BigInt
+  auctionIsDutch: Boolean!
 }
 
 type CollectionHistoricData @entity {
