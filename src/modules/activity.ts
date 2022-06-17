@@ -70,6 +70,7 @@ export function createOfferActivity(
   activity.nftContract = nftContractId;
   activity.transactionHash = event.transaction.hash;
   activity.initiator = actor.toHexString();
+  activity.auctionIsDutch=false;
 
   if (type == 'offerAccept') {
     activity.from = actor.toHexString();
@@ -89,6 +90,7 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
+  activity.auctionIsDutch=false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -113,6 +115,7 @@ export function createERC1155TransferActivity(
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
+  activity.auctionIsDutch=false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -147,6 +150,7 @@ export function createPrivateSaleActivity(
   activity.initiator = buyerAddress;
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
+  activity.auctionIsDutch=false;
 
   activity.save();
 }
