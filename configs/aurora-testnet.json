@@ -1,24 +1,24 @@
 {
-    "network": "rinkeby",
-    "offerAddress": "0xD74705C6642B1359D858A7dE9f11d0F2739F098f",
-    "collectionBidAddress": "0x4F24FaFe8fD1Cb95d36A8C2cEf74526394281d47",
+    "network": "goerli",
+    "offerAddress": "0xcb917eF216367b4Fba9EDce3138E960B9673537E",
+    "collectionBidAddress": "",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xEF2f8d2f9330E46f46F8363aa83413BFc4A366Bf",
-    "contractImporterAddress":"0x26a033078618206595D9461132736B0F17d96DEf",
-    "metadataUpdaterAddress": "0x0Fd3CAc3da631ac5F6A18bcFF5F595dEBAC0B3eF",
-    "startBlock": 10172998,
+    "royaltiesProviderAddress": "0xF85Ab30873673dDe16E1d70518cB21814eE8fF9A",
+    "contractImporterAddress":"0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda",
+    "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
+    "startBlock": 7120952,
     "erc721Factories": [
         {
             "name": "EndemicNFTFactory",
-            "address": "0x6891e2695c88aB0B9F27ee45C9Dc43Ff35864067",
-            "block": 10172998
+            "address": "0x801C7A8410E4bf11a27B6D4a42B1E157C3E98549",
+            "block": 7120952
         }
     ],
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6",
-            "block": 10172998
+            "address": "0x42321A6BaF15C5cD5872fa79a2c58A7caEcbC077",
+            "block": 7120952
         }
     ],
     "collections": []
