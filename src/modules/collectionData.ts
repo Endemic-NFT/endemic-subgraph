@@ -200,7 +200,8 @@ export function updateHistoricDataForOfferAccepted(
 export function updateHourData(
   blockTimestamp: BigInt,
   contractAddress: Bytes,
-  volumeTraded: BigInt
+  volumeTraded: BigInt,
+  paymentErc20TokenAddress: Bytes | null
 ): void {
   const timestamp = blockTimestamp.toI32();
 
@@ -221,6 +222,7 @@ export function updateHourData(
     collectionHourData.epoch = epoch;
     collectionHourData.volumeTraded = ZERO_BI;
     collectionHourData.contractId = contractAddress;
+    collectionHourData.paymentErc20TokenAddress = paymentErc20TokenAddress;
   }
 
   collectionHourData.volumeTraded =

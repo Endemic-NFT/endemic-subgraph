@@ -1,7 +1,32 @@
 [
   {
     "inputs": [],
+    "name": "AcceptFromSelf",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "DurationTooShort",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FeeTransferFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FundsTransferFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidOffer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPaymentMethod",
     "type": "error"
   },
   {
@@ -11,18 +36,36 @@
   },
   {
     "inputs": [],
-    "name": "InvalidValueSent",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NoActiveOffer",
+    "name": "InvalidValueProvided",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "OfferExists",
     "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RefundFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RoyaltiesTransferFailed",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -142,6 +185,12 @@
         "internalType": "uint256",
         "name": "expiresAt",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "paymentErc20TokenAddress",
+        "type": "address"
       }
     ],
     "name": "OfferCreated",
@@ -167,34 +216,8 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Paused",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "Unpaused",
-    "type": "event"
-  },
-  {
     "inputs": [],
-    "name": "ERC721_Received",
+    "name": "ERC1155_ASSET_CLASS",
     "outputs": [
       {
         "internalType": "bytes4",
@@ -207,7 +230,46 @@
   },
   {
     "inputs": [],
-    "name": "MIN_BID_DURATION",
+    "name": "ERC1155_INTERFACE",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ERC721_ASSET_CLASS",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ERC721_INTERFACE",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MIN_OFFER_DURATION",
     "outputs": [
       {
         "internalType": "uint256",
@@ -216,29 +278,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_feeProvider",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_royaltiesProvider",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeClaimAddress",
-        "type": "address"
-      }
-    ],
-    "name": "__Offer_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -257,6 +296,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "offerIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "adminCancelOffers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "offerId",
         "type": "uint256"
@@ -265,6 +317,19 @@
     "name": "cancelOffer",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeClaimAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -290,9 +355,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
+            "internalType": "address",
+            "name": "paymentErc20TokenAddress",
+            "type": "address"
           },
           {
             "internalType": "address",
@@ -301,12 +366,17 @@
           },
           {
             "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "price",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "priceWithFee",
+            "name": "priceWithTakerFee",
             "type": "uint256"
           },
           {
@@ -315,9 +385,22 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct OfferCore.Offer",
+        "internalType": "struct EndemicOffer.Offer",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "makerFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -331,26 +414,6 @@
         "internalType": "address",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -382,22 +445,32 @@
   {
     "inputs": [
       {
-        "internalType": "address[]",
-        "name": "_tokenAddresses",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
       },
       {
-        "internalType": "uint256[]",
-        "name": "_tokenIds",
-        "type": "uint256[]"
+        "internalType": "address",
+        "name": "paymentErc20TokenAddress",
+        "type": "address"
       },
       {
-        "internalType": "address[]",
-        "name": "_offerders",
-        "type": "address[]"
+        "internalType": "uint256",
+        "name": "offerInErc20",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
       }
     ],
-    "name": "removeExpiredOffers",
+    "name": "placeOfferInErc20",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -410,6 +483,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "royaltiesProvider",
+    "outputs": [
+      {
+        "internalType": "contract IRoyaltiesProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "takerFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -418,13 +517,6 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

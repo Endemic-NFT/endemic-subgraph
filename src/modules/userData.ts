@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { UserHistoricData, UserHourData } from '../../generated/schema';
 import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
@@ -107,17 +107,31 @@ export function updateHourDataForSaleCompleted(
   timestamp: BigInt,
   volume: BigInt,
   buyerAddress: string,
-  sellerAddress: string
+  sellerAddress: string,
+  paymentErc20TokenAddress: Bytes | null
 ): void {
-  updateHourData(timestamp, buyerAddress, BigInt.fromU32(0), volume);
-  updateHourData(timestamp, sellerAddress, volume, BigInt.fromU32(0));
+  updateHourData(
+    timestamp,
+    buyerAddress,
+    BigInt.fromU32(0),
+    volume,
+    paymentErc20TokenAddress
+  );
+  updateHourData(
+    timestamp,
+    sellerAddress,
+    volume,
+    BigInt.fromU32(0),
+    paymentErc20TokenAddress
+  );
 }
 
 export function updateHourData(
   blockTimestamp: BigInt,
   userAddress: string,
   makerVolume: BigInt,
-  takerVolume: BigInt
+  takerVolume: BigInt,
+  paymentErc20TokenAddress: Bytes | null
 ): void {
   const timestamp = blockTimestamp.toI32();
 
@@ -138,6 +152,7 @@ export function updateHourData(
     userHourVolumeData.accountId = userAddress;
     userHourVolumeData.makerVolume = ZERO_BI;
     userHourVolumeData.takerVolume = ZERO_BI;
+    userHourVolumeData.paymentErc20TokenAddress = paymentErc20TokenAddress;
   }
 
   userHourVolumeData.makerVolume =

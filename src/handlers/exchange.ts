@@ -56,6 +56,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.nft = nftId;
   auction.tokenAmount = event.params.amount;
   auction.soldTokenAmount = ZERO_BI;
+  auction.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
 
   auction.save();
 
@@ -116,7 +117,8 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     event.block.timestamp,
     auction.totalPrice!,
     auction.buyer!.toHexString(),
-    auction.seller
+    auction.seller,
+    auction.paymentErc20TokenAddress
   );
   collectionData.updateHistoricDataForAuctionCompleted(
     nft.contractId,
@@ -127,7 +129,8 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
   collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
-    auction.totalPrice!
+    auction.totalPrice!,
+    auction.paymentErc20TokenAddress
   );
 
   createAuctionActivity(
@@ -186,13 +189,15 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
     event.block.timestamp,
     event.params.totalFees,
     event.params.buyer.toHexString(),
-    event.params.seller.toHexString()
+    event.params.seller.toHexString(),
+    event.params.paymentErc20TokenAddress
   );
 
   collectionData.updateHourData(
     event.block.timestamp,
     event.params.nftContract,
-    event.params.totalFees
+    event.params.totalFees,
+    event.params.paymentErc20TokenAddress
   );
 
   collectionData.updateHistoricDataForTransfer(
@@ -202,13 +207,5 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
     event.params.totalFees
   );
 
-  createPrivateSaleActivity(
-    event.params.nftContract,
-    event.params.tokenId,
-    event.params.seller.toHexString(),
-    event.params.buyer.toHexString(),
-    event.params.price,
-    event.params.totalFees,
-    event
-  );
+  createPrivateSaleActivity(event);
 }
