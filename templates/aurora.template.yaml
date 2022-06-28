@@ -2,6 +2,34 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
+{{#exchangesLegacy}}
+  - kind: ethereum/contract
+    name: {{name}}
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: EndemicExchangeLegacy
+      startBlock: {{block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: EndemicExchangeLegacy
+          file: ./abis/EndemicExchangeLegacy.json
+      eventHandlers:
+        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
+          handler: handleAuctionCreated
+        - event:  AuctionSuccessful(indexed bytes32,indexed uint256,address,uint256,uint256)
+          handler: handleAuctionSuccessful
+        - event:  AuctionCancelled(indexed bytes32)
+          handler: handleAuctionCancelled
+      file: ./src/handlers/aurora/exchange_legacy.ts
+{{/exchangesLegacy}}
+
 {{#exchanges}}
   - kind: ethereum/contract
     name: {{name}}
