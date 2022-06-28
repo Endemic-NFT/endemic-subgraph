@@ -30,6 +30,34 @@ dataSources:
       file: ./src/handlers/aurora/exchange_legacy.ts
 {{/exchangesLegacy}}
 
+{{#offersLegacy}}
+  - kind: ethereum/contract
+    name: {{name}}
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: OfferLegacy
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFT
+        - Account
+      abis:
+        - name: OfferLegacy
+          file: ./abis/OfferLegacy.json
+      eventHandlers:
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
+          handler: handleOfferCreated
+        - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
+          handler: handleOfferAccepted
+        - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
+          handler: handleOfferCancelled
+      file: ./src/handlers/aurora/offer_legacy.ts
+{{/offersLegacy}}
+
 {{#exchanges}}
   - kind: ethereum/contract
     name: {{name}}
@@ -55,34 +83,16 @@ dataSources:
           handler: handleAuctionSuccessful
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
-      file: ./src/handlers/exchange.ts
-{{/exchanges}}
-
-  - kind: ethereum/contract
-    name: Offer
-    network: {{network}}
-    source:
-      address: "{{offerAddress}}"
-      abi: Offer
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - NFT
-        - Account
-      abis:
-        - name: Offer
-          file: ./abis/Offer.json
-      eventHandlers:
         - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address)
           handler: handleOfferCreated
         - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
           handler: handleOfferAccepted
         - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
           handler: handleOfferCancelled
-      file: ./src/handlers/aurora/offer.ts
+        - event: PrivateSaleSuccess(indexed address,indexed uint256,indexed address,address,uint256,uint256,address)
+          handler: handlePrivateSaleSuccess
+      file: ./src/handlers/exchange.ts
+{{/exchanges}}
 
   # - kind: ethereum/contract
   #   name: CollectionBid

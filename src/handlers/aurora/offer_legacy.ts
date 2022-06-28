@@ -1,3 +1,6 @@
+//** This file is used to index previous offers contract data on Aurora **/
+//** Contract is no longer is use**/
+
 import { log, store } from '@graphprotocol/graph-ts';
 import {
   OfferAccepted,
@@ -33,7 +36,6 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
   offer.isCollectionOffer = false;
-  offer.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
 
   offer.save();
 
@@ -75,8 +77,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
     event.block.timestamp,
     event.params.price,
     event.params.bidder.toHexString(),
-    event.params.seller.toHexString(),
-    offer.paymentErc20TokenAddress
+    event.params.seller.toHexString()
   );
 
   collectionData.updateHistoricDataForOfferAccepted(
@@ -86,8 +87,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
   collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
-    event.params.price,
-    offer.paymentErc20TokenAddress
+    event.params.price
   );
 
   createOfferActivity(

@@ -108,7 +108,7 @@ export function updateHourDataForSaleCompleted(
   volume: BigInt,
   buyerAddress: string,
   sellerAddress: string,
-  paymentErc20TokenAddress: Bytes | null
+  paymentErc20TokenAddress: Bytes | null = null
 ): void {
   updateHourData(
     timestamp,
@@ -131,7 +131,7 @@ export function updateHourData(
   userAddress: string,
   makerVolume: BigInt,
   takerVolume: BigInt,
-  paymentErc20TokenAddress: Bytes | null
+  paymentErc20TokenAddress: Bytes | null = null
 ): void {
   const timestamp = blockTimestamp.toI32();
 

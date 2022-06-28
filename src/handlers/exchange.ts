@@ -2,9 +2,12 @@ import {
   AuctionCancelled,
   AuctionCreated,
   AuctionSuccessful,
+  OfferAccepted,
+  OfferCancelled,
+  OfferCreated,
   PrivateSaleSuccess,
 } from '../../generated/EndemicExchange/EndemicExchange';
-import { Nft, Auction } from '../../generated/schema';
+import { Nft, Auction, Offer } from '../../generated/schema';
 import {
   createNftId,
   handleAuctionCompletedForNFT,
@@ -12,6 +15,7 @@ import {
 } from '../modules/nft';
 import {
   createAuctionActivity,
+  createOfferActivity,
   createPrivateSaleActivity,
 } from '../modules/activity';
 import { log, store } from '@graphprotocol/graph-ts';
@@ -19,6 +23,7 @@ import { getOrCreateNftOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { ZERO_BI } from '../utils/constants';
+import { createAccount } from '../modules/account';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -176,6 +181,123 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   );
 
   createAuctionActivity(auction, nft, 'auctionCancel', ZERO_BI, event);
+}
+
+export function handleOfferCreated(event: OfferCreated): void {
+  let nftId = createNftId(
+    event.params.nftContract.toHexString(),
+    event.params.tokenId.toString()
+  );
+
+  let offerId = event.params.id.toString();
+  let offer = new Offer(offerId);
+
+  let nft = Nft.load(nftId);
+  if (nft == null) {
+    log.info('NFT not found {} for offer {}', [nftId, offerId]);
+    return;
+  }
+
+  offer.nft = nftId;
+  offer.bidder = event.params.bidder.toHexString();
+  offer.price = event.params.price;
+  offer.expiresAt = event.params.expiresAt;
+  offer.createdAt = event.block.timestamp;
+  offer.isCollectionOffer = false;
+  offer.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
+
+  offer.save();
+
+  createAccount(event.params.bidder);
+  createOfferActivity(
+    offer,
+    nft.id,
+    nft.contractId.toHexString(),
+    ZERO_BI,
+    'offerCreate',
+    event.params.bidder,
+    event
+  );
+}
+
+export function handleOfferAccepted(event: OfferAccepted): void {
+  let offerId = event.params.id.toString();
+
+  let offer = Offer.load(offerId);
+  if (offer == null) {
+    log.info('Offer not found {}', [offerId]);
+    return;
+  }
+
+  let nft = Nft.load(offer.nft!);
+  if (nft == null) {
+    log.info('NFT not found {} for offer {}', [nft!.id, offerId]);
+    return;
+  }
+
+  store.remove('Offer', offer.id);
+
+  userData.updateHistoricDataForOfferAccepted(
+    event.params.bidder.toHexString(),
+    event.params.seller.toHexString(),
+    event.params.price
+  );
+  userData.updateHourDataForSaleCompleted(
+    event.block.timestamp,
+    event.params.price,
+    event.params.bidder.toHexString(),
+    event.params.seller.toHexString(),
+    offer.paymentErc20TokenAddress
+  );
+
+  collectionData.updateHistoricDataForOfferAccepted(
+    nft.contractId,
+    event.params.price
+  );
+  collectionData.updateHourData(
+    event.block.timestamp,
+    nft.contractId,
+    event.params.price,
+    offer.paymentErc20TokenAddress
+  );
+
+  createOfferActivity(
+    offer,
+    nft.id,
+    nft.contractId.toHexString(),
+    event.params.totalFees,
+    'offerAccept',
+    event.params.seller,
+    event
+  );
+}
+
+export function handleOfferCancelled(event: OfferCancelled): void {
+  let offerId = event.params.id.toString();
+
+  let offer = Offer.load(offerId);
+  if (offer == null) {
+    log.info('Offer not found {}', [offerId]);
+    return;
+  }
+
+  let nft = Nft.load(offer.nft!);
+  if (nft == null) {
+    log.info('NFT not found {} for offer {}', [nft!.id, offerId]);
+    return;
+  }
+
+  store.remove('Offer', offer.id);
+
+  createOfferActivity(
+    offer,
+    nft.id,
+    nft.contractId.toHexString(),
+    ZERO_BI,
+    'offerCancel',
+    event.params.bidder,
+    event
+  );
 }
 
 export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {

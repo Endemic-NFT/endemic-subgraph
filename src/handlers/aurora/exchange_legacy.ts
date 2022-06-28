@@ -5,7 +5,6 @@ import {
   AuctionCancelled,
   AuctionCreated,
   AuctionSuccessful,
-  PrivateSaleSuccess,
 } from '../../../generated/EndemicExchangeLegacy/EndemicExchangeLegacy';
 import { Nft, Auction } from '../../../generated/schema';
 import {
@@ -13,10 +12,7 @@ import {
   handleAuctionCompletedForNFT,
   handleAuctionCreatedForNFT,
 } from '../../modules/nft';
-import {
-  createAuctionActivity,
-  createPrivateSaleActivity,
-} from '../../modules/activity';
+import { createAuctionActivity } from '../../modules/activity';
 import { log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateNftOwnership } from '../../modules/ownership';
 import * as userData from '../../modules/userData';
@@ -176,42 +172,4 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   );
 
   createAuctionActivity(auction, nft, 'auctionCancel', ZERO_BI, event);
-}
-
-export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
-  userData.updateHistoricDataForOfferAccepted(
-    event.params.buyer.toHexString(),
-    event.params.seller.toHexString(),
-    event.params.totalFees
-  );
-
-  userData.updateHourDataForSaleCompleted(
-    event.block.timestamp,
-    event.params.totalFees,
-    event.params.buyer.toHexString(),
-    event.params.seller.toHexString()
-  );
-
-  collectionData.updateHourData(
-    event.block.timestamp,
-    event.params.nftContract,
-    event.params.totalFees
-  );
-
-  collectionData.updateHistoricDataForTransfer(
-    event.params.nftContract,
-    event.params.seller,
-    event.params.buyer,
-    event.params.totalFees
-  );
-
-  createPrivateSaleActivity(
-    event.params.nftContract,
-    event.params.tokenId,
-    event.params.seller.toHexString(),
-    event.params.buyer.toHexString(),
-    event.params.price,
-    event.params.totalFees,
-    event
-  );
 }

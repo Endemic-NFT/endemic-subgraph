@@ -201,7 +201,7 @@ export function updateHourData(
   blockTimestamp: BigInt,
   contractAddress: Bytes,
   volumeTraded: BigInt,
-  paymentErc20TokenAddress: Bytes | null
+  paymentErc20TokenAddress: Bytes | null = null
 ): void {
   const timestamp = blockTimestamp.toI32();
 
