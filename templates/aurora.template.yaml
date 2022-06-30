@@ -93,42 +93,14 @@ dataSources:
           handler: handlePrivateSaleSuccess
       file: ./src/handlers/exchange.ts
 {{/exchanges}}
-
-  # - kind: ethereum/contract
-  #   name: CollectionBid
-  #   network: {{network}}
-  #   source:
-  #     address: "{{collectionBidAddress}}"
-  #     abi: CollectionBid
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.5
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - NFT
-  #       - NFTContract
-  #       - Account
-  #     abis:
-  #       - name: CollectionBid
-  #         file: ./abis/CollectionBid.json
-  #     eventHandlers:
-  #       - event: BidCreated(bytes32,indexed address,indexed address,uint256,uint256)
-  #         handler: handleBidCreated
-  #       - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
-  #         handler: handleBidAccepted
-  #       - event: BidCancelled(bytes32,indexed address,indexed address)
-  #         handler: handleBidCancelled
-  #     file: ./src/handlers/aurora/collectionBid.ts
-
     
-{{#erc721Factories}}
+{{#erc721FactoriesLegacy}}
   - kind: ethereum/contract
     name: {{name}}
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: EndemicNFTFactory
+      abi: EndemicNFTFactoryLegacy
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
@@ -138,35 +110,38 @@ dataSources:
         - NFTContract
         - Account
       abis:
-        - name: EndemicNFTFactory
-          file: ./abis/EndemicNFTFactory.json
+        - name: EndemicNFTFactoryLegacy
+          file: ./abis/EndemicNFTFactoryLegacy.json
       eventHandlers:
         - event: NFTContractCreated(indexed address,indexed address,string,string,string)
           handler: handleCreated
-      file: ./src/handlers/aurora/erc721Factory.ts
-{{/erc721Factories}}
+      file: ./src/handlers/aurora/erc721Factory_legacy.ts
+{{/erc721FactoriesLegacy}}
 
-  # - kind: ethereum/contract
-  #   name: EndemicERC1155Factory
-  #   network: {{network}}
-  #   source:
-  #     address: "{{erc1155FactoryAddress}}"
-  #     abi: EndemicERC1155Factory
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.5
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - NFTContract
-  #       - Account
-  #     abis:
-  #       - name: EndemicERC1155Factory
-  #         file: ./abis/EndemicERC1155Factory.json
-  #     eventHandlers:
-  #       - event: Created(indexed address,indexed address,string,string,string)
-  #         handler: handleCreated
-  #     file: ./src/handlers/erc1155Factory.ts
+    
+{{#erc721Factories}}
+  - kind: ethereum/contract
+    name: {{name}}
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: EndemicCollectionFactory
+      startBlock: {{block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - NFTContract
+        - Account
+      abis:
+        - name: EndemicCollectionFactory
+          file: ./abis/EndemicCollectionFactory.json
+      eventHandlers:
+        - event: NFTContractCreated(indexed address,indexed address,string,string,string,uint256)
+          handler: handleCreated
+      file: ./src/handlers/erc721Factory.ts
+{{/erc721Factories}}
 
   - kind: ethereum/contract
     name: RoyaltiesProvider
