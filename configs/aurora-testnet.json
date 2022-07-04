@@ -2,7 +2,7 @@
     "network": "goerli",
     "collectionBidAddress": "",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xF85Ab30873673dDe16E1d70518cB21814eE8fF9A",
+    "royaltiesProviderAddress": "0xD0E7364473F0843461F2631306AE248539Dab487",
     "contractImporterAddress":"0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda",
     "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
     "startBlock": 7120952,
@@ -37,8 +37,8 @@
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7",
-            "block": 57246873
+            "address": "0x2B01B64f11353F55A0500DeEeA9524ab633687E9",
+            "block": 7144612
         }
     ],
     "collections": []
