@@ -100,7 +100,7 @@ type Auction @entity {
   id: ID!
   seller: Account!
   buyer: Bytes
-  paymentErc20TokenAddress: Bytes
+  paymentErc20TokenAddress: Bytes!
   startingPrice: BigInt!
   endingPrice: BigInt!
   isDutch: Boolean!
@@ -117,7 +117,7 @@ type Offer @entity {
   nft: Nft
   nftContract: NftContract
   bidder: Account!
-  paymentErc20TokenAddress: Bytes
+  paymentErc20TokenAddress: Bytes!
   price: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
@@ -151,6 +151,7 @@ type CollectionHistoricData @entity {
   ownersCount: BigInt!
   floorPrice: BigInt
   floorPriceTracker: [BigInt!]
+  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "collectionHistoricData")
 }
 
 type UserHistoricData @entity {
@@ -160,6 +161,7 @@ type UserHistoricData @entity {
   onSaleCount: BigInt!
   makerVolume: BigInt!
   takerVolume: BigInt!
+  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "userHistoricData")
 }
 
 type CollectionHourData @entity {
@@ -179,6 +181,16 @@ type UserHourData @entity {
   makerVolume: BigInt!
   takerVolume: BigInt!
   paymentErc20TokenAddress: Bytes
+}
+
+type Erc20Volume @entity {
+  id: ID!
+  volumeTraded: BigInt!
+  makerVolume: BigInt!
+  takerVolume: BigInt!
+  paymentErc20TokenAddress: String
+  userHistoricData: UserHistoricData
+  collectionHistoricData: CollectionHistoricData
 }
 
 enum ActivityType @entity {

@@ -116,7 +116,8 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     auction.buyer!.toHexString(),
     auction.seller,
     auction.totalPrice!,
-    event.params.amount
+    event.params.amount,
+    auction.paymentErc20TokenAddress
   );
   userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
@@ -129,7 +130,8 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     nft.contractId,
     auction.totalPrice!,
     auction.endingPrice,
-    event.params.amount
+    event.params.amount,
+    auction.paymentErc20TokenAddress
   );
   collectionData.updateHourData(
     event.block.timestamp,
@@ -240,7 +242,8 @@ export function handleOfferAccepted(event: OfferAccepted): void {
   userData.updateHistoricDataForOfferAccepted(
     event.params.bidder.toHexString(),
     event.params.seller.toHexString(),
-    event.params.price
+    event.params.price,
+    offer.paymentErc20TokenAddress
   );
   userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
@@ -252,7 +255,8 @@ export function handleOfferAccepted(event: OfferAccepted): void {
 
   collectionData.updateHistoricDataForOfferAccepted(
     nft.contractId,
-    event.params.price
+    event.params.price,
+    offer.paymentErc20TokenAddress
   );
   collectionData.updateHourData(
     event.block.timestamp,
@@ -304,7 +308,8 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
   userData.updateHistoricDataForOfferAccepted(
     event.params.buyer.toHexString(),
     event.params.seller.toHexString(),
-    event.params.totalFees
+    event.params.totalFees,
+    event.params.paymentErc20TokenAddress
   );
 
   userData.updateHourDataForSaleCompleted(

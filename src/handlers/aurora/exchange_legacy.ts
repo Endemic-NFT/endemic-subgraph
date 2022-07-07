@@ -17,7 +17,7 @@ import { log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateNftOwnership } from '../../modules/ownership';
 import * as userData from '../../modules/userData';
 import * as collectionData from '../../modules/collectionData';
-import { ZERO_BI } from '../../utils/constants';
+import { NULL_ADDRESS, ZERO_BI } from '../../utils/constants';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -55,6 +55,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.nft = nftId;
   auction.tokenAmount = event.params.amount;
   auction.soldTokenAmount = ZERO_BI;
+  auction.paymentErc20TokenAddress = NULL_ADDRESS;
 
   auction.save();
 
