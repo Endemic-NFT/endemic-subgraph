@@ -3,6 +3,7 @@ import { Transfer } from '../../generated/templates/Collection/Collection';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, Nft, Auction, Offer } from '../../generated/schema';
 import { isMintEvent, isBurnEvent, createNftId } from './nft';
+import { PrivateSaleSuccess } from '../../generated/EndemicExchange/EndemicExchange';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -32,6 +33,7 @@ export function createAuctionActivity(
   activity.price = auction.startingPrice;
   activity.totalPrice = auction.totalPrice;
   activity.auctionIsDutch = auction.isDutch;
+  activity.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
 
   activity.createdAt = event.block.timestamp;
   activity.nft = nft.id;
@@ -70,7 +72,8 @@ export function createOfferActivity(
   activity.nftContract = nftContractId;
   activity.transactionHash = event.transaction.hash;
   activity.initiator = actor.toHexString();
-  activity.auctionIsDutch=false;
+  activity.auctionIsDutch = false;
+  activity.paymentErc20TokenAddress = offer.paymentErc20TokenAddress;
 
   if (type == 'offerAccept') {
     activity.from = actor.toHexString();
@@ -90,7 +93,7 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
-  activity.auctionIsDutch=false;
+  activity.auctionIsDutch = false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -115,7 +118,7 @@ export function createERC1155TransferActivity(
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
-  activity.auctionIsDutch=false;
+  activity.auctionIsDutch = false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -126,31 +129,29 @@ export function createERC1155TransferActivity(
   activity.save();
 }
 
-export function createPrivateSaleActivity(
-  nftContract: Address,
-  tokenId: BigInt,
-  sellerAddress: string,
-  buyerAddress: string,
-  price: BigInt,
-  totalFees: BigInt,
-  event: ethereum.Event
-): void {
+export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
   let id = 'offer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
 
-  const nftId = createNftId(nftContract.toHexString(), tokenId.toString());
+  let buyerAddress = event.params.buyer.toHexString();
+
+  let nftId = createNftId(
+    event.params.nftContract.toHexString(),
+    event.params.tokenId.toString()
+  );
 
   activity.type = 'privateSaleSuccess';
   activity.nft = nftId;
-  activity.from = sellerAddress;
+  activity.from = event.params.seller.toHexString();
   activity.to = buyerAddress;
-  activity.price = price;
-  activity.fee = totalFees;
-  activity.totalPrice = price.plus(totalFees);
+  activity.price = event.params.price;
+  activity.fee = event.params.totalFees;
+  activity.totalPrice = event.params.price.plus(event.params.totalFees);
   activity.initiator = buyerAddress;
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
-  activity.auctionIsDutch=false;
+  activity.auctionIsDutch = false;
+  activity.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
 
   activity.save();
 }

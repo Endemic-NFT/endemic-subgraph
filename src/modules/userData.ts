@@ -1,7 +1,12 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { UserHistoricData, UserHourData } from '../../generated/schema';
-import { ZERO_BI } from '../utils/constants';
+import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
+import {
+  isPaymentInEther,
+  updateErc20VolumeForBuyerHistoricData,
+  updateErc20VolumeForSellerHistoricData,
+} from './erc20Volume';
 
 export function getOrCreateUserHistoricData(
   userAddress: string
@@ -77,29 +82,62 @@ export function updateHistoricDataForAuctionCompleted(
   buyerAddress: string,
   sellerAddress: string,
   volumeTraded: BigInt,
-  tokenAmount: BigInt
+  tokenAmount: BigInt,
+  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
 ): void {
   let buyerStats = getOrCreateUserHistoricData(buyerAddress);
-  buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
-  buyerStats.save();
-
   let sellerStats = getOrCreateUserHistoricData(sellerAddress);
+
   sellerStats.onSaleCount = sellerStats.onSaleCount.minus(tokenAmount);
-  sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
+
+  if (isPaymentInEther(paymentErc20TokenAddress)) {
+    buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
+
+    sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
+  } else {
+    updateErc20VolumeForBuyerHistoricData(
+      paymentErc20TokenAddress.toHexString(),
+      buyerAddress,
+      volumeTraded
+    );
+    updateErc20VolumeForSellerHistoricData(
+      paymentErc20TokenAddress.toHexString(),
+      sellerAddress,
+      volumeTraded
+    );
+  }
+
+  buyerStats.save();
   sellerStats.save();
 }
 
 export function updateHistoricDataForOfferAccepted(
   buyerAddress: string,
   sellerAddress: string,
-  volumeTraded: BigInt
+  volumeTraded: BigInt,
+  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
 ): void {
   let buyerStats = getOrCreateUserHistoricData(buyerAddress);
-  buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
-  buyerStats.save();
-
   let sellerStats = getOrCreateUserHistoricData(sellerAddress);
-  sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
+
+  if (isPaymentInEther(paymentErc20TokenAddress)) {
+    buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
+
+    sellerStats.makerVolume = sellerStats.makerVolume.plus(volumeTraded);
+  } else {
+    updateErc20VolumeForBuyerHistoricData(
+      paymentErc20TokenAddress.toHexString(),
+      buyerAddress,
+      volumeTraded
+    );
+    updateErc20VolumeForSellerHistoricData(
+      paymentErc20TokenAddress.toHexString(),
+      sellerAddress,
+      volumeTraded
+    );
+  }
+
+  buyerStats.save();
   sellerStats.save();
 }
 
@@ -107,17 +145,31 @@ export function updateHourDataForSaleCompleted(
   timestamp: BigInt,
   volume: BigInt,
   buyerAddress: string,
-  sellerAddress: string
+  sellerAddress: string,
+  paymentErc20TokenAddress: Bytes | null = null
 ): void {
-  updateHourData(timestamp, buyerAddress, BigInt.fromU32(0), volume);
-  updateHourData(timestamp, sellerAddress, volume, BigInt.fromU32(0));
+  updateHourData(
+    timestamp,
+    buyerAddress,
+    BigInt.fromU32(0),
+    volume,
+    paymentErc20TokenAddress
+  );
+  updateHourData(
+    timestamp,
+    sellerAddress,
+    volume,
+    BigInt.fromU32(0),
+    paymentErc20TokenAddress
+  );
 }
 
 export function updateHourData(
   blockTimestamp: BigInt,
   userAddress: string,
   makerVolume: BigInt,
-  takerVolume: BigInt
+  takerVolume: BigInt,
+  paymentErc20TokenAddress: Bytes | null = null
 ): void {
   const timestamp = blockTimestamp.toI32();
 
@@ -138,6 +190,7 @@ export function updateHourData(
     userHourVolumeData.accountId = userAddress;
     userHourVolumeData.makerVolume = ZERO_BI;
     userHourVolumeData.takerVolume = ZERO_BI;
+    userHourVolumeData.paymentErc20TokenAddress = paymentErc20TokenAddress;
   }
 
   userHourVolumeData.makerVolume =
