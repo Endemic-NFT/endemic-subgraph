@@ -3,7 +3,7 @@ import {
   CollectionHistoricData,
   CollectionHourData,
 } from '../../generated/schema';
-import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
 import {
   updateFloorPrice,
   updatePriceTracker,
@@ -11,10 +11,6 @@ import {
 } from '../utils/floorPrices';
 import { isBurnEvent, isMintEvent } from './nft';
 import { getOrCreateOwnershipPerContract } from './ownership';
-import {
-  isPaymentInEther,
-  updateErc20VolumeForCollectionHistoricData,
-} from './erc20Volume';
 
 export function getOrCreateColectionHistoricData(
   contractAddress: Bytes
@@ -164,22 +160,12 @@ export function updateHistoricDataForAuctionCompleted(
   contractAddress: Bytes,
   volumeTraded: BigInt,
   auctionPrice: BigInt,
-  tokenAmount: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  tokenAmount: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
-
-  if (isPaymentInEther(paymentErc20TokenAddress)) {
-    collectionStats.volumeTraded =
-      collectionStats.volumeTraded.plus(volumeTraded);
-  } else {
-    updateErc20VolumeForCollectionHistoricData(
-      paymentErc20TokenAddress.toHexString(),
-      contractAddress.toHexString(),
-      volumeTraded
-    );
-  }
+  collectionStats.volumeTraded =
+    collectionStats.volumeTraded.plus(volumeTraded);
 
   if (
     collectionStats.floorPrice &&
@@ -203,30 +189,18 @@ export function updateHistoricDataForAuctionCompleted(
 
 export function updateHistoricDataForOfferAccepted(
   contractAddress: Bytes,
-  volumeTraded: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  volumeTraded: BigInt
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
-
-  if (isPaymentInEther(paymentErc20TokenAddress)) {
-    collectionStats.volumeTraded =
-      collectionStats.volumeTraded.plus(volumeTraded);
-  } else {
-    updateErc20VolumeForCollectionHistoricData(
-      paymentErc20TokenAddress.toHexString(),
-      contractAddress.toHexString(),
-      volumeTraded
-    );
-  }
-
+  collectionStats.volumeTraded =
+    collectionStats.volumeTraded.plus(volumeTraded);
   collectionStats.save();
 }
 
 export function updateHourData(
   blockTimestamp: BigInt,
   contractAddress: Bytes,
-  volumeTraded: BigInt,
-  paymentErc20TokenAddress: Bytes | null = null
+  volumeTraded: BigInt
 ): void {
   const timestamp = blockTimestamp.toI32();
 
@@ -247,7 +221,6 @@ export function updateHourData(
     collectionHourData.epoch = epoch;
     collectionHourData.volumeTraded = ZERO_BI;
     collectionHourData.contractId = contractAddress;
-    collectionHourData.paymentErc20TokenAddress = paymentErc20TokenAddress;
   }
 
   collectionHourData.volumeTraded =

@@ -1,6 +1,3 @@
-//** This file is used to index previous offers contract data on Aurora **/
-//** Contract is no longer is use**/
-
 import { log, store } from '@graphprotocol/graph-ts';
 import {
   OfferAccepted,
@@ -13,7 +10,7 @@ import { createOfferActivity } from '../../modules/activity';
 import * as userData from '../../modules/userData';
 import * as collectionData from '../../modules/collectionData';
 import { createAccount } from '../../modules/account';
-import { NULL_ADDRESS, ZERO_BI } from '../../utils/constants';
+import { ZERO_BI } from '../../utils/constants';
 
 export function handleOfferCreated(event: OfferCreated): void {
   let nftId = createNftId(
@@ -36,7 +33,6 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
   offer.isCollectionOffer = false;
-  offer.paymentErc20TokenAddress = NULL_ADDRESS;
 
   offer.save();
 

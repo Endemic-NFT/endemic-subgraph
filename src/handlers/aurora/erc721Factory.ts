@@ -1,4 +1,4 @@
-import { NFTContractCreated } from '../../../generated/EndemicNFTFactoryLegacy/EndemicNFTFactoryLegacy';
+import { NFTContractCreated } from '../../../generated/EndemicNFTFactory/EndemicNFTFactory';
 import { Collection } from '../../../generated/templates';
 import { NftContract } from '../../../generated/schema';
 import { toLowerCase } from '../../utils/string';

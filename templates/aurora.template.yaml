@@ -2,62 +2,6 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-{{#exchangesLegacy}}
-  - kind: ethereum/contract
-    name: {{name}}
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: EndemicExchangeLegacy
-      startBlock: {{block}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - NFT
-        - Account
-      abis:
-        - name: EndemicExchangeLegacy
-          file: ./abis/EndemicExchangeLegacy.json
-      eventHandlers:
-        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
-          handler: handleAuctionCreated
-        - event:  AuctionSuccessful(indexed bytes32,indexed uint256,address,uint256,uint256)
-          handler: handleAuctionSuccessful
-        - event:  AuctionCancelled(indexed bytes32)
-          handler: handleAuctionCancelled
-      file: ./src/handlers/aurora/exchange_legacy.ts
-{{/exchangesLegacy}}
-
-{{#offersLegacy}}
-  - kind: ethereum/contract
-    name: {{name}}
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: OfferLegacy
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - NFT
-        - Account
-      abis:
-        - name: OfferLegacy
-          file: ./abis/OfferLegacy.json
-      eventHandlers:
-        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
-          handler: handleOfferCreated
-        - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
-          handler: handleOfferAccepted
-        - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
-          handler: handleOfferCancelled
-      file: ./src/handlers/aurora/offer_legacy.ts
-{{/offersLegacy}}
-
 {{#exchanges}}
   - kind: ethereum/contract
     name: {{name}}
@@ -77,46 +21,67 @@ dataSources:
         - name: EndemicExchange
           file: ./abis/EndemicExchange.json
       eventHandlers:
-        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,address,bytes4)
+        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
           handler: handleAuctionCreated
         - event:  AuctionSuccessful(indexed bytes32,indexed uint256,address,uint256,uint256)
           handler: handleAuctionSuccessful
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
-        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address)
-          handler: handleOfferCreated
-        - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
-          handler: handleOfferAccepted
-        - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
-          handler: handleOfferCancelled
-        - event: PrivateSaleSuccess(indexed address,indexed uint256,indexed address,address,uint256,uint256,address)
-          handler: handlePrivateSaleSuccess
       file: ./src/handlers/exchange.ts
 {{/exchanges}}
-    
-{{#erc721FactoriesLegacy}}
+
   - kind: ethereum/contract
-    name: {{name}}
+    name: Offer
     network: {{network}}
     source:
-      address: "{{address}}"
-      abi: EndemicNFTFactoryLegacy
-      startBlock: {{block}}
+      address: "{{offerAddress}}"
+      abi: Offer
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - NFTContract
+        - NFT
         - Account
       abis:
-        - name: EndemicNFTFactoryLegacy
-          file: ./abis/EndemicNFTFactoryLegacy.json
+        - name: Offer
+          file: ./abis/Offer.json
       eventHandlers:
-        - event: NFTContractCreated(indexed address,indexed address,string,string,string)
-          handler: handleCreated
-      file: ./src/handlers/aurora/erc721Factory_legacy.ts
-{{/erc721FactoriesLegacy}}
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
+          handler: handleOfferCreated
+        - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
+          handler: handleOfferAccepted
+        - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
+          handler: handleOfferCancelled
+      file: ./src/handlers/aurora/offer.ts
+
+  # - kind: ethereum/contract
+  #   name: CollectionBid
+  #   network: {{network}}
+  #   source:
+  #     address: "{{collectionBidAddress}}"
+  #     abi: CollectionBid
+  #     startBlock: {{startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - NFT
+  #       - NFTContract
+  #       - Account
+  #     abis:
+  #       - name: CollectionBid
+  #         file: ./abis/CollectionBid.json
+  #     eventHandlers:
+  #       - event: BidCreated(bytes32,indexed address,indexed address,uint256,uint256)
+  #         handler: handleBidCreated
+  #       - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256)
+  #         handler: handleBidAccepted
+  #       - event: BidCancelled(bytes32,indexed address,indexed address)
+  #         handler: handleBidCancelled
+  #     file: ./src/handlers/aurora/collectionBid.ts
 
     
 {{#erc721Factories}}
@@ -125,7 +90,7 @@ dataSources:
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: EndemicCollectionFactory
+      abi: EndemicNFTFactory
       startBlock: {{block}}
     mapping:
       kind: ethereum/events
@@ -135,13 +100,35 @@ dataSources:
         - NFTContract
         - Account
       abis:
-        - name: EndemicCollectionFactory
-          file: ./abis/EndemicCollectionFactory.json
+        - name: EndemicNFTFactory
+          file: ./abis/EndemicNFTFactory.json
       eventHandlers:
-        - event: NFTContractCreated(indexed address,indexed address,string,string,string,uint256)
+        - event: NFTContractCreated(indexed address,indexed address,string,string,string)
           handler: handleCreated
-      file: ./src/handlers/erc721Factory.ts
+      file: ./src/handlers/aurora/erc721Factory.ts
 {{/erc721Factories}}
+
+  # - kind: ethereum/contract
+  #   name: EndemicERC1155Factory
+  #   network: {{network}}
+  #   source:
+  #     address: "{{erc1155FactoryAddress}}"
+  #     abi: EndemicERC1155Factory
+  #     startBlock: {{startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.5
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - NFTContract
+  #       - Account
+  #     abis:
+  #       - name: EndemicERC1155Factory
+  #         file: ./abis/EndemicERC1155Factory.json
+  #     eventHandlers:
+  #       - event: Created(indexed address,indexed address,string,string,string)
+  #         handler: handleCreated
+  #     file: ./src/handlers/erc1155Factory.ts
 
   - kind: ethereum/contract
     name: RoyaltiesProvider
