@@ -21,19 +21,19 @@ dataSources:
         - name: EndemicExchange
           file: ./abis/EndemicExchange.json
       eventHandlers:
-        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,bytes4)
+        - event: AuctionCreated(indexed address,indexed uint256,indexed bytes32,uint256,uint256,uint256,address,uint256,address,bytes4)
           handler: handleAuctionCreated
         - event:  AuctionSuccessful(indexed bytes32,indexed uint256,address,uint256,uint256)
           handler: handleAuctionSuccessful
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
-        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address)
           handler: handleOfferCreated
         - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
           handler: handleOfferAccepted
         - event: OfferCancelled(uint256,indexed address,indexed uint256,indexed address)
           handler: handleOfferCancelled
-        - event: PrivateSaleSuccess(indexed address,indexed uint256,indexed address,address,uint256,uint256)
+        - event: PrivateSaleSuccess(indexed address,indexed uint256,indexed address,address,uint256,uint256,address)
           handler: handlePrivateSaleSuccess
       file: ./src/handlers/exchange.ts
 {{/exchanges}}
