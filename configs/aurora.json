@@ -26,5 +26,11 @@
             "block": 57246873
         }
     ],
-    "collections": []
+    "collections": [
+        {
+            "name" :"EYWA",
+            "address" :"0xB2e6a5a864A1004C3c828a2e767A08C173939b01",
+            "block": 72073334
+        }
+    ]
 }

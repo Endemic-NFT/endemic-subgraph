@@ -71,7 +71,7 @@ type Nft @entity {
   description: String
   image: String
   thumbnail: String
-  attributes: [NftAttribute!] @derivedFrom(field: "nft")
+  attributes: [String!]
 
   #denormalized for performance
   contractId: Bytes!
@@ -85,14 +85,6 @@ type Nft @entity {
   ownership: [NftOwnership!] @derivedFrom(field: "nft")
   auctions: [Auction!] @derivedFrom(field: "nft")
   offers: [Offer!] @derivedFrom(field: "nft")
-}
-
-type NftAttribute @entity {
-  id: ID!
-  nft: Nft!
-  contractId: Bytes!
-  type: String
-  value: String
 }
 
 type Auction @entity {
