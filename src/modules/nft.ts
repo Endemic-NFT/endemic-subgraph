@@ -6,7 +6,7 @@ import {
   Address,
   JSONValue,
 } from '@graphprotocol/graph-ts';
-import { Auction, Nft, NftAttribute } from '../../generated/schema';
+import { Auction, Nft } from '../../generated/schema';
 import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import * as addresses from '../utils/addresses';
@@ -115,6 +115,8 @@ export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
       attributes = atts.toArray();
     }
 
+    nft.attributes = [];
+
     for (let i = 0; i < attributes.length; i++) {
       let item = attributes[i].toObject();
       let traitType: string = '';
@@ -128,12 +130,11 @@ export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
         traitValue = v.toString();
       }
 
-      let attribute = new NftAttribute(nft.id + '-' + i.toString());
-      attribute.nft = nft.id;
-      attribute.contractId = nft.contractId;
-      attribute.value = traitValue;
-      attribute.type = traitType;
-      attribute.save();
+      let attribute = traitType + ',' + traitValue;
+
+      let nftAttributes = nft.attributes;
+      nftAttributes!.push(attribute);
+      nft.attributes = nftAttributes;
     }
 
     nft.image = image ? image.toString() : null;

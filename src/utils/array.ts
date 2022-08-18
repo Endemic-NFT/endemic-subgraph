@@ -33,7 +33,6 @@ export const removeFirst = (array: BigInt[], value: BigInt): BigInt[] => {
 
 export function add(array: BigInt[], value: BigInt): BigInt[] {
   const idx = findIndex(array, value);
-
   return insert(array, idx, value);
 }
 
