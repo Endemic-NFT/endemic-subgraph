@@ -49,7 +49,7 @@ dataSources:
         - name: OfferLegacy
           file: ./abis/OfferLegacy.json
       eventHandlers:
-        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256)
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address,bool)
           handler: handleOfferCreated
         - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
           handler: handleOfferAccepted
