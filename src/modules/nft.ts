@@ -130,7 +130,7 @@ export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
         traitValue = v.toString();
       }
 
-      let attribute = traitType + ',' + traitValue;
+      let attribute = traitType + '|' + traitValue;
 
       let nftAttributes = nft.attributes;
       nftAttributes!.push(attribute);
@@ -138,7 +138,7 @@ export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
     }
 
     nft.image = image ? image.toString() : null;
-    nft.thumbnail = thumbnail ? thumbnail.toString() : nft.image;
+    nft.thumbnail = thumbnail ? thumbnail.toString() : null;
     nft.name = name ? name.toString() : null;
     nft.description = description ? description.toString() : null;
   } else {
