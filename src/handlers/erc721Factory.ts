@@ -1,4 +1,4 @@
-import { NFTContractCreated } from '../../generated/EndemicNFTFactory/EndemicNFTFactory';
+import { NFTContractCreated } from '../../generated/EndemicCollectionFactory/EndemicCollectionFactory';
 import { Collection } from '../../generated/templates';
 import { NftContract } from '../../generated/schema';
 import { toLowerCase } from '../utils/string';
@@ -24,6 +24,8 @@ export function handleCreated(event: NFTContractCreated): void {
   nftContract.category = event.params.category;
   nftContract.createdAt = event.block.timestamp;
   nftContract.searchText = toLowerCase(nftContract.name);
+  nftContract.royalties = event.params.royalties;
+  nftContract.royaltiesRecipient = event.params.owner;
   nftContract.save();
 
   Collection.create(event.params.nftContract);
