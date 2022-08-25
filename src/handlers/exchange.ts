@@ -205,7 +205,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.price = event.params.price;
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
-  offer.isCollectionOffer = false;
+  offer.isForCollection = event.params.isForCollection;
   offer.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
 
   offer.save();

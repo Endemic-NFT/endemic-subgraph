@@ -1,32 +1,7 @@
 [
   {
     "inputs": [],
-    "name": "AcceptFromSelf",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "DurationTooShort",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "FeeTransferFailed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "FundsTransferFailed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidOffer",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidPaymentMethod",
     "type": "error"
   },
   {
@@ -36,36 +11,18 @@
   },
   {
     "inputs": [],
-    "name": "InvalidValueProvided",
+    "name": "InvalidValueSent",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoActiveOffer",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "OfferExists",
     "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "RefundFailed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "RoyaltiesTransferFailed",
-    "type": "error"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "version",
-        "type": "uint8"
-      }
-    ],
-    "name": "Initialized",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -185,18 +142,6 @@
         "internalType": "uint256",
         "name": "expiresAt",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "paymentErc20TokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isForCollection",
-        "type": "bool"
       }
     ],
     "name": "OfferCreated",
@@ -222,8 +167,34 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
     "inputs": [],
-    "name": "ERC1155_ASSET_CLASS",
+    "name": "ERC721_Received",
     "outputs": [
       {
         "internalType": "bytes4",
@@ -236,46 +207,7 @@
   },
   {
     "inputs": [],
-    "name": "ERC1155_INTERFACE",
-    "outputs": [
-      {
-        "internalType": "bytes4",
-        "name": "",
-        "type": "bytes4"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "ERC721_ASSET_CLASS",
-    "outputs": [
-      {
-        "internalType": "bytes4",
-        "name": "",
-        "type": "bytes4"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "ERC721_INTERFACE",
-    "outputs": [
-      {
-        "internalType": "bytes4",
-        "name": "",
-        "type": "bytes4"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "MIN_OFFER_DURATION",
+    "name": "MIN_BID_DURATION",
     "outputs": [
       {
         "internalType": "uint256",
@@ -289,17 +221,22 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "offerId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_feeProvider",
+        "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_royaltiesProvider",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeClaimAddress",
+        "type": "address"
       }
     ],
-    "name": "acceptCollectionOffer",
+    "name": "__Offer_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -312,20 +249,7 @@
         "type": "uint256"
       }
     ],
-    "name": "acceptNftOffer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "offerIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "adminCancelOffers",
+    "name": "acceptOffer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -341,19 +265,6 @@
     "name": "cancelOffer",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "feeClaimAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -379,9 +290,9 @@
             "type": "address"
           },
           {
-            "internalType": "address",
-            "name": "paymentErc20TokenAddress",
-            "type": "address"
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -390,46 +301,23 @@
           },
           {
             "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "price",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "priceWithTakerFee",
+            "name": "priceWithFee",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
             "name": "expiresAt",
             "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "isForCollection",
-            "type": "bool"
           }
         ],
-        "internalType": "struct EndemicOffer.Offer",
+        "internalType": "struct OfferCore.Offer",
         "name": "",
         "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "makerFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -449,72 +337,23 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "placeCollectionOffer",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "paymentErc20TokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "offerInErc20",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "placeCollectionOfferInErc20",
+    "inputs": [],
+    "name": "pause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "nftContract",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "name": "placeNftOffer",
-    "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -525,16 +364,6 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "paymentErc20TokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "offerInErc20",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
@@ -545,7 +374,30 @@
         "type": "uint256"
       }
     ],
-    "name": "placeNftOfferInErc20",
+    "name": "placeOffer",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_tokenAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_tokenIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "_offerders",
+        "type": "address[]"
+      }
+    ],
+    "name": "removeExpiredOffers",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -558,32 +410,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "royaltiesProvider",
-    "outputs": [
-      {
-        "internalType": "contract IRoyaltiesProvider",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "takerFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -592,6 +418,13 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
