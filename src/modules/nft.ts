@@ -191,13 +191,13 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.isOnSale = false;
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
-      nft.paymentErc20TokenAddress = null;
+      nft.paymentErc20TokenAddress = NULL_ADDRESS;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
-    nft.paymentErc20TokenAddress = null;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
   }
 
   return nft;

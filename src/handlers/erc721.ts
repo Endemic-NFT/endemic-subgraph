@@ -19,7 +19,7 @@ import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { toLowerCase } from '../utils/string';
-import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
 import { createAccount } from '../modules/account';
 
 export function handleTransfer(event: Transfer): void {
@@ -58,6 +58,7 @@ export function handleTransfer(event: Transfer): void {
     nft.contractName = contract.name;
     nft.tokenURI = tokenURI;
     nft.supply = ONE_BI;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
 
     nft = updateTokenMetadataFromIPFS(nft);
     if (nft.name !== null) {
