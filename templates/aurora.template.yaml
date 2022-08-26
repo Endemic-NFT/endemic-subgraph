@@ -83,7 +83,7 @@ dataSources:
           handler: handleAuctionSuccessful
         - event:  AuctionCancelled(indexed bytes32)
           handler: handleAuctionCancelled
-        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address)
+        - event: OfferCreated(uint256,indexed address,indexed uint256,indexed address,uint256,uint256,address,bool)
           handler: handleOfferCreated
         - event: OfferAccepted(uint256,indexed address,indexed uint256,address,indexed address,uint256,uint256)
           handler: handleOfferAccepted

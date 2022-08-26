@@ -378,6 +378,12 @@
         "internalType": "address",
         "name": "paymentErc20TokenAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isForCollection",
+        "type": "bool"
       }
     ],
     "name": "OfferCreated",
@@ -563,9 +569,27 @@
         "internalType": "uint256",
         "name": "offerId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       }
     ],
-    "name": "acceptOffer",
+    "name": "acceptCollectionOffer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "offerId",
+        "type": "uint256"
+      }
+    ],
+    "name": "acceptNftOffer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -897,6 +921,11 @@
             "internalType": "uint256",
             "name": "expiresAt",
             "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isForCollection",
+            "type": "bool"
           }
         ],
         "internalType": "struct EndemicOffer.Offer",
@@ -942,6 +971,52 @@
       },
       {
         "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "placeCollectionOffer",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "paymentErc20TokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "offerInErc20",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "placeCollectionOfferInErc20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
       },
@@ -951,7 +1026,7 @@
         "type": "uint256"
       }
     ],
-    "name": "placeOffer",
+    "name": "placeNftOffer",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -984,7 +1059,7 @@
         "type": "uint256"
       }
     ],
-    "name": "placeOfferInErc20",
+    "name": "placeNftOfferInErc20",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

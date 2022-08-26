@@ -6,7 +6,7 @@ import {
   OfferAccepted,
   OfferCancelled,
   OfferCreated,
-} from '../../../generated/Offer/Offer';
+} from '../../../generated/OfferLegacy/OfferLegacy';
 import { Offer, Nft } from '../../../generated/schema';
 import { createNftId } from '../../modules/nft';
 import { createOfferActivity } from '../../modules/activity';
@@ -35,7 +35,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.price = event.params.price;
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
-  offer.isCollectionOffer = false;
+  offer.isForCollection = false;
   offer.paymentErc20TokenAddress = NULL_ADDRESS;
 
   offer.save();
