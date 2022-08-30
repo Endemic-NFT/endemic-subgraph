@@ -15,7 +15,7 @@ export function getEndemicExchangeAddress(): string {
   }
 
   if (network == 'goerli') {
-    return '0x42321A6BaF15C5cD5872fa79a2c58A7caEcbC077';
+    return '0x0F7C35b5ebE2A3EF7a88fdA2f7B7Adf81Dc05a4F';
   }
 
   log.debug('Could not find EndemicExchange address for network {}', [network]);
