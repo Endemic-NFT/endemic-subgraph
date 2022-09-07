@@ -107,7 +107,7 @@ type Auction @entity {
 type Offer @entity {
   id: ID!
   nft: Nft
-  nftContract: NftContract
+  nftContract: NftContract!
   bidder: Account!
   paymentErc20TokenAddress: Bytes!
   price: BigInt!
