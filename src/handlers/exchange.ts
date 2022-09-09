@@ -62,6 +62,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.tokenAmount = event.params.amount;
   auction.soldTokenAmount = ZERO_BI;
   auction.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
+  auction.sourceVersion = 'V2';
 
   auction.save();
 
@@ -209,6 +210,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.createdAt = event.block.timestamp;
   offer.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
   offer.isForCollection = isOfferForCollection;
+  offer.sourceVersion = 'V2';
 
   offer.save();
 
