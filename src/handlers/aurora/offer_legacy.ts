@@ -37,6 +37,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.createdAt = event.block.timestamp;
   offer.isForCollection = false;
   offer.paymentErc20TokenAddress = NULL_ADDRESS;
+  offer.sourceVersion = 'V1';
 
   offer.save();
 

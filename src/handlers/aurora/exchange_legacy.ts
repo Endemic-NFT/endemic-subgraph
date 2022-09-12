@@ -56,6 +56,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.tokenAmount = event.params.amount;
   auction.soldTokenAmount = ZERO_BI;
   auction.paymentErc20TokenAddress = NULL_ADDRESS;
+  auction.sourceVersion = 'V1';
 
   auction.save();
 

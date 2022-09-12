@@ -9,21 +9,21 @@
     "erc721FactoriesLegacy": [
         {
             "name": "EndemicNFTFactoryLegacy",
-            "address": "0x801C7A8410E4bf11a27B6D4a42B1E157C3E98549",
+            "address": "0x4202db76d367f96f19c348124579385d208E44B6",
             "block": 7120952
         }
     ],
     "exchangesLegacy": [
         {
             "name": "EndemicExchangeLegacy",
-            "address": "0x42321A6BaF15C5cD5872fa79a2c58A7caEcbC077",
+            "address": "0x0c96f87fEfcD2257c7125ADAD85A32478733bBfd",
             "block": 7120952
         }
     ],
     "offersLegacy": [
         {
             "name": "OfferLegacy",
-            "address": "0xcb917eF216367b4Fba9EDce3138E960B9673537E",
+            "address": "0x68fb2f1f3F5F785c98479e3a8124f28854901874",
             "block": 7120952
         }
     ],
