@@ -16,10 +16,9 @@ import { createAccount } from '../../modules/account';
 import { NULL_ADDRESS, ZERO_BI } from '../../utils/constants';
 
 export function handleOfferCreated(event: OfferCreated): void {
-  let nftId = createNftId(
-    event.params.nftContract.toHexString(),
-    event.params.tokenId.toString()
-  );
+  let nftContract = event.params.nftContract.toHexString();
+
+  let nftId = createNftId(nftContract, event.params.tokenId.toString());
 
   let offerId = event.params.id.toString();
   let offer = new Offer(offerId);
@@ -31,6 +30,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   }
 
   offer.nft = nftId;
+  offer.nftContract = nftContract;
   offer.bidder = event.params.bidder.toHexString();
   offer.price = event.params.price;
   offer.expiresAt = event.params.expiresAt;
@@ -44,8 +44,8 @@ export function handleOfferCreated(event: OfferCreated): void {
   createAccount(event.params.bidder);
   createOfferActivity(
     offer,
-    nft.id,
-    nft.contractId.toHexString(),
+    nftId,
+    nftContract,
     ZERO_BI,
     'offerCreate',
     event.params.bidder,
