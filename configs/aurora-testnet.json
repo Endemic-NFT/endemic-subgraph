@@ -1,6 +1,5 @@
 {
     "network": "goerli",
-    "collectionBidAddress": "",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xD0E7364473F0843461F2631306AE248539Dab487",
     "contractImporterAddress":"0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda",

@@ -57,7 +57,7 @@ dataSources:
           handler: handleOfferCancelled
       file: ./src/handlers/aurora/offer_legacy.ts
 {{/offersLegacy}}
-
+  
 {{#exchanges}}
   - kind: ethereum/contract
     name: {{name}}
@@ -118,7 +118,6 @@ dataSources:
       file: ./src/handlers/aurora/erc721Factory_legacy.ts
 {{/erc721FactoriesLegacy}}
 
-    
 {{#erc721Factories}}
   - kind: ethereum/contract
     name: {{name}}

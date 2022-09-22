@@ -50,12 +50,6 @@ export function getERC721TokenURI(address: Address, tokenId: BigInt): string {
       address.toHexString(),
     ]);
   } else {
-    if (tokenURICallResult.value == null) {
-      log.warning('ERC721 got NULL tokenURI for tokenID: {} contract: {}', [
-        tokenId.toString(),
-        address.toHexString(),
-      ]);
-    }
     tokenURI = tokenURICallResult.value;
   }
 

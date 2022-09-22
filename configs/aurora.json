@@ -1,6 +1,5 @@
 {
     "network": "aurora",
-    "collectionBidAddress":"",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
     "contractImporterAddress":"0x427f522121534EB79d40Cbeeb5C62e172c05979d",

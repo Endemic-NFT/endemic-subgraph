@@ -29,16 +29,19 @@ export function removeActiveAuction(
   if (auction == null) return;
 
   auction.tokenAmount = auction.tokenAmount.minus(amount);
+  let auctionSeller = auction.seller;
+  let auctionEndingPrice = auction.endingPrice;
+
   if (auction.tokenAmount <= BigInt.fromI32(0)) {
     store.remove('Auction', auctionIdValue);
   } else {
     auction.save();
   }
 
-  userData.updateHistoricDataForAuctionCancel(auction.seller, amount);
+  userData.updateHistoricDataForAuctionCancel(auctionSeller, amount);
   collectionData.updateHistoricDataForAuctionCancel(
     nft.contractId,
-    auction.endingPrice,
+    auctionEndingPrice,
     amount
   );
 

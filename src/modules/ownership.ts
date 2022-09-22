@@ -1,12 +1,11 @@
 import { store, Bytes, BigInt, Address } from '@graphprotocol/graph-ts';
 import {
   Nft,
-  NftContract,
   NftOwnership,
   NftOwnershipPerContract,
 } from '../../generated/schema';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
-import { isBurnEvent, isMintEvent } from './nft';
+import { isMintEvent } from './nft';
 
 export function createNftOwnershipId(
   nftId: string,

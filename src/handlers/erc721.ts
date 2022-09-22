@@ -43,6 +43,7 @@ export function handleTransfer(event: Transfer): void {
 
   nft.tokenId = event.params.tokenId;
   nft.contract = event.address.toHexString();
+  nft.contractId = event.address;
   nft.updatedAt = event.block.timestamp;
   nft.price = ZERO_BI;
   nft.burned = false;
@@ -54,7 +55,6 @@ export function handleTransfer(event: Transfer): void {
 
     nft.createdAt = event.block.timestamp;
     nft.category = contract.category;
-    nft.contractId = event.address;
     nft.contractName = contract.name;
     nft.tokenURI = tokenURI;
     nft.supply = ONE_BI;
