@@ -43,6 +43,7 @@ export function getOrCreateNftOwnership(
     nftOwnership.nftCreatedAt = nft.createdAt;
     nftOwnership.nftListedAt = nft.listedAt;
     nftOwnership.nftIsOnSale = false;
+    nftOwnership.nftPaymentErc20TokenAddress = nft.paymentErc20TokenAddress;
   }
 
   return nftOwnership;
