@@ -41,6 +41,7 @@ type NftOwnership @entity {
   nftCreatedAt: BigInt!
   nftListedAt: BigInt!
   nftIsOnSale: Boolean!
+  nftPaymentErc20TokenAddress: Bytes!
 }
 
 type Nft @entity {
@@ -64,7 +65,7 @@ type Nft @entity {
   price: BigInt!
   lastSalePrice: BigInt
   auctionIds: [String!]!
-  paymentErc20TokenAddress: Bytes
+  paymentErc20TokenAddress: Bytes!
 
   #metadata
   tokenURI: String
