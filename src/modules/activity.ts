@@ -32,7 +32,6 @@ export function createAuctionActivity(
   activity.auctionStartingPrice = auction.startingPrice;
   activity.price = auction.startingPrice;
   activity.totalPrice = auction.totalPrice;
-  activity.auctionIsDutch = auction.isDutch;
   activity.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
 
   activity.createdAt = event.block.timestamp;
@@ -72,7 +71,6 @@ export function createOfferActivity(
   activity.nftContract = nftContractId;
   activity.transactionHash = event.transaction.hash;
   activity.initiator = actor.toHexString();
-  activity.auctionIsDutch = false;
   activity.paymentErc20TokenAddress = offer.paymentErc20TokenAddress;
 
   if (type == 'offerAccept') {
@@ -93,7 +91,6 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
-  activity.auctionIsDutch = false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -118,7 +115,6 @@ export function createERC1155TransferActivity(
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
-  activity.auctionIsDutch = false;
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -150,7 +146,6 @@ export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
   activity.initiator = buyerAddress;
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
-  activity.auctionIsDutch = false;
   activity.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
 
   activity.save();

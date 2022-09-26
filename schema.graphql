@@ -135,7 +135,6 @@ type Activity @entity {
   paymentErc20TokenAddress: Bytes
   #auction activity
   auctionStartingPrice: BigInt
-  auctionIsDutch: Boolean!
 }
 
 type CollectionHistoricData @entity {
