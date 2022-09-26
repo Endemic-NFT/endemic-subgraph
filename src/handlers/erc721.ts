@@ -76,7 +76,7 @@ export function handleTransfer(event: Transfer): void {
     !isExchangeAddress(event.transaction.to!.toHexString()) &&
     !isMintEvent(event.params.from)
   ) {
-    removeActiveAuction(nft, event.params.from, ONE_BI);
+    nft = removeActiveAuction(nft, event.params.from, ONE_BI);
   }
 
   nft.save();
