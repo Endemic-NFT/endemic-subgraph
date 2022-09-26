@@ -203,5 +203,4 @@ enum ActivityType @entity {
   offerCreate
   offerAccept
   offerCancel
-  privateSaleSuccess
 }

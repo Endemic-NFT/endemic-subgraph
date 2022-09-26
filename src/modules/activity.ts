@@ -130,7 +130,7 @@ export function createERC1155TransferActivity(
 }
 
 export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
-  let id = 'offer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
+  let id = 'auction/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
 
   let buyerAddress = event.params.buyer.toHexString();
@@ -140,7 +140,7 @@ export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
     event.params.tokenId.toString()
   );
 
-  activity.type = 'privateSaleSuccess';
+  activity.type = 'auctionSuccess';
   activity.nft = nftId;
   activity.from = event.params.seller.toHexString();
   activity.to = buyerAddress;
