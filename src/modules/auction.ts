@@ -5,7 +5,6 @@ import * as addresses from '../utils/addresses';
 import { handleAuctionCompletedForNFT } from './nft';
 import * as userData from './userData';
 import * as collectionData from './collectionData';
-import { getOrCreateNftOwnership } from './ownership';
 
 export function removeActiveAuction(
   nft: Nft,
@@ -30,23 +29,17 @@ export function removeActiveAuction(
   if (auction == null) return nft;
 
   auction.tokenAmount = auction.tokenAmount.minus(amount);
-  let auctionSeller = auction.seller;
   let auctionEndingPrice = auction.endingPrice;
 
   nft = handleAuctionCompletedForNFT(nft, auctionIdValue);
 
-  if (auction.tokenAmount <= BigInt.fromI32(0)) {
+  if (nft.type == 'ERC-721') {
     store.remove('Auction', auctionIdValue);
-    let nftOwnership = getOrCreateNftOwnership(nft, auctionSeller);
-    nftOwnership.nftIsOnSale = false;
-    nftOwnership.nftPrice = nft.price;
-    nftOwnership.nftListedAt = nft.listedAt;
-    nftOwnership.save();
   } else {
     auction.save();
   }
 
-  userData.updateHistoricDataForAuctionCancel(auctionSeller, amount);
+  userData.updateHistoricDataForAuctionCancel(seller.toHexString(), amount);
   collectionData.updateHistoricDataForAuctionCancel(
     nft.contractId,
     auctionEndingPrice,

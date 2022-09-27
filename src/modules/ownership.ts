@@ -76,7 +76,9 @@ export function updateERC721Ownership(
   let nftOwnership = getOrCreateNftOwnership(nft, toAccountId.toHexString());
   nftOwnership.value = ONE_BI;
   nftOwnership.nftBurned = nft.burned;
-  nftOwnership.nftIsOnSale = false;
+  nftOwnership.nftIsOnSale = nft.isOnSale;
+  nftOwnership.nftPrice = nft.price;
+  nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 }
 
