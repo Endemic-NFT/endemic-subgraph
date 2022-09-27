@@ -19,6 +19,7 @@ import { getOrCreateNftOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { ZERO_BI } from '../utils/constants';
+import { createAccount } from '../modules/account';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -35,6 +36,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   let auction = Auction.load(event.params.id.toHexString());
   if (!auction) {
     auction = new Auction(event.params.id.toHexString());
+    createAccount(event.params.seller);
   } else {
     userData.updateHistoricDataForAuctionCancel(
       auction.seller,
