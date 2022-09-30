@@ -247,7 +247,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
     nftId = nft.id;
     contractId = nft.contractId;
   } else {
-    nftId = createNftId(offer.nftContract, '0');
+    nftId = createNftId(offer.nftContract, event.params.tokenId.toString());
     contractId = Bytes.fromByteArray(Bytes.fromHexString(offer.nftContract));
   }
 
