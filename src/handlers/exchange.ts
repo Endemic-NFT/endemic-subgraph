@@ -40,6 +40,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   let auction = Auction.load(event.params.id.toHexString());
   if (!auction) {
     auction = new Auction(event.params.id.toHexString());
+    createAccount(event.params.seller);
   } else {
     userData.updateHistoricDataForAuctionCancel(
       auction.seller,
