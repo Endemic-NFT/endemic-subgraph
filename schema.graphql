@@ -97,8 +97,8 @@ type Auction @entity {
   startingPrice: BigInt!
   endingPrice: BigInt!
   isDutch: Boolean!
-  duration: BigInt!
   startedAt: BigInt!
+  endingAt: BigInt!
   nft: Nft!
   tokenAmount: BigInt!
   soldTokenAmount: BigInt!
@@ -202,4 +202,5 @@ enum ActivityType @entity {
   offerCreate
   offerAccept
   offerCancel
+  reserveBid
 }

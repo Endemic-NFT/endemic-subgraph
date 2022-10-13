@@ -6,6 +6,21 @@
   },
   {
     "inputs": [],
+    "name": "AuctionEnded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AuctionInProgress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AuctionNotStarted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "DurationTooShort",
     "type": "error"
   },
@@ -17,6 +32,11 @@
   {
     "inputs": [],
     "name": "FundsTransferFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InsufficientBid",
     "type": "error"
   },
   {
@@ -42,11 +62,6 @@
   {
     "inputs": [],
     "name": "InvalidDuration",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InvalidFees",
     "type": "error"
   },
   {
@@ -91,11 +106,6 @@
   },
   {
     "inputs": [],
-    "name": "InvalidValueProvided",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "OfferExists",
     "type": "error"
   },
@@ -122,6 +132,11 @@
   {
     "inputs": [],
     "name": "Unauthorized",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnsufficientCurrencySupplied",
     "type": "error"
   },
   {
@@ -173,7 +188,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "duration",
+        "name": "endingAt",
         "type": "uint256"
       },
       {
@@ -458,6 +473,37 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "reservePrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endingAt",
+        "type": "uint256"
+      }
+    ],
+    "name": "ReserveBidPlaced",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "DOMAIN_SEPARATOR",
     "outputs": [
@@ -544,18 +590,13 @@
       },
       {
         "internalType": "address",
-        "name": "_feeClaimAddress",
+        "name": "_paymentManager",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_makerFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_takerFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_feeRecipientAddress",
+        "type": "address"
       }
     ],
     "name": "__EndemicExchange_init",
@@ -633,9 +674,27 @@
         "type": "uint256"
       }
     ],
-    "name": "bid",
+    "name": "bidForDutchAuction",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bidPriceWithFees",
+        "type": "uint256"
+      }
+    ],
+    "name": "bidForReserveAuctionInErc20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -715,6 +774,48 @@
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "offerIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "cancelOffers",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "nftContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      }
+    ],
+    "name": "createAuctionId",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "nftContract",
         "type": "address"
@@ -755,7 +856,7 @@
         "type": "bytes4"
       }
     ],
-    "name": "createAuction",
+    "name": "createDutchAuction",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -773,25 +874,24 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "reservePrice",
+        "type": "uint256"
+      },
+      {
         "internalType": "address",
-        "name": "seller",
+        "name": "paymentErc20TokenAddress",
         "type": "address"
       }
     ],
-    "name": "createAuctionId",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "pure",
+    "name": "createReserveAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "feeClaimAddress",
+    "name": "feeRecipientAddress",
     "outputs": [
       {
         "internalType": "address",
@@ -800,6 +900,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "finalizeReserveAuction",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -834,12 +947,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "duration",
+        "name": "startedAt",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "startedAt",
+        "name": "endingAt",
         "type": "uint256"
       },
       {
@@ -865,6 +978,25 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getHighestBidder",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -938,12 +1070,12 @@
   },
   {
     "inputs": [],
-    "name": "makerFee",
+    "name": "owner",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -951,10 +1083,10 @@
   },
   {
     "inputs": [],
-    "name": "owner",
+    "name": "paymentManager",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IPaymentManager",
         "name": "",
         "type": "address"
       }
@@ -1085,19 +1217,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "takerFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -1119,39 +1238,16 @@
       },
       {
         "internalType": "address",
-        "name": "_feeClaimAddress",
+        "name": "_paymentManager",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_makerFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_takerFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_feeRecipientAddress",
+        "type": "address"
       }
     ],
     "name": "updateConfiguration",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_erc20TokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_isEnabled",
-        "type": "bool"
-      }
-    ],
-    "name": "updateSupportedErc20Tokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
