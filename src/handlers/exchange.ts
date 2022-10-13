@@ -6,6 +6,7 @@ import {
   OfferCancelled,
   OfferCreated,
   PrivateSaleSuccess,
+  ReserveBidPlaced,
 } from '../../generated/EndemicExchange/EndemicExchange';
 import { Nft, Auction, Offer } from '../../generated/schema';
 import {
@@ -17,6 +18,7 @@ import {
   createAuctionActivity,
   createOfferActivity,
   createPrivateSaleActivity,
+  createReserveBidPlacedActivity,
 } from '../modules/activity';
 import { Bytes, log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateNftOwnership } from '../modules/ownership';
@@ -54,11 +56,11 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   }
 
   auction.startedAt = event.block.timestamp;
+  auction.endingAt = event.params.endingAt;
   auction.seller = event.params.seller.toHexString();
   auction.startingPrice = event.params.startingPrice;
   auction.endingPrice = event.params.endingPrice;
   auction.isDutch = event.params.startingPrice != event.params.endingPrice;
-  auction.duration = event.params.duration;
   auction.nft = nftId;
   auction.tokenAmount = event.params.amount;
   auction.soldTokenAmount = ZERO_BI;
@@ -357,4 +359,21 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
   );
 
   createPrivateSaleActivity(event);
+}
+
+export function handleReserveBidPlaced(event: ReserveBidPlaced): void {
+  let auction = Auction.load(event.params.id.toHexString());
+
+  if (auction == null) {
+    log.warning('Auction {} not available', [event.params.id.toHexString()]);
+    return;
+  }
+
+  auction.buyer = event.params.bidder;
+  auction.endingAt = event.params.endingAt;
+  auction.endingPrice = event.params.reservePrice;
+
+  auction.save();
+
+  createReserveBidPlacedActivity(auction.nft, event);
 }

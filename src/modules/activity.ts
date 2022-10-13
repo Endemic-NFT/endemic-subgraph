@@ -3,7 +3,11 @@ import { Transfer } from '../../generated/templates/Collection/Collection';
 import { TransferSingle } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { Activity, Nft, Auction, Offer } from '../../generated/schema';
 import { isMintEvent, isBurnEvent, createNftId } from './nft';
-import { PrivateSaleSuccess } from '../../generated/EndemicExchange/EndemicExchange';
+import {
+  PrivateSaleSuccess,
+  ReserveBidPlaced,
+} from '../../generated/EndemicExchange/EndemicExchange';
+import { NULL_ADDRESS } from '../utils/constants';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -147,6 +151,29 @@ export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
   activity.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
+
+  activity.save();
+}
+
+export function createReserveBidPlacedActivity(
+  nftId: string,
+  event: ReserveBidPlaced
+): void {
+  let id = 'reserve/' + event.transaction.hash.toHex() + event.logIndex.toHex();
+
+  let activity = new Activity(id);
+
+  const bidder = event.params.bidder.toHexString();
+
+  activity.type = 'reserveBid';
+  activity.nft = nftId;
+  activity.from = bidder;
+  activity.to = null;
+  activity.price = event.params.reservePrice;
+  activity.initiator = bidder;
+  activity.createdAt = event.block.timestamp;
+  activity.transactionHash = event.transaction.hash;
+  activity.paymentErc20TokenAddress = NULL_ADDRESS;
 
   activity.save();
 }
