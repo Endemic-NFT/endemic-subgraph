@@ -5,6 +5,21 @@
     "contractImporterAddress":"0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda",
     "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
     "startBlock": 7120952,
+    "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0xB4550D625035B1D563B6c883B34AE83E0fa71411",
+            "block": 7120952
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0x0F7C35b5ebE2A3EF7a88fdA2f7B7Adf81Dc05a4F",
+            "block": 7144612
+        }
+    ],
+    "collections": [],
     "erc721FactoriesLegacy": [
         {
             "name": "EndemicNFTFactoryLegacy",
@@ -26,20 +41,5 @@
             "block": 7120952
         }
     ],
-    "erc721Factories": [
-        {
-            "name": "EndemicCollectionFactory",
-            "address": "0xB4550D625035B1D563B6c883B34AE83E0fa71411",
-            "block": 7120952
-        }
-    ],
-    "exchanges": [
-        {
-            "name": "EndemicExchange",
-            "address": "0x0F7C35b5ebE2A3EF7a88fdA2f7B7Adf81Dc05a4F",
-            "block": 7144612
-        }
-    ],
-    "collections": []
 }
 
