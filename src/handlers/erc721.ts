@@ -10,9 +10,8 @@ import {
   updateTokenMetadataFromIPFS,
   isBurnEvent,
   isMintEvent,
-  isExchangeAddress,
 } from '../modules/nft';
-import { removeActiveAuction } from '../modules/auction';
+import { removePossibleActiveAuction } from '../modules/auction';
 import { createERC721TransferActivity } from '../modules/activity';
 import { createNFTContract } from '../modules/nftContract';
 import * as userData from '../modules/userData';
@@ -61,7 +60,7 @@ export function handleTransfer(event: Transfer): void {
     nft.paymentErc20TokenAddress = NULL_ADDRESS;
 
     nft = updateTokenMetadataFromIPFS(nft);
-    if (nft.name !== null) {
+    if (nft.name != null) {
       nft.searchText = toLowerCase(nft.name!);
     }
   } else if (isBurnEvent(event.params.to)) {
@@ -71,13 +70,12 @@ export function handleTransfer(event: Transfer): void {
     }
   }
 
-  if (
-    event.transaction.to !== null &&
-    !isExchangeAddress(event.transaction.to!.toHexString()) &&
-    !isMintEvent(event.params.from)
-  ) {
-    nft = removeActiveAuction(nft, event.params.from, ONE_BI);
-  }
+  nft = removePossibleActiveAuction(
+    event.transaction.from,
+    event.params.from,
+    nft,
+    ONE_BI
+  );
 
   nft.save();
 

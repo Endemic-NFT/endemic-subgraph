@@ -9,6 +9,16 @@
     "exchanges": [],
     "collections": [
         {
+            "name": "BORED",
+            "address": "0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c",
+            "block": 66699925
+        },
+        {
+            "name": "TAC",
+            "address":"0xea5cc56b180d1a845bd86cba6711868a9763f461",
+            "block": 57464900    
+        },
+        {
             "name" :"EYWA",
             "address" :"0xB2e6a5a864A1004C3c828a2e767A08C173939b01",
             "block": 72073334

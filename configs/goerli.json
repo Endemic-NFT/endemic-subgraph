@@ -15,8 +15,8 @@
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x0F7C35b5ebE2A3EF7a88fdA2f7B7Adf81Dc05a4F",
-            "block": 7144612
+            "address": "0x53431AB725Edf32deF31992c4fd8ba2719c16661",
+            "block": 7767744
         }
     ],
     "collections": [],
@@ -40,6 +40,6 @@
             "address": "0x68fb2f1f3F5F785c98479e3a8124f28854901874",
             "block": 7120952
         }
-    ],
+    ]
 }
 

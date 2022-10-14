@@ -60,7 +60,7 @@ function updateFloorPriceOnFinalize(
   const floorPriceTracker = collectionStats.floorPriceTracker;
 
   collectionStats.floorPrice =
-    floorPriceTracker!.length !== 0 ? floorPriceTracker!.pop() : null;
+    floorPriceTracker!.length != 0 ? floorPriceTracker!.pop() : null;
   collectionStats.floorPriceTracker = floorPriceTracker;
 
   return collectionStats;
