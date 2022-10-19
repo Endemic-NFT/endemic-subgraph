@@ -33,7 +33,7 @@ export function handleTransferSingle(event: TransferSingle): void {
   }
 
   nft = removePossibleActiveAuction(
-    event.transaction.from,
+    event.transaction.to,
     event.params.from,
     nft,
     event.params.value

@@ -71,7 +71,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   nft = removePossibleActiveAuction(
-    event.transaction.from,
+    event.transaction.to,
     event.params.from,
     nft,
     ONE_BI
