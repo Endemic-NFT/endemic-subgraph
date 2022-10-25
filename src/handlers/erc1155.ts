@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts';
+import { log, dataSource } from '@graphprotocol/graph-ts';
 import {
   TransferSingle,
   Create,
@@ -81,6 +81,7 @@ export function handleCreate(event: Create): void {
   let tokenURI = getERC1155TokenURI(event.address, event.params.tokenId);
 
   nft.type = 'ERC-1155';
+  nft.blockchain = dataSource.network();
   nft.category = contract.category;
   nft.artistId = event.params.artistId;
   nft.artist = event.params.artistId.toHex();

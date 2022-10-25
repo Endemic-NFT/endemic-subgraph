@@ -1,3 +1,4 @@
+import { dataSource } from '@graphprotocol/graph-ts';
 import {
   Transfer,
   Mint,
@@ -33,6 +34,7 @@ export function handleTransfer(event: Transfer): void {
     nft = new Nft(id);
     nft.auctionIds = [];
     nft.type = 'ERC-721';
+    nft.blockchain = dataSource.network();
   }
 
   let contract = NftContract.load(event.address.toHexString());

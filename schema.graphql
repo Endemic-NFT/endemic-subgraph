@@ -74,6 +74,7 @@ type Nft @entity {
   image: String
   thumbnail: String
   attributes: [String!]
+  blockchain: String!
 
   #denormalized for performance
   contractId: Bytes!
