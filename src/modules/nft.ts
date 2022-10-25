@@ -9,15 +9,8 @@ import {
 import { Auction, Nft } from '../../generated/schema';
 import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
-import * as addresses from '../utils/addresses';
 import { filter } from '../utils/array';
 import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
-
-export function isExchangeAddress(address: String): boolean {
-  return (
-    address.toLowerCase() == addresses.getEndemicExchangeAddress().toLowerCase()
-  );
-}
 
 export function isMintEvent(from: Address): boolean {
   return from.toHexString() == NULL_ADDRESS.toHexString();
@@ -160,7 +153,6 @@ export function handleAuctionCreatedForNFT(
       nft.price = auction.startingPrice;
     }
   } else {
-    // we only support immutable price for now. Starting and ending prices will always be the same in the contract
     nft.price = auction.startingPrice;
   }
 

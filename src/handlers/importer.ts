@@ -112,6 +112,9 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.contractName = nftContract.name;
     nft.tokenURI = tokenURI.value;
     nft.supply = ONE_BI;
+    nft.listedAt = ZERO_BI;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
+
     nft = updateTokenMetadataFromIPFS(nft);
     if (nft.name !== null) {
       nft.searchText = toLowerCase(nft.name!);
