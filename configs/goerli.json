@@ -2,7 +2,6 @@
     "network": "goerli",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0xD0E7364473F0843461F2631306AE248539Dab487",
-    "contractImporterAddress":"0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda",
     "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
     "startBlock": 7120952,
     "erc721Factories": [

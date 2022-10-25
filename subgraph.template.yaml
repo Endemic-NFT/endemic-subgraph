@@ -172,56 +172,6 @@ dataSources:
           handler: handleRoyaltiesSetForToken
       file: ./src/handlers/royalties.ts
 
-  - kind: ethereum/contract
-    name: MetadataUpdater
-    network: {{network}}
-    source:
-      address: "{{metadataUpdaterAddress}}"
-      abi: MetadataUpdater
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - NFTContract
-        - NFT
-      abis:
-        - name: MetadataUpdater
-          file: ./abis/MetadataUpdater.json
-        - name: ERC721Enumerable
-          file: ./abis/ERC721Enumerable.json
-      eventHandlers:
-        - event: UpdateMetadata(string[])
-          handler: handleMetadataUpdate
-      file: ./src/handlers/metadata.ts
-
-  # - kind: ethereum/contract
-  #   name: ContractImporter
-  #   network: {{network}}
-  #   source:
-  #     address: "{{contractImporterAddress}}"
-  #     abi: ContractImporter
-  #     startBlock: {{startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.5
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - NFTContract
-  #       - NFT
-  #     abis:
-  #       - name: ContractImporter
-  #         file: ./abis/ContractImporter.json
-  #       - name: ERC721Enumerable
-  #         file: ./abis/ERC721Enumerable.json
-  #       - name: Collection
-  #         file: ./abis/ERC721Enumerable.json
-  #     eventHandlers:
-  #       - event: CollectionAdded(address,string)
-  #         handler: handleCollectionAdded
-  #     file: ./src/handlers/importer.ts
-
 {{#collections}}
   - kind: ethereum/contract
     name: {{name}}

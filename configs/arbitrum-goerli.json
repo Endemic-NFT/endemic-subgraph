@@ -2,8 +2,7 @@
     "network": "arbitrum-goerli",
     "erc1155FactoryAddress": "",
     "royaltiesProviderAddress": "0x03B19c39355fD271A0fF071fAeaEe65F4fe26914",
-    "contractImporterAddress":"",
-    "metadataUpdaterAddress": "",
+    "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
     "startBlock": 821317,
     "erc721Factories": [
         {
