@@ -1,11 +1,23 @@
 {
     "network": "aurora",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
+    "royaltiesProviderAddress": "0x4282CAB4548FBB27f1eaBD1b16F5B8c3D128B268",
     "metadataUpdaterAddress": "0x8C7C8539e48e0808E89acecEEFabd85FC2875599",
     "startBlock": 54570015,
-    "erc721Factories": [],
-    "exchanges": [],
+    "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0x76FA7f90D3900eB95Cfc58AB12c916984AeC50c8",
+            "block": 77431034
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0x0c45c5971f751D93F2e4Ae0E7CeB149967b846d2",
+            "block": 77431140
+        }
+    ],
     "collections": [
         {
             "name": "BORED",
