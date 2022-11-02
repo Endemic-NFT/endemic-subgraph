@@ -136,6 +136,10 @@ type Activity @entity {
   paymentErc20TokenAddress: Bytes
   #auction activity
   auctionStartingPrice: BigInt
+
+  #denormalized for queries
+  nftId: String
+  nftContractId: String
 }
 
 type CollectionHistoricData @entity {

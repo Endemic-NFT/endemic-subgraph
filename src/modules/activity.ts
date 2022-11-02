@@ -37,10 +37,13 @@ export function createAuctionActivity(
   activity.price = auction.startingPrice;
   activity.totalPrice = auction.totalPrice;
   activity.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
-
   activity.createdAt = event.block.timestamp;
+
   activity.nft = nft.id;
+  activity.nftId = nft.id;
   activity.nftContract = nft.contractId.toHexString();
+  activity.nftContractId = nft.contractId.toHexString();
+
   activity.transactionHash = event.transaction.hash;
 
   if (type == 'auctionCreate' || type == 'auctionCancel') {
@@ -71,11 +74,13 @@ export function createOfferActivity(
   activity.price = offer.price;
   activity.totalPrice = offer.price.plus(totalFee);
   activity.createdAt = event.block.timestamp;
-  activity.nft = nftId;
-  activity.nftContract = nftContractId;
   activity.transactionHash = event.transaction.hash;
   activity.initiator = actor.toHexString();
   activity.paymentErc20TokenAddress = offer.paymentErc20TokenAddress;
+  activity.nft = nftId;
+  activity.nftId = nftId;
+  activity.nftContract = nftContractId;
+  activity.nftContractId = nftContractId;
 
   if (type == 'offerAccept') {
     activity.from = actor.toHexString();
@@ -88,13 +93,16 @@ export function createERC721TransferActivity(nft: Nft, event: Transfer): void {
   let id =
     'transfer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
-  activity.nft = nft.id;
-  activity.nftContract = nft.contractId.toHexString();
+
   activity.type = getTransferActivityType(event.params.from, event.params.to);
   activity.from = event.params.from.toHexString();
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
+  activity.nft = nft.id;
+  activity.nftId = nft.id;
+  activity.nftContract = nft.contractId.toHexString();
+  activity.nftContractId = nft.contractId.toHexString();
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -112,13 +120,15 @@ export function createERC1155TransferActivity(
   let id =
     'transfer/' + event.transaction.hash.toHex() + event.logIndex.toHex();
   let activity = new Activity(id);
-  activity.nft = nft.id;
-  activity.nftContract = nft.contractId.toHexString();
   activity.type = getTransferActivityType(event.params.from, event.params.to);
   activity.from = event.params.from.toHexString();
   activity.to = event.params.to.toHexString();
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.from;
+  activity.nft = nft.id;
+  activity.nftId = nft.id;
+  activity.nftContract = nft.contractId.toHexString();
+  activity.nftContractId = nft.contractId.toHexString();
 
   if (activity.type == 'mint') {
     activity.initiator = activity.to!;
@@ -142,6 +152,7 @@ export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
 
   activity.type = 'auctionSuccess';
   activity.nft = nftId;
+  activity.nftContract = event.params.nftContract.toHexString();
   activity.from = event.params.seller.toHexString();
   activity.to = buyerAddress;
   activity.price = event.params.price;
@@ -151,6 +162,8 @@ export function createPrivateSaleActivity(event: PrivateSaleSuccess): void {
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
   activity.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
+  activity.nftId = nftId;
+  activity.nftContractId = event.params.nftContract.toHexString();
 
   activity.save();
 }
@@ -167,6 +180,7 @@ export function createReserveBidPlacedActivity(
 
   activity.type = 'reserveBid';
   activity.nft = nftId;
+  activity.nftId = nftId;
   activity.from = bidder;
   activity.to = null;
   activity.price = event.params.reservePrice;

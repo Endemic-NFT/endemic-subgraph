@@ -220,7 +220,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   createAccount(event.params.bidder);
   createOfferActivity(
     offer,
-    nftId,
+    offer.isForCollection ? null : nftId,
     nftContract,
     ZERO_BI,
     'offerCreate',
@@ -284,7 +284,7 @@ export function handleOfferAccepted(event: OfferAccepted): void {
 
   createOfferActivity(
     offer,
-    nftId,
+    offer.isForCollection ? null : nftId,
     offer.nftContract,
     event.params.totalFees,
     'offerAccept',
@@ -319,7 +319,7 @@ export function handleOfferCancelled(event: OfferCancelled): void {
 
   createOfferActivity(
     offer,
-    nftId,
+    offer.isForCollection ? null : nftId,
     offer.nftContract,
     ZERO_BI,
     'offerCancel',
