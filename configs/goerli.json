@@ -22,6 +22,11 @@
     "erc721FactoriesLegacy": [
         {
             "name": "EndemicNFTFactoryLegacy",
+            "address": "0x801C7A8410E4bf11a27B6D4a42B1E157C3E98549",
+            "block": 7121012
+        },
+        {
+            "name": "EndemicNFTFactoryLegacy_v2",
             "address": "0x4202db76d367f96f19c348124579385d208E44B6",
             "block": 7120952
         }
