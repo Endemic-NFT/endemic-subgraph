@@ -1,4 +1,4 @@
-import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, log, store } from '@graphprotocol/graph-ts';
 import { Auction, Nft } from '../../generated/schema';
 import { EndemicExchange } from '../../generated/EndemicExchange/EndemicExchange';
 import * as addresses from '../utils/addresses';
@@ -42,7 +42,11 @@ function getAuctionId(nft: Nft, seller: Address): string | null {
   );
 }
 
-function removeActiveAuction(nft: Nft, seller: Address, amount: BigInt): Nft {
+export function removeActiveAuction(
+  nft: Nft,
+  seller: Address,
+  amount: BigInt
+): Nft {
   let auctionId = getAuctionId(nft, seller);
   if (auctionId == null) return nft;
 

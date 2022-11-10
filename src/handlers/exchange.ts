@@ -24,8 +24,9 @@ import { Bytes, log, store } from '@graphprotocol/graph-ts';
 import { getOrCreateNftOwnership } from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
-import { ZERO_BI } from '../utils/constants';
+import { ONE_BI, ZERO_BI } from '../utils/constants';
 import { createAccount } from '../modules/account';
+import { removeActiveAuction } from '../modules/auction';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -253,6 +254,19 @@ export function handleOfferAccepted(event: OfferAccepted): void {
     nftId = createNftId(offer.nftContract, event.params.tokenId.toString());
     contractId = Bytes.fromByteArray(Bytes.fromHexString(offer.nftContract));
   }
+
+  if (nft === null) {
+    //Offer is for collection -> load nft from store with new nftId
+    nft = Nft.load(nftId);
+
+    if (nft === null) {
+      log.warning('NFT not found {} for offer {}', [nftId, offerId]);
+      return;
+    }
+  }
+
+  nft = removeActiveAuction(nft, event.params.seller, ONE_BI);
+  nft.save();
 
   store.remove('Offer', offer.id);
 
