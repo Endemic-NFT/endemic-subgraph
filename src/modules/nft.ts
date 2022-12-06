@@ -147,6 +147,8 @@ export function handleAuctionCreatedForNFT(
   nft.isOnSale = true;
   nft.listedAt = listedAt;
   nft.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
+  nft.auctionStartingPrice = auction.startingPrice;
+  nft.auctionEndingPrice = auction.endingPrice;
 
   if (nft.type == 'ERC-1155') {
     if (nft.price === null || nft.price > auction.startingPrice) {
@@ -178,12 +180,16 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
       nft.paymentErc20TokenAddress = NULL_ADDRESS;
+      nft.auctionStartingPrice = ZERO_BI;
+      nft.auctionEndingPrice = ZERO_BI;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
     nft.paymentErc20TokenAddress = NULL_ADDRESS;
+    nft.auctionStartingPrice = ZERO_BI;
+    nft.auctionEndingPrice = ZERO_BI;
   }
 
   return nft;

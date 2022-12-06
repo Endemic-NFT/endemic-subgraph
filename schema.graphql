@@ -37,6 +37,8 @@ type NftOwnership @entity {
   nftContractId: Bytes!
   nftCategory: String
   nftPrice: BigInt!
+  nftAuctionStartingPrice: BigInt!
+  nftAuctionEndingPrice: BigInt!
   nftBurned: Boolean!
   nftCreatedAt: BigInt!
   nftListedAt: BigInt!
@@ -79,6 +81,8 @@ type Nft @entity {
   #denormalized for performance
   contractId: Bytes!
   contractName: String
+  auctionStartingPrice: BigInt!
+  auctionEndingPrice: BigInt!
 
   searchText: String
 

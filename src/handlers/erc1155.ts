@@ -98,6 +98,9 @@ export function handleCreate(event: Create): void {
   nft.supply = event.params.supply;
 
   nft.price = ZERO_BI;
+  nft.auctionStartingPrice = ZERO_BI;
+  nft.auctionEndingPrice = ZERO_BI;
+
   nft.isOnSale = false;
   nft.burned = false;
 
