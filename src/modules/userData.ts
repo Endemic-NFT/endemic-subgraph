@@ -146,7 +146,7 @@ export function updateHourDataForSaleCompleted(
   volume: BigInt,
   buyerAddress: string,
   sellerAddress: string,
-  paymentErc20TokenAddress: Bytes | null = null
+  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
 ): void {
   updateHourData(
     timestamp,
@@ -169,24 +169,24 @@ export function updateHourData(
   userAddress: string,
   makerVolume: BigInt,
   takerVolume: BigInt,
-  paymentErc20TokenAddress: Bytes | null = null
+  paymentErc20TokenAddress: Bytes
 ): void {
   const timestamp = blockTimestamp.toI32();
 
   const hour = timestamp / 3600;
 
-  const epoch = hour * 3600;
-
   const hourDataId = userAddress
     .concat('-')
-    .concat(BigInt.fromI32(hour).toString());
+    .concat(BigInt.fromI32(hour).toString())
+    .concat('-')
+    .concat(paymentErc20TokenAddress.toHexString());
 
   let userHourVolumeData = UserHourData.load(hourDataId);
 
   if (userHourVolumeData == null) {
     userHourVolumeData = new UserHourData(hourDataId);
 
-    userHourVolumeData.epoch = epoch;
+    userHourVolumeData.epoch = timestamp;
     userHourVolumeData.accountId = userAddress;
     userHourVolumeData.makerVolume = ZERO_BI;
     userHourVolumeData.takerVolume = ZERO_BI;
