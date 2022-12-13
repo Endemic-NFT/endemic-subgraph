@@ -1,12 +1,41 @@
 {
     "network": "aurora",
-    "offerAddress": "0x0eFd38A98FaaDDBc078FEcA76D1D20857b1Be5F5",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xE6a3541995E78600A949049C41A1C310634C57cc",
-    "contractImporterAddress":"0x427f522121534EB79d40Cbeeb5C62e172c05979d",
+    "royaltiesProviderAddress": "0x4282CAB4548FBB27f1eaBD1b16F5B8c3D128B268",
     "metadataUpdaterAddress": "0x8C7C8539e48e0808E89acecEEFabd85FC2875599",
     "startBlock": 54570015,
     "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0x76FA7f90D3900eB95Cfc58AB12c916984AeC50c8",
+            "block": 77431034
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0x0c45c5971f751D93F2e4Ae0E7CeB149967b846d2",
+            "block": 77431140
+        }
+    ],
+    "collections": [
+        {
+            "name": "BORED",
+            "address": "0x8b8af1072e8cf40cf75ad6efdf9fe999a47e285c",
+            "block": 66699925
+        },
+        {
+            "name": "TAC",
+            "address":"0xea5cc56b180d1a845bd86cba6711868a9763f461",
+            "block": 57464900    
+        },
+        {
+            "name" :"EYWA",
+            "address" :"0xB2e6a5a864A1004C3c828a2e767A08C173939b01",
+            "block": 72073334
+        }
+    ],
+    "erc721FactoriesLegacy": [
         {
             "name": "EndemicNFTFactoryV1",
             "address": "0x7e4fD7d4bb0e31A14B76a396F840b6FE08A51da3",
@@ -18,18 +47,18 @@
             "block": 54570015
         }
     ],
-    "exchanges": [
+    "exchangesLegacy": [
         {
-            "name": "EndemicExchange",
+            "name": "EndemicExchangeLegacy",
             "address": "0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7",
             "block": 57246873
         }
     ],
-    "collections": [
+    "offersLegacy": [
         {
-            "name" :"EYWA",
-            "address" :"0xB2e6a5a864A1004C3c828a2e767A08C173939b01",
-            "block": 72073334
+            "name": "OfferLegacy",
+            "address": "0x0eFd38A98FaaDDBc078FEcA76D1D20857b1Be5F5",
+            "block": 54570015
         }
     ]
 }

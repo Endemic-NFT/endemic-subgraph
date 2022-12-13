@@ -1,0 +1,26 @@
+{
+    "network": "arbitrum-goerli",
+    "erc1155FactoryAddress": "",
+    "royaltiesProviderAddress": "0x03B19c39355fD271A0fF071fAeaEe65F4fe26914",
+    "metadataUpdaterAddress": "0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92",
+    "startBlock": 821317,
+    "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0x45F3e4c28b68142e7C83c55aA95F3c5281006DB8",
+            "block": 821317
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0xF85Ab30873673dDe16E1d70518cB21814eE8fF9A",
+            "block": 821317
+        }
+    ],
+    "collections": [],
+    "erc721FactoriesLegacy": [],
+    "exchangesLegacy": [],
+    "offersLegacy": []
+}
+

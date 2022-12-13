@@ -37,10 +37,13 @@ type NftOwnership @entity {
   nftContractId: Bytes!
   nftCategory: String
   nftPrice: BigInt!
+  nftAuctionStartingPrice: BigInt!
+  nftAuctionEndingPrice: BigInt!
   nftBurned: Boolean!
   nftCreatedAt: BigInt!
   nftListedAt: BigInt!
   nftIsOnSale: Boolean!
+  nftPaymentErc20TokenAddress: Bytes!
 }
 
 type Nft @entity {
@@ -64,6 +67,7 @@ type Nft @entity {
   price: BigInt!
   lastSalePrice: BigInt
   auctionIds: [String!]!
+  paymentErc20TokenAddress: Bytes!
 
   #metadata
   tokenURI: String
@@ -72,10 +76,13 @@ type Nft @entity {
   image: String
   thumbnail: String
   attributes: [String!]
+  blockchain: String!
 
   #denormalized for performance
   contractId: Bytes!
   contractName: String
+  auctionStartingPrice: BigInt!
+  auctionEndingPrice: BigInt!
 
   searchText: String
 
@@ -91,26 +98,30 @@ type Auction @entity {
   id: ID!
   seller: Account!
   buyer: Bytes
+  paymentErc20TokenAddress: Bytes!
   startingPrice: BigInt!
   endingPrice: BigInt!
   isDutch: Boolean!
-  duration: BigInt!
   startedAt: BigInt!
+  endingAt: BigInt!
   nft: Nft!
   tokenAmount: BigInt!
   soldTokenAmount: BigInt!
   totalPrice: BigInt
+  sourceVersion: SourceVersion!
 }
 
 type Offer @entity {
   id: ID!
   nft: Nft
-  nftContract: NftContract
+  nftContract: NftContract!
   bidder: Account!
+  paymentErc20TokenAddress: Bytes!
   price: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
-  isCollectionOffer: Boolean!
+  isForCollection: Boolean!
+  sourceVersion: SourceVersion!
 }
 
 type Activity @entity {
@@ -126,9 +137,13 @@ type Activity @entity {
   price: BigInt #This field is price that unifies "offerPrice, privatePrice and auction starting price (if dutch auction); Depending on activity type"
   totalPrice: BigInt #This field is total price that unifies "offerPrice, privatePrice and auction starting price (if dutch auction); Plus fee depending on activity type"
   fee: BigInt #This field is fee that we get after auctionSuccess, offerAccept or privateSaleSuccess events
+  paymentErc20TokenAddress: Bytes
   #auction activity
   auctionStartingPrice: BigInt
-  auctionIsDutch: Boolean!
+
+  #denormalized for queries
+  nftId: String
+  nftContractId: String
 }
 
 type CollectionHistoricData @entity {
@@ -139,6 +154,7 @@ type CollectionHistoricData @entity {
   ownersCount: BigInt!
   floorPrice: BigInt
   floorPriceTracker: [BigInt!]
+  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "collectionHistoricData")
 }
 
 type UserHistoricData @entity {
@@ -148,6 +164,7 @@ type UserHistoricData @entity {
   onSaleCount: BigInt!
   makerVolume: BigInt!
   takerVolume: BigInt!
+  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "userHistoricData")
 }
 
 type CollectionHourData @entity {
@@ -156,6 +173,7 @@ type CollectionHourData @entity {
   epoch: Int!
   contractId: Bytes!
   volumeTraded: BigInt!
+  paymentErc20TokenAddress: Bytes
 }
 
 type UserHourData @entity {
@@ -165,6 +183,22 @@ type UserHourData @entity {
   accountId: Account!
   makerVolume: BigInt!
   takerVolume: BigInt!
+  paymentErc20TokenAddress: Bytes
+}
+
+type Erc20Volume @entity {
+  id: ID!
+  volumeTraded: BigInt!
+  makerVolume: BigInt!
+  takerVolume: BigInt!
+  paymentErc20TokenAddress: String
+  userHistoricData: UserHistoricData
+  collectionHistoricData: CollectionHistoricData
+}
+
+enum SourceVersion @entity {
+  V1
+  V2
 }
 
 enum ActivityType @entity {
@@ -177,4 +211,5 @@ enum ActivityType @entity {
   offerCreate
   offerAccept
   offerCancel
+  reserveBid
 }

@@ -1,3 +1,4 @@
+import { dataSource } from '@graphprotocol/graph-ts';
 import {
   Transfer,
   Mint,
@@ -10,16 +11,15 @@ import {
   updateTokenMetadataFromIPFS,
   isBurnEvent,
   isMintEvent,
-  isExchangeAddress,
 } from '../modules/nft';
-import { removeActiveAuction } from '../modules/auction';
+import { removePossibleActiveAuction } from '../modules/auction';
 import { createERC721TransferActivity } from '../modules/activity';
 import { createNFTContract } from '../modules/nftContract';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { toLowerCase } from '../utils/string';
-import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
 import { createAccount } from '../modules/account';
 
 export function handleTransfer(event: Transfer): void {
@@ -34,6 +34,7 @@ export function handleTransfer(event: Transfer): void {
     nft = new Nft(id);
     nft.auctionIds = [];
     nft.type = 'ERC-721';
+    nft.blockchain = dataSource.network();
   }
 
   let contract = NftContract.load(event.address.toHexString());
@@ -46,6 +47,8 @@ export function handleTransfer(event: Transfer): void {
   nft.contractId = event.address;
   nft.updatedAt = event.block.timestamp;
   nft.price = ZERO_BI;
+  nft.auctionStartingPrice = ZERO_BI;
+  nft.auctionEndingPrice = ZERO_BI;
   nft.burned = false;
   nft.isOnSale = false;
   nft.listedAt = ZERO_BI;
@@ -58,9 +61,10 @@ export function handleTransfer(event: Transfer): void {
     nft.contractName = contract.name;
     nft.tokenURI = tokenURI;
     nft.supply = ONE_BI;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
 
     nft = updateTokenMetadataFromIPFS(nft);
-    if (nft.name !== null) {
+    if (nft.name != null) {
       nft.searchText = toLowerCase(nft.name!);
     }
   } else if (isBurnEvent(event.params.to)) {
@@ -70,13 +74,12 @@ export function handleTransfer(event: Transfer): void {
     }
   }
 
-  if (
-    event.transaction.to !== null &&
-    !isExchangeAddress(event.transaction.to!.toHexString()) &&
-    !isMintEvent(event.params.from)
-  ) {
-    nft = removeActiveAuction(nft, event.params.from, ONE_BI);
-  }
+  nft = removePossibleActiveAuction(
+    event.transaction.to,
+    event.params.from,
+    nft,
+    ONE_BI
+  );
 
   nft.save();
 

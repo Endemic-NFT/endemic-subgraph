@@ -1,19 +1,17 @@
-import { Address, BigInt, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, log, store } from '@graphprotocol/graph-ts';
 import { Auction, Nft } from '../../generated/schema';
 import { EndemicExchange } from '../../generated/EndemicExchange/EndemicExchange';
 import * as addresses from '../utils/addresses';
-import { handleAuctionCompletedForNFT } from './nft';
+import { handleAuctionCompletedForNFT, isMintEvent } from './nft';
 import * as userData from './userData';
 import * as collectionData from './collectionData';
 
-export function removeActiveAuction(
+function getAuctionIdForAdress(
   nft: Nft,
   seller: Address,
-  amount: BigInt
-): Nft {
-  let exchange = EndemicExchange.bind(
-    Address.fromString(addresses.getEndemicExchangeAddress())
-  );
+  exchangeAddress: Address
+): string | null {
+  let exchange = EndemicExchange.bind(exchangeAddress);
 
   let auctionId = exchange.try_createAuctionId(
     Address.fromString(nft.contractId.toHexString()),
@@ -21,20 +19,47 @@ export function removeActiveAuction(
     seller
   );
   if (auctionId.reverted) {
-    return nft;
+    return null;
   }
 
-  let auctionIdValue = auctionId.value.toHexString();
-  let auction = Auction.load(auctionIdValue);
+  return auctionId.value.toHexString();
+}
+
+function getAuctionId(nft: Nft, seller: Address): string | null {
+  let auctionId = getAuctionIdForAdress(
+    nft,
+    seller,
+    Address.fromString(addresses.getLatestEndemicExchangeAddress())
+  );
+  if (auctionId != null) {
+    return auctionId;
+  }
+
+  return getAuctionIdForAdress(
+    nft,
+    seller,
+    Address.fromString(addresses.getLegacyEndemicExchangeAddress())
+  );
+}
+
+export function removeActiveAuction(
+  nft: Nft,
+  seller: Address,
+  amount: BigInt
+): Nft {
+  let auctionId = getAuctionId(nft, seller);
+  if (auctionId == null) return nft;
+
+  let auction = Auction.load(auctionId!);
   if (auction == null) return nft;
 
   auction.tokenAmount = auction.tokenAmount.minus(amount);
   let auctionEndingPrice = auction.endingPrice;
 
-  nft = handleAuctionCompletedForNFT(nft, auctionIdValue);
+  nft = handleAuctionCompletedForNFT(nft, auctionId!);
 
   if (nft.type == 'ERC-721') {
-    store.remove('Auction', auctionIdValue);
+    store.remove('Auction', auctionId!);
   } else {
     auction.save();
   }
@@ -46,5 +71,22 @@ export function removeActiveAuction(
     amount
   );
 
+  return nft;
+}
+
+export function removePossibleActiveAuction(
+  transactionOrigin: Address | null,
+  fromAccount: Address,
+  nft: Nft,
+  amount: BigInt
+): Nft {
+  let isOwnershipChangedWithoutTrade =
+    transactionOrigin !== null &&
+    !addresses.isExchangeAddress(transactionOrigin.toHexString()) &&
+    !isMintEvent(fromAccount);
+
+  if (isOwnershipChangedWithoutTrade) {
+    nft = removeActiveAuction(nft, fromAccount, amount);
+  }
   return nft;
 }

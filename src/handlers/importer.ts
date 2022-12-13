@@ -104,6 +104,8 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.contract = event.params.contractAddress.toHexString();
     nft.updatedAt = event.block.timestamp;
     nft.price = ZERO_BI;
+    nft.auctionStartingPrice = ZERO_BI;
+    nft.auctionEndingPrice = ZERO_BI;
     nft.burned = false;
     nft.isOnSale = false;
     nft.createdAt = event.block.timestamp;
@@ -112,6 +114,9 @@ export function handleCollectionAdded(event: CollectionAdded): void {
     nft.contractName = nftContract.name;
     nft.tokenURI = tokenURI.value;
     nft.supply = ONE_BI;
+    nft.listedAt = ZERO_BI;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
+
     nft = updateTokenMetadataFromIPFS(nft);
     if (nft.name !== null) {
       nft.searchText = toLowerCase(nft.name!);

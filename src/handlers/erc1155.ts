@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts';
+import { log, dataSource } from '@graphprotocol/graph-ts';
 import {
   TransferSingle,
   Create,
@@ -8,16 +8,16 @@ import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC1155TokenURI,
   createNftId,
-  isExchangeAddress,
   isMintEvent,
   updateTokenMetadataFromIPFS,
 } from '../modules/nft';
 import { createERC1155TransferActivity } from '../modules/activity';
 import { updateERC1155Ownership } from '../modules/ownership';
-import { removeActiveAuction } from '../modules/auction';
+import { removePossibleActiveAuction } from '../modules/auction';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { toLowerCase } from '../utils/string';
+import * as addresses from '../utils/addresses';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
 import { createAccount } from '../modules/account';
 
@@ -32,14 +32,14 @@ export function handleTransferSingle(event: TransferSingle): void {
     return;
   }
 
-  if (
-    event.transaction.to !== null &&
-    !isExchangeAddress(event.transaction.to!.toHexString()) &&
-    !isMintEvent(event.params.from)
-  ) {
-    removeActiveAuction(nft, event.params.from, event.params.value);
-    nft.save();
-  }
+  nft = removePossibleActiveAuction(
+    event.transaction.to,
+    event.params.from,
+    nft,
+    event.params.value
+  );
+
+  nft.save();
 
   createAccount(event.params.from);
   createAccount(event.params.to);
@@ -81,6 +81,7 @@ export function handleCreate(event: Create): void {
   let tokenURI = getERC1155TokenURI(event.address, event.params.tokenId);
 
   nft.type = 'ERC-1155';
+  nft.blockchain = dataSource.network();
   nft.category = contract.category;
   nft.artistId = event.params.artistId;
   nft.artist = event.params.artistId.toHex();
@@ -97,11 +98,14 @@ export function handleCreate(event: Create): void {
   nft.supply = event.params.supply;
 
   nft.price = ZERO_BI;
+  nft.auctionStartingPrice = ZERO_BI;
+  nft.auctionEndingPrice = ZERO_BI;
+
   nft.isOnSale = false;
   nft.burned = false;
 
   nft = updateTokenMetadataFromIPFS(nft);
-  if (nft.name !== null) {
+  if (nft.name != null) {
     nft.searchText = toLowerCase(nft.name!);
   }
 

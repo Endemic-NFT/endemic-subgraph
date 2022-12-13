@@ -9,15 +9,8 @@ import {
 import { Auction, Nft } from '../../generated/schema';
 import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
-import * as addresses from '../utils/addresses';
 import { filter } from '../utils/array';
 import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
-
-export function isExchangeAddress(address: String): boolean {
-  return (
-    address.toLowerCase() == addresses.getEndemicExchangeAddress().toLowerCase()
-  );
-}
 
 export function isMintEvent(from: Address): boolean {
   return from.toHexString() == NULL_ADDRESS.toHexString();
@@ -153,13 +146,15 @@ export function handleAuctionCreatedForNFT(
   nft.auctionIds = auctionIds;
   nft.isOnSale = true;
   nft.listedAt = listedAt;
+  nft.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
+  nft.auctionStartingPrice = auction.startingPrice;
+  nft.auctionEndingPrice = auction.endingPrice;
 
   if (nft.type == 'ERC-1155') {
     if (nft.price === null || nft.price > auction.startingPrice) {
       nft.price = auction.startingPrice;
     }
   } else {
-    // we only support immutable price for now. Starting and ending prices will always be the same in the contract
     nft.price = auction.startingPrice;
   }
 
@@ -184,11 +179,17 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.isOnSale = false;
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
+      nft.paymentErc20TokenAddress = NULL_ADDRESS;
+      nft.auctionStartingPrice = ZERO_BI;
+      nft.auctionEndingPrice = ZERO_BI;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
+    nft.paymentErc20TokenAddress = NULL_ADDRESS;
+    nft.auctionStartingPrice = ZERO_BI;
+    nft.auctionEndingPrice = ZERO_BI;
   }
 
   return nft;

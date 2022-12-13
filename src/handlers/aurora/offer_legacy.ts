@@ -1,22 +1,24 @@
+//** This file is used to index previous offers contract data on Aurora **/
+//** Contract is no longer is use**/
+
 import { log, store } from '@graphprotocol/graph-ts';
 import {
   OfferAccepted,
   OfferCancelled,
   OfferCreated,
-} from '../../../generated/Offer/Offer';
+} from '../../../generated/OfferLegacy/OfferLegacy';
 import { Offer, Nft } from '../../../generated/schema';
 import { createNftId } from '../../modules/nft';
 import { createOfferActivity } from '../../modules/activity';
 import * as userData from '../../modules/userData';
 import * as collectionData from '../../modules/collectionData';
 import { createAccount } from '../../modules/account';
-import { ZERO_BI } from '../../utils/constants';
+import { NULL_ADDRESS, ZERO_BI } from '../../utils/constants';
 
 export function handleOfferCreated(event: OfferCreated): void {
-  let nftId = createNftId(
-    event.params.nftContract.toHexString(),
-    event.params.tokenId.toString()
-  );
+  let nftContract = event.params.nftContract.toHexString();
+
+  let nftId = createNftId(nftContract, event.params.tokenId.toString());
 
   let offerId = event.params.id.toString();
   let offer = new Offer(offerId);
@@ -28,19 +30,22 @@ export function handleOfferCreated(event: OfferCreated): void {
   }
 
   offer.nft = nftId;
+  offer.nftContract = nftContract;
   offer.bidder = event.params.bidder.toHexString();
   offer.price = event.params.price;
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
-  offer.isCollectionOffer = false;
+  offer.isForCollection = false;
+  offer.paymentErc20TokenAddress = NULL_ADDRESS;
+  offer.sourceVersion = 'V1';
 
   offer.save();
 
   createAccount(event.params.bidder);
   createOfferActivity(
     offer,
-    nft.id,
-    nft.contractId.toHexString(),
+    nftId,
+    nftContract,
     ZERO_BI,
     'offerCreate',
     event.params.bidder,
