@@ -73,23 +73,27 @@ export function handleOfferAccepted(event: OfferAccepted): void {
   userData.updateHistoricDataForOfferAccepted(
     event.params.bidder.toHexString(),
     event.params.seller.toHexString(),
-    event.params.price
+    event.params.price,
+    offer.paymentErc20TokenAddress
   );
   userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
     event.params.price,
     event.params.bidder.toHexString(),
-    event.params.seller.toHexString()
+    event.params.seller.toHexString(),
+    offer.paymentErc20TokenAddress
   );
 
   collectionData.updateHistoricDataForOfferAccepted(
     nft.contractId,
-    event.params.price
+    event.params.price,
+    offer.paymentErc20TokenAddress
   );
   collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
-    event.params.price
+    event.params.price,
+    offer.paymentErc20TokenAddress
   );
 
   createOfferActivity(
