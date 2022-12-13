@@ -1,6 +1,6 @@
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 import { UserHistoricData, UserHourData } from '../../generated/schema';
-import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
+import { ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isTransferEvent } from './nft';
 import {
   isPaymentInEther,
@@ -13,7 +13,7 @@ export function getOrCreateUserHistoricData(
 ): UserHistoricData {
   let stats = UserHistoricData.load(userAddress);
 
-  if (!stats) {
+  if (stats == null) {
     stats = new UserHistoricData(userAddress);
     stats.createdCount = ZERO_BI;
     stats.onSaleCount = ZERO_BI;
@@ -83,13 +83,12 @@ export function updateHistoricDataForAuctionCompleted(
   sellerAddress: string,
   volumeTraded: BigInt,
   tokenAmount: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  paymentErc20TokenAddress: Bytes
 ): void {
   let buyerStats = getOrCreateUserHistoricData(buyerAddress);
   let sellerStats = getOrCreateUserHistoricData(sellerAddress);
 
   sellerStats.onSaleCount = sellerStats.onSaleCount.minus(tokenAmount);
-
   if (isPaymentInEther(paymentErc20TokenAddress)) {
     buyerStats.takerVolume = buyerStats.takerVolume.plus(volumeTraded);
 
@@ -115,7 +114,7 @@ export function updateHistoricDataForOfferAccepted(
   buyerAddress: string,
   sellerAddress: string,
   volumeTraded: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  paymentErc20TokenAddress: Bytes
 ): void {
   let buyerStats = getOrCreateUserHistoricData(buyerAddress);
   let sellerStats = getOrCreateUserHistoricData(sellerAddress);
@@ -146,7 +145,7 @@ export function updateHourDataForSaleCompleted(
   volume: BigInt,
   buyerAddress: string,
   sellerAddress: string,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  paymentErc20TokenAddress: Bytes
 ): void {
   updateHourData(
     timestamp,
