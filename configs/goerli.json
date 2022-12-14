@@ -18,7 +18,13 @@
             "block": 7767744
         }
     ],
-    "collections": [],
+    "collections": [
+        {
+            "name": "TEST",
+            "address": "0x3f9bd902dE8845B9cBBe8f26333FA10fE9a494Fe",
+            "block": 7767744
+        }
+    ],
     "erc721FactoriesLegacy": [
         {
             "name": "EndemicNFTFactoryLegacy",
