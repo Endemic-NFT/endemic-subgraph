@@ -6,6 +6,7 @@ const blacklistedAuroraCollections = [
   '0xf18ca1c9e69e784f04aefaf806763eb85472c871', // che flies
   '0x9f028079723735276102a0953f2debae7650dc50', // bored ape pro club
   '0x36904b103c7afc1cb983afcb94e1bd70e555c869', // ape king
+  '0x414f674004f04273516b937b1459f8f99d478a6c', // skull man art
 ];
 
 export { blacklistedAuroraCollections };
