@@ -202,10 +202,10 @@ export function handleOfferCreated(event: OfferCreated): void {
   let offerId = event.params.id.toString();
   let offer = new Offer(offerId);
 
-  let isOfferForCollection = event.params.isForCollection;
+  let isForCollection = event.params.isForCollection;
 
   let nft = Nft.load(nftId);
-  if (!isOfferForCollection && nft == null) {
+  if (!isForCollection && nft == null) {
     log.info('NFT not found {} for offer {}', [nftId, offerId]);
     return;
   }
@@ -217,7 +217,7 @@ export function handleOfferCreated(event: OfferCreated): void {
   offer.expiresAt = event.params.expiresAt;
   offer.createdAt = event.block.timestamp;
   offer.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
-  offer.isForCollection = isOfferForCollection;
+  offer.isForCollection = isForCollection;
   offer.sourceVersion = 'V2';
 
   offer.save();
@@ -225,10 +225,10 @@ export function handleOfferCreated(event: OfferCreated): void {
   createAccount(event.params.bidder);
   createOfferActivity(
     offer,
-    offer.isForCollection ? null : nftId,
+    isForCollection ? null : nftId,
     nftContract,
     ZERO_BI,
-    'offerCreate',
+    !isForCollection ? 'offerCreate' : 'collectionOfferCreate',
     event.params.bidder,
     event
   );
@@ -320,8 +320,10 @@ export function handleOfferCancelled(event: OfferCancelled): void {
     return;
   }
 
+  let isForCollection = offer.isForCollection;
+
   let nft = Nft.load(offer.nft!);
-  if (!offer.isForCollection && nft == null) {
+  if (!isForCollection && nft == null) {
     log.info('NFT not found {} for offer {}', [nft!.id, offerId]);
     return;
   }
@@ -337,10 +339,10 @@ export function handleOfferCancelled(event: OfferCancelled): void {
 
   createOfferActivity(
     offer,
-    offer.isForCollection ? null : nftId,
+    isForCollection ? null : nftId,
     offer.nftContract,
     ZERO_BI,
-    'offerCancel',
+    !isForCollection ? 'offerCancel' : 'collectionOfferCancel',
     event.params.bidder,
     event
   );
