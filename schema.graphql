@@ -37,8 +37,7 @@ type NftOwnership @entity {
   nftContractId: Bytes!
   nftCategory: String
   nftPrice: BigInt!
-  nftAuctionStartingPrice: BigInt!
-  nftAuctionEndingPrice: BigInt!
+  nftAuctionSortingPrice: BigDecimal!
   nftBurned: Boolean!
   nftCreatedAt: BigInt!
   nftListedAt: BigInt!
@@ -81,8 +80,7 @@ type Nft @entity {
   #denormalized for performance
   contractId: Bytes!
   contractName: String
-  auctionStartingPrice: BigInt!
-  auctionEndingPrice: BigInt!
+  auctionSortingPrice: BigDecimal!
 
   searchText: String
 
@@ -109,6 +107,9 @@ type Auction @entity {
   soldTokenAmount: BigInt!
   totalPrice: BigInt
   sourceVersion: SourceVersion!
+
+  # endingPrice in high denomination -> used for sorting on UI
+  sortingPrice: BigDecimal!
 }
 
 type Offer @entity {

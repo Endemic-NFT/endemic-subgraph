@@ -38,8 +38,7 @@ export function getOrCreateNftOwnership(
     nftOwnership.nft = nft.id;
     nftOwnership.nftCategory = nft.category;
     nftOwnership.nftPrice = nft.price;
-    nftOwnership.nftAuctionStartingPrice = nft.auctionStartingPrice;
-    nftOwnership.nftAuctionEndingPrice = nft.auctionEndingPrice;
+    nftOwnership.nftAuctionSortingPrice = nft.auctionSortingPrice;
     nftOwnership.nftContractId = nft.contractId;
     nftOwnership.nftBurned = nft.burned;
     nftOwnership.nftCreatedAt = nft.createdAt;
@@ -81,8 +80,7 @@ export function updateERC721Ownership(
   nftOwnership.nftBurned = nft.burned;
   nftOwnership.nftIsOnSale = nft.isOnSale;
   nftOwnership.nftPrice = nft.price;
-  nftOwnership.nftAuctionStartingPrice = nft.auctionStartingPrice;
-  nftOwnership.nftAuctionEndingPrice = nft.auctionEndingPrice;
+  nftOwnership.nftAuctionSortingPrice = nft.auctionSortingPrice;
   nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 }

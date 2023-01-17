@@ -8,7 +8,6 @@ import { Nft, NftContract } from '../../generated/schema';
 import {
   getERC1155TokenURI,
   createNftId,
-  isMintEvent,
   updateTokenMetadataFromIPFS,
 } from '../modules/nft';
 import { createERC1155TransferActivity } from '../modules/activity';
@@ -17,8 +16,7 @@ import { removePossibleActiveAuction } from '../modules/auction';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { toLowerCase } from '../utils/string';
-import * as addresses from '../utils/addresses';
-import { ONE_BI, ZERO_BI } from '../utils/constants';
+import { ONE_BI, ZERO_BI, ZERO_DECIMAL } from '../utils/constants';
 import { createAccount } from '../modules/account';
 
 export function handleTransferSingle(event: TransferSingle): void {
@@ -98,8 +96,7 @@ export function handleCreate(event: Create): void {
   nft.supply = event.params.supply;
 
   nft.price = ZERO_BI;
-  nft.auctionStartingPrice = ZERO_BI;
-  nft.auctionEndingPrice = ZERO_BI;
+  nft.auctionSortingPrice = ZERO_DECIMAL;
 
   nft.isOnSale = false;
   nft.burned = false;

@@ -19,7 +19,12 @@ import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { updateERC721Ownership } from '../modules/ownership';
 import { toLowerCase } from '../utils/string';
-import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
+import {
+  NULL_ADDRESS,
+  ONE_BI,
+  ZERO_BI,
+  ZERO_DECIMAL,
+} from '../utils/constants';
 import { createAccount } from '../modules/account';
 
 export function handleTransfer(event: Transfer): void {
@@ -47,8 +52,7 @@ export function handleTransfer(event: Transfer): void {
   nft.contractId = event.address;
   nft.updatedAt = event.block.timestamp;
   nft.price = ZERO_BI;
-  nft.auctionStartingPrice = ZERO_BI;
-  nft.auctionEndingPrice = ZERO_BI;
+  nft.auctionSortingPrice = ZERO_DECIMAL;
   nft.burned = false;
   nft.isOnSale = false;
   nft.listedAt = ZERO_BI;
