@@ -150,11 +150,11 @@ export function handleAuctionCreatedForNFT(
   nft.auctionSortingPrice = auction.sortingPrice;
 
   if (nft.type == 'ERC-1155') {
-    if (nft.price === null || nft.price > auction.startingPrice) {
-      nft.price = auction.startingPrice;
+    if (nft.price === null || nft.price > auction.endingPrice) {
+      nft.price = auction.endingPrice;
     }
   } else {
-    nft.price = auction.startingPrice;
+    nft.price = auction.endingPrice;
   }
 
   return nft;
@@ -169,8 +169,8 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       let lowestPrice = BigInt.fromI32(2).pow(255 as u8);
       for (let i = 0; i < nft.auctionIds.length; i++) {
         let otherAuction = Auction.load(nft.auctionIds[i])!;
-        if (lowestPrice.gt(otherAuction.startingPrice)) {
-          lowestPrice = otherAuction.startingPrice;
+        if (lowestPrice.gt(otherAuction.endingPrice)) {
+          lowestPrice = otherAuction.endingPrice;
         }
       }
       nft.price = lowestPrice;
