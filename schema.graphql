@@ -211,5 +211,7 @@ enum ActivityType @entity {
   offerCreate
   offerAccept
   offerCancel
-  reserveBid
+  reserveOffer
+  collectionOfferCreate
+  collectionOfferCancel
 }

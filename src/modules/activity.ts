@@ -178,7 +178,7 @@ export function createReserveBidPlacedActivity(
 
   const bidder = event.params.bidder.toHexString();
 
-  activity.type = 'reserveBid';
+  activity.type = 'reserveOffer';
   activity.nft = nftId;
   activity.nftId = nftId;
   activity.from = bidder;
