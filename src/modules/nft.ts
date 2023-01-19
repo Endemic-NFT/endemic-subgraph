@@ -10,7 +10,7 @@ import { Auction, Nft } from '../../generated/schema';
 import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { filter } from '../utils/array';
-import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
+import { NULL_ADDRESS, ZERO_BI, ZERO_DECIMAL } from '../utils/constants';
 
 export function isMintEvent(from: Address): boolean {
   return from.toHexString() == NULL_ADDRESS.toHexString();
@@ -147,15 +147,14 @@ export function handleAuctionCreatedForNFT(
   nft.isOnSale = true;
   nft.listedAt = listedAt;
   nft.paymentErc20TokenAddress = auction.paymentErc20TokenAddress;
-  nft.auctionStartingPrice = auction.startingPrice;
-  nft.auctionEndingPrice = auction.endingPrice;
+  nft.auctionSortingPrice = auction.sortingPrice;
 
   if (nft.type == 'ERC-1155') {
-    if (nft.price === null || nft.price > auction.startingPrice) {
-      nft.price = auction.startingPrice;
+    if (nft.price === null || nft.price > auction.endingPrice) {
+      nft.price = auction.endingPrice;
     }
   } else {
-    nft.price = auction.startingPrice;
+    nft.price = auction.endingPrice;
   }
 
   return nft;
@@ -170,8 +169,8 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       let lowestPrice = BigInt.fromI32(2).pow(255 as u8);
       for (let i = 0; i < nft.auctionIds.length; i++) {
         let otherAuction = Auction.load(nft.auctionIds[i])!;
-        if (lowestPrice.gt(otherAuction.startingPrice)) {
-          lowestPrice = otherAuction.startingPrice;
+        if (lowestPrice.gt(otherAuction.endingPrice)) {
+          lowestPrice = otherAuction.endingPrice;
         }
       }
       nft.price = lowestPrice;
@@ -180,16 +179,14 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
       nft.paymentErc20TokenAddress = NULL_ADDRESS;
-      nft.auctionStartingPrice = ZERO_BI;
-      nft.auctionEndingPrice = ZERO_BI;
+      nft.auctionSortingPrice = ZERO_DECIMAL;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
     nft.paymentErc20TokenAddress = NULL_ADDRESS;
-    nft.auctionStartingPrice = ZERO_BI;
-    nft.auctionEndingPrice = ZERO_BI;
+    nft.auctionSortingPrice = ZERO_DECIMAL;
   }
 
   return nft;

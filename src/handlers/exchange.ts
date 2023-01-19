@@ -27,6 +27,7 @@ import * as collectionData from '../modules/collectionData';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
 import { createAccount } from '../modules/account';
 import { removeActiveAuction } from '../modules/auction';
+import { toHighDenom } from '../utils/prices';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -67,6 +68,10 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.soldTokenAmount = ZERO_BI;
   auction.paymentErc20TokenAddress = event.params.paymentErc20TokenAddress;
   auction.sourceVersion = 'V2';
+  auction.sortingPrice = toHighDenom(
+    auction.endingPrice,
+    auction.paymentErc20TokenAddress
+  );
 
   auction.save();
 
@@ -75,8 +80,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 
   let nftOwnership = getOrCreateNftOwnership(nft, auction.seller);
   nftOwnership.nftPrice = nft.price;
-  nftOwnership.nftAuctionStartingPrice = nft.auctionStartingPrice;
-  nftOwnership.nftAuctionEndingPrice = nft.auctionEndingPrice;
+  nftOwnership.nftAuctionSortingPrice = nft.auctionSortingPrice;
   nftOwnership.nftIsOnSale = true;
   nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
@@ -175,8 +179,7 @@ export function handleAuctionCancelled(event: AuctionCancelled): void {
   let nftOwnership = getOrCreateNftOwnership(nft, auction.seller);
   nftOwnership.nftIsOnSale = false;
   nftOwnership.nftPrice = nft.price;
-  nftOwnership.nftAuctionStartingPrice = nft.auctionStartingPrice;
-  nftOwnership.nftAuctionEndingPrice = nft.auctionEndingPrice;
+  nftOwnership.nftAuctionSortingPrice = nft.auctionSortingPrice;
   nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
 

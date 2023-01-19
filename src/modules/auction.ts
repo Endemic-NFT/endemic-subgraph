@@ -1,4 +1,4 @@
-import { Address, BigInt, log, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, store, log } from '@graphprotocol/graph-ts';
 import { Auction, Nft } from '../../generated/schema';
 import { EndemicExchange } from '../../generated/EndemicExchange/EndemicExchange';
 import * as addresses from '../utils/addresses';
