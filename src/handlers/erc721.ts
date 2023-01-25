@@ -85,6 +85,18 @@ export function handleTransfer(event: Transfer): void {
     ONE_BI
   );
 
+  if (nft.description != null) {
+    if (nft.description!.length > 1500) {
+      return;
+    }
+  }
+
+  if (nft.name != null) {
+    if (nft.name!.length > 1500) {
+      return;
+    }
+  }
+
   nft.save();
 
   userData.updateHistoricDataForTransfer(
@@ -111,7 +123,12 @@ export function handleMint(event: Mint): void {
     event.params.tokenId.toString()
   );
 
-  let nft = Nft.load(id)!;
+  let nft = Nft.load(id);
+
+  if (nft == null) {
+    return;
+  }
+
   nft.artistId = event.params.artistId;
   nft.artist = event.params.artistId.toHexString();
   nft.save();
