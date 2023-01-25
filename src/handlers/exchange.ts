@@ -370,11 +370,10 @@ export function handlePrivateSaleSuccess(event: PrivateSaleSuccess): void {
     event.params.paymentErc20TokenAddress
   );
 
-  collectionData.updateHistoricDataForTransfer(
+  collectionData.updateHistoricDataForOfferAccepted(
     event.params.nftContract,
-    event.params.seller,
-    event.params.buyer,
-    event.params.totalFees
+    event.params.price,
+    event.params.paymentErc20TokenAddress
   );
 
   createPrivateSaleActivity(event);
