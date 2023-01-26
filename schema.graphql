@@ -153,8 +153,6 @@ type CollectionHistoricData @entity {
   onSaleCount: BigInt!
   volumeTraded: BigInt!
   ownersCount: BigInt!
-  floorPrice: BigInt
-  floorPriceTracker: [BigInt!]
   erc20Volumes: [Erc20Volume!] @derivedFrom(field: "collectionHistoricData")
 }
 

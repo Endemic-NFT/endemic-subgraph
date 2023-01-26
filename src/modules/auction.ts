@@ -54,7 +54,6 @@ export function removeActiveAuction(
   if (auction == null) return nft;
 
   auction.tokenAmount = auction.tokenAmount.minus(amount);
-  let auctionEndingPrice = auction.endingPrice;
 
   nft = handleAuctionCompletedForNFT(nft, auctionId!);
 
@@ -65,11 +64,7 @@ export function removeActiveAuction(
   }
 
   userData.updateHistoricDataForAuctionCancel(seller.toHexString(), amount);
-  collectionData.updateHistoricDataForAuctionCancel(
-    nft.contractId,
-    auctionEndingPrice,
-    amount
-  );
+  collectionData.updateHistoricDataForAuctionCancel(nft.contractId, amount);
 
   return nft;
 }
