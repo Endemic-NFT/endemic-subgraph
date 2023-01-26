@@ -85,14 +85,15 @@ export function handleTransfer(event: Transfer): void {
     ONE_BI
   );
 
+  //avoid row size limit on existing NFTs
   if (nft.description != null) {
-    if (nft.description!.length > 1500) {
+    if (nft.description!.length > 5000) {
       return;
     }
   }
 
   if (nft.name != null) {
-    if (nft.name!.length > 1500) {
+    if (nft.name!.length > 500) {
       return;
     }
   }

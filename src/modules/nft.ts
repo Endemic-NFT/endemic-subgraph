@@ -11,6 +11,7 @@ import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { filter } from '../utils/array';
 import { NULL_ADDRESS, ZERO_BI, ZERO_DECIMAL } from '../utils/constants';
+import { checkLength } from '../utils/string';
 
 export function isMintEvent(from: Address): boolean {
   return from.toHexString() == NULL_ADDRESS.toHexString();
@@ -126,8 +127,10 @@ export function updateTokenMetadataFromIPFS(nft: Nft): Nft {
 
     nft.image = image ? image.toString() : null;
     nft.thumbnail = thumbnail ? thumbnail.toString() : null;
-    nft.name = name ? name.toString() : null;
-    nft.description = description ? description.toString() : null;
+    nft.name = name ? checkLength(name.toString(), 500) : null;
+    nft.description = description
+      ? checkLength(description.toString(), 5000)
+      : null;
   } else {
     log.warning('Metadata not available: {}', [nft.tokenURI!]);
   }

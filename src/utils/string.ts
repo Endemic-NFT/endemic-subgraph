@@ -13,3 +13,11 @@ export function toLowerCase(str: string): string {
 
   return result;
 }
+
+export function checkLength(str: string, limit: number): string {
+  if (str.length < limit) {
+    return str;
+  }
+
+  return str.substring(limit as i32);
+}
