@@ -17,7 +17,7 @@ export function getOrCreateErc20VolumeForUserHistoricData(
 
   let erc20Volume = Erc20Volume.load(erc20VolumeId);
 
-  if (!erc20Volume) {
+  if (erc20Volume == null) {
     erc20Volume = new Erc20Volume(erc20VolumeId);
 
     erc20Volume.volumeTraded = ZERO_BI;

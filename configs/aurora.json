@@ -33,6 +33,10 @@
             "name" :"EYWA",
             "address" :"0xB2e6a5a864A1004C3c828a2e767A08C173939b01",
             "block": 72073334
+        },
+        {   "name": "HOLDR",
+            "address": "0xE304d7982Bb34c253D82959acfAe75F6A3Adb9d8",
+            "block": 80626660
         }
     ],
     "erc721FactoriesLegacy": [

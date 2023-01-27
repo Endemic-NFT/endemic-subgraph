@@ -16,7 +16,7 @@ export function getOrCreateColectionHistoricData(
 ): CollectionHistoricData {
   let stats = CollectionHistoricData.load(contractAddress.toHexString());
 
-  if (!stats) {
+  if (stats == null) {
     stats = new CollectionHistoricData(contractAddress.toHexString());
     stats.onSaleCount = ZERO_BI;
     stats.totalCount = ZERO_BI;

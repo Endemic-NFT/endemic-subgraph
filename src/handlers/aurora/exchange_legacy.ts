@@ -115,23 +115,27 @@ export function handleAuctionSuccessful(event: AuctionSuccessful): void {
     auction.buyer!.toHexString(),
     auction.seller,
     auction.totalPrice!,
-    event.params.amount
+    event.params.amount,
+    auction.paymentErc20TokenAddress
   );
   userData.updateHourDataForSaleCompleted(
     event.block.timestamp,
     auction.totalPrice!,
     auction.buyer!.toHexString(),
-    auction.seller
+    auction.seller,
+    auction.paymentErc20TokenAddress
   );
   collectionData.updateHistoricDataForAuctionCompleted(
     nft.contractId,
     auction.totalPrice!,
-    event.params.amount
+    event.params.amount,
+    auction.paymentErc20TokenAddress
   );
   collectionData.updateHourData(
     event.block.timestamp,
     nft.contractId,
-    auction.totalPrice!
+    auction.totalPrice!,
+    auction.paymentErc20TokenAddress
   );
 
   createAuctionActivity(

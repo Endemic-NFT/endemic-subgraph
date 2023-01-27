@@ -3,7 +3,7 @@ import { dataSource, log } from '@graphprotocol/graph-ts';
 export function getLatestEndemicExchangeAddress(): string {
   let network = dataSource.network();
   if (network == 'aurora') {
-    return '0x2f6A8241d4F34EA22B9c122bE9DDdFDaaf3121E7';
+    return '0x0c45c5971f751d93f2e4ae0e7ceb149967b846d2';
   }
 
   if (network == 'goerli') {
