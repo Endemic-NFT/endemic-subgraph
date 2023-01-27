@@ -18,6 +18,7 @@ import { getOrCreateNftOwnership } from '../../modules/ownership';
 import * as userData from '../../modules/userData';
 import * as collectionData from '../../modules/collectionData';
 import { NULL_ADDRESS, ZERO_BI } from '../../utils/constants';
+import { toHighDenom } from '../../utils/prices';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nftId = createNftId(
@@ -56,6 +57,10 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.soldTokenAmount = ZERO_BI;
   auction.paymentErc20TokenAddress = NULL_ADDRESS;
   auction.sourceVersion = 'V1';
+  auction.sortingPrice = toHighDenom(
+    auction.endingPrice,
+    auction.paymentErc20TokenAddress
+  );
 
   auction.save();
 
