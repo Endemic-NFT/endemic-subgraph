@@ -1,5 +1,5 @@
 import { BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Erc20Volume } from '../../generated/schema';
+import { CollectionErc20Volume, UserErc20Volume } from '../../generated/schema';
 import { NULL_ADDRESS, ZERO_BI } from '../utils/constants';
 
 export function createErc20VolumeId(
@@ -12,19 +12,16 @@ export function createErc20VolumeId(
 export function getOrCreateErc20VolumeForUserHistoricData(
   paymentErc20TokenAddress: string,
   entityId: string
-): Erc20Volume {
+): UserErc20Volume {
   const erc20VolumeId = createErc20VolumeId(paymentErc20TokenAddress, entityId);
 
-  let erc20Volume = Erc20Volume.load(erc20VolumeId);
+  let erc20Volume = UserErc20Volume.load(erc20VolumeId);
 
   if (erc20Volume == null) {
-    erc20Volume = new Erc20Volume(erc20VolumeId);
+    erc20Volume = new UserErc20Volume(erc20VolumeId);
 
-    erc20Volume.volumeTraded = ZERO_BI;
     erc20Volume.makerVolume = ZERO_BI;
     erc20Volume.takerVolume = ZERO_BI;
-    erc20Volume.userHistoricData = entityId;
-    erc20Volume.collectionHistoricData = null;
     erc20Volume.paymentErc20TokenAddress = paymentErc20TokenAddress;
 
     erc20Volume.save();
@@ -36,19 +33,15 @@ export function getOrCreateErc20VolumeForUserHistoricData(
 export function getOrCreateErc20VolumeForCollectionHistoricData(
   paymentErc20TokenAddress: string,
   entityId: string
-): Erc20Volume {
+): CollectionErc20Volume {
   const erc20VolumeId = createErc20VolumeId(paymentErc20TokenAddress, entityId);
 
-  let erc20Volume = Erc20Volume.load(erc20VolumeId);
+  let erc20Volume = CollectionErc20Volume.load(erc20VolumeId);
 
-  if (!erc20Volume) {
-    erc20Volume = new Erc20Volume(erc20VolumeId);
+  if (erc20Volume == null) {
+    erc20Volume = new CollectionErc20Volume(erc20VolumeId);
 
     erc20Volume.volumeTraded = ZERO_BI;
-    erc20Volume.makerVolume = ZERO_BI;
-    erc20Volume.takerVolume = ZERO_BI;
-    erc20Volume.userHistoricData = null;
-    erc20Volume.collectionHistoricData = entityId;
     erc20Volume.paymentErc20TokenAddress = paymentErc20TokenAddress;
 
     erc20Volume.save();

@@ -153,7 +153,6 @@ type CollectionHistoricData @entity {
   onSaleCount: BigInt!
   volumeTraded: BigInt!
   ownersCount: BigInt!
-  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "collectionHistoricData")
 }
 
 type UserHistoricData @entity {
@@ -163,7 +162,6 @@ type UserHistoricData @entity {
   onSaleCount: BigInt!
   makerVolume: BigInt!
   takerVolume: BigInt!
-  erc20Volumes: [Erc20Volume!] @derivedFrom(field: "userHistoricData")
 }
 
 type CollectionHourData @entity {
@@ -185,14 +183,17 @@ type UserHourData @entity {
   paymentErc20TokenAddress: Bytes
 }
 
-type Erc20Volume @entity {
+type UserErc20Volume @entity {
   id: ID!
-  volumeTraded: BigInt!
   makerVolume: BigInt!
   takerVolume: BigInt!
   paymentErc20TokenAddress: String
-  userHistoricData: UserHistoricData
-  collectionHistoricData: CollectionHistoricData
+}
+
+type CollectionErc20Volume @entity {
+  id: ID!
+  volumeTraded: BigInt!
+  paymentErc20TokenAddress: String
 }
 
 enum SourceVersion @entity {
