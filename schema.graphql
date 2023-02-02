@@ -43,6 +43,9 @@ type NftOwnership @entity {
   nftListedAt: BigInt!
   nftIsOnSale: Boolean!
   nftPaymentErc20TokenAddress: Bytes!
+
+  #denormalized for received offers query
+  nftOfferIds: [BigInt!]!
 }
 
 type Nft @entity {
@@ -86,6 +89,8 @@ type Nft @entity {
 
   #for erc-1155
   supply: BigInt
+
+  ownershipId: String
 
   ownership: [NftOwnership!] @derivedFrom(field: "nft")
   auctions: [Auction!] @derivedFrom(field: "nft")
