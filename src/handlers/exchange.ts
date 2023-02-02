@@ -21,7 +21,11 @@ import {
   createReserveBidPlacedActivity,
 } from '../modules/activity';
 import { Bytes, log, store } from '@graphprotocol/graph-ts';
-import { getOrCreateNftOwnership } from '../modules/ownership';
+import {
+  addNftOfferForOwnership,
+  getOrCreateNftOwnership,
+  removeNftOfferForOwnership,
+} from '../modules/ownership';
 import * as userData from '../modules/userData';
 import * as collectionData from '../modules/collectionData';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
@@ -221,6 +225,10 @@ export function handleOfferCreated(event: OfferCreated): void {
 
   offer.save();
 
+  if (nft != null) {
+    addNftOfferForOwnership(nft, offerId);
+  }
+
   createAccount(event.params.bidder);
   createOfferActivity(
     offer,
@@ -272,6 +280,8 @@ export function handleOfferAccepted(event: OfferAccepted): void {
   nft.save();
 
   store.remove('Offer', offer.id);
+
+  removeNftOfferForOwnership(nft, offer.id);
 
   userData.updateHistoricDataForOfferAccepted(
     event.params.bidder.toHexString(),
@@ -330,6 +340,7 @@ export function handleOfferCancelled(event: OfferCancelled): void {
   let nftId: string;
   if (nft != null) {
     nftId = nft.id;
+    removeNftOfferForOwnership(nft, offer.id);
   } else {
     nftId = createNftId(offer.nftContract, '0');
   }
