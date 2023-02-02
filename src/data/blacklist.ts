@@ -19,6 +19,11 @@ const blacklistedAuroraCollections = [
   '0x821a4bed869515fd181dcc4cbe160521ba76a4ea', // The Kallé
   '0x388e7c4b0b5b3c3795574c42472afdc461d4e670', // MULTIVERSE
   '0x5f0b1817028424ef68954608402ee5cfa9650e55', // Neon Nova Dream Scene
+  '0x414f674004f04273516b937b1459f8f99d478a6c', // Skull Man Art
+  '0x36904b103c7afc1cb983afcb94e1bd70e555c869', // Ape king
+  '0x9f028079723735276102a0953f2debae7650dc50', // 0000000
+  '0x5792f7a08dcc425cbd7ba34e2384fe6700abef47', // Skull art
+  '0x185d94ced9af21253011d3710985eee785e90828', // Max art
 ];
 
 export { blacklistedAuroraCollections };
