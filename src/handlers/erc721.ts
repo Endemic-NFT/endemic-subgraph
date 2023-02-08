@@ -98,8 +98,6 @@ export function handleTransfer(event: Transfer): void {
     }
   }
 
-  nft.save();
-
   userData.updateHistoricDataForTransfer(
     event.params.from,
     event.params.to,
@@ -115,6 +113,9 @@ export function handleTransfer(event: Transfer): void {
   createAccount(event.params.from);
   createAccount(event.params.to);
   updateERC721Ownership(nft, event.params.from, event.params.to);
+
+  nft.save();
+
   createERC721TransferActivity(nft, event);
 }
 

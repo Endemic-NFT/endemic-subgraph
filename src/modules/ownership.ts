@@ -4,6 +4,7 @@ import {
   NftOwnership,
   NftOwnershipPerContract,
 } from '../../generated/schema';
+import { removeFirst } from '../utils/array';
 import { ONE_BI, ZERO_BI } from '../utils/constants';
 import { isMintEvent } from './nft';
 
@@ -73,6 +74,8 @@ export function updateERC721Ownership(
 ): void {
   if (!isMintEvent(fromAccountId)) {
     deleteNftOwnership(nft.id, fromAccountId);
+
+    nft.ownershipId = null;
   }
 
   let nftOwnership = getOrCreateNftOwnership(nft, toAccountId.toHexString());
@@ -83,6 +86,8 @@ export function updateERC721Ownership(
   nftOwnership.nftAuctionSortingPrice = nft.auctionSortingPrice;
   nftOwnership.nftListedAt = nft.listedAt;
   nftOwnership.save();
+
+  nft.ownershipId = nftOwnership.id;
 }
 
 export function updateERC1155Ownership(
@@ -102,4 +107,36 @@ export function updateERC1155Ownership(
     sourceOwnership.value = sourceOwnership.value.minus(tokenAmount);
     sourceOwnership.save();
   }
+}
+
+export function addNftOfferForOwnership(nft: Nft, offerId: string): void {
+  if (nft == null || nft.ownershipId == null) {
+    return;
+  }
+
+  let nftOwnership = NftOwnership.load(nft.ownershipId!);
+
+  let nftOfferIds = nftOwnership!.nftOfferIds;
+  nftOfferIds.push(BigInt.fromString(offerId));
+
+  nftOwnership!.nftOfferIds = nftOfferIds;
+
+  nftOwnership!.save();
+}
+
+export function removeNftOfferForOwnership(nft: Nft, offerId: string): void {
+  if (nft == null || nft.ownershipId == null) {
+    return;
+  }
+
+  let nftOwnership = NftOwnership.load(nft.ownershipId!);
+
+  let nftOfferIds = nftOwnership!.nftOfferIds;
+
+  nftOwnership!.nftOfferIds = removeFirst(
+    nftOfferIds,
+    BigInt.fromString(offerId)
+  );
+
+  nftOwnership!.save();
 }
