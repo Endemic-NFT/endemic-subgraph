@@ -6,11 +6,13 @@
     "build": "npx graph build",
     "prepare:goerli": "mustache configs/goerli.json subgraph.template.yaml > subgraph.yaml && npx graph codegen",
     "prepare:arbitrum-goerli": "mustache configs/arbitrum-goerli.json subgraph.template.yaml > subgraph.yaml && npx graph codegen",
+    "prepare:polygon-mumbai": "mustache configs/polygon-mumbai.json subgraph.template.yaml > subgraph.yaml && npx graph codegen",
     "prepare:aurora": "mustache configs/aurora.json subgraph.template.yaml > subgraph.yaml && npx graph codegen",
     "deploy:goerli": "npm run prepare:goerli && npx graph deploy endemic-nft/endemic-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
     "deploy:aurora": "npm run prepare:aurora && npx graph deploy endemic-nft/endemic-aurora --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
     "deploy:aurora-staging": "npm run prepare:aurora && npx graph deploy endemic-nft/endemic-aurora-staging --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy:arbitrum-goerli":  "npm run prepare:arbitrum-goerli && npx graph deploy endemic-nft/endemic-arbitrum-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
+    "deploy:arbitrum-goerli":  "npm run prepare:arbitrum-goerli && npx graph deploy endemic-nft/endemic-arbitrum-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy:polygon-mumbai":  "npm run prepare:polygon-mumbai && npx graph deploy endemic-nft/endemic-polygon-mumbai --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.35.0",

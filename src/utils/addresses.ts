@@ -10,6 +10,10 @@ export function getLatestEndemicExchangeAddress(): string {
     return '0x53431AB725Edf32deF31992c4fd8ba2719c16661';
   }
 
+  if (network == 'mumbai') {
+    return '0xf36274A1A1DEE9eB58052241e269c3D6bbc5F0dC';
+  }
+
   if (network == 'arbitrum-goerli') {
     return '0xF85Ab30873673dDe16E1d70518cB21814eE8fF9A';
   }

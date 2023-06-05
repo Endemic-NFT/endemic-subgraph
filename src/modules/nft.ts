@@ -10,7 +10,12 @@ import { Auction, Nft } from '../../generated/schema';
 import { Collection } from '../../generated/templates/Collection/Collection';
 import { EndemicERC1155 } from '../../generated/templates/EndemicERC1155/EndemicERC1155';
 import { filter } from '../utils/array';
-import { NULL_ADDRESS, ZERO_BI, ZERO_DECIMAL } from '../utils/constants';
+import {
+  MATIC_ADDRESS,
+  NULL_ADDRESS,
+  ZERO_BI,
+  ZERO_DECIMAL,
+} from '../utils/constants';
 import { checkLength } from '../utils/string';
 
 export function isMintEvent(from: Address): boolean {
@@ -181,14 +186,14 @@ export function handleAuctionCompletedForNFT(nft: Nft, auctionId: string): Nft {
       nft.isOnSale = false;
       nft.listedAt = ZERO_BI;
       nft.price = ZERO_BI;
-      nft.paymentErc20TokenAddress = NULL_ADDRESS;
+      nft.paymentErc20TokenAddress = MATIC_ADDRESS;
       nft.auctionSortingPrice = ZERO_DECIMAL;
     }
   } else {
     nft.isOnSale = false;
     nft.listedAt = ZERO_BI;
     nft.price = ZERO_BI;
-    nft.paymentErc20TokenAddress = NULL_ADDRESS;
+    nft.paymentErc20TokenAddress = MATIC_ADDRESS;
     nft.auctionSortingPrice = ZERO_DECIMAL;
   }
 

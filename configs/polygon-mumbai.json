@@ -1,21 +1,21 @@
 {
-    "network": "goerli",
+    "network": "mumbai",
     "erc1155FactoryAddress": "",
-    "royaltiesProviderAddress": "0xD0E7364473F0843461F2631306AE248539Dab487",
+    "royaltiesProviderAddress": "0x3B7A2D4bfA13378f275146D7AE05518F42241BcD",
     "metadataUpdaterAddress": "",
-    "startBlock": 9044261,
+    "startBlock": 36322613,
     "erc721Factories": [
         {
             "name": "EndemicCollectionFactory",
-            "address": "0xB4550D625035B1D563B6c883B34AE83E0fa71411",
-            "block": 9044261
+            "address": "0x137ae0d8eaE185A626A2d6ff3F8380C20aAA0909",
+            "block": 36322613
         }
     ],
     "exchanges": [
         {
             "name": "EndemicExchange",
-            "address": "0x53431AB725Edf32deF31992c4fd8ba2719c16661",
-            "block": 9044261
+            "address": "0xf36274A1A1DEE9eB58052241e269c3D6bbc5F0dC",
+            "block": 36322613
         }
     ],
     "collections": [],

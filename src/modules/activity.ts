@@ -7,7 +7,7 @@ import {
   PrivateSaleSuccess,
   ReserveBidPlaced,
 } from '../../generated/EndemicExchange/EndemicExchange';
-import { NULL_ADDRESS } from '../utils/constants';
+import { MATIC_ADDRESS } from '../utils/constants';
 
 function getTransferActivityType(from: Address, to: Address): string {
   if (isMintEvent(from)) {
@@ -187,7 +187,7 @@ export function createReserveBidPlacedActivity(
   activity.initiator = bidder;
   activity.createdAt = event.block.timestamp;
   activity.transactionHash = event.transaction.hash;
-  activity.paymentErc20TokenAddress = NULL_ADDRESS;
+  activity.paymentErc20TokenAddress = MATIC_ADDRESS;
 
   activity.save();
 }

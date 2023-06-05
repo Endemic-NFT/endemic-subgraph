@@ -1,0 +1,32 @@
+{
+    "network": "mainnet",
+    "erc1155FactoryAddress": "",
+    "royaltiesProviderAddress": "0x99F8D550094076b63bbBe84D291Bb8a6D34133aB",
+    "metadataUpdaterAddress": "",
+    "startBlock": 17229425,
+    "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0xC895Fdf7c328858a4558bC56FD30Ba7936F3d28a",
+            "block": 17229425
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0xa0607F6c1be269631De836724768e3aeeb2272F4",
+            "block": 17229425
+        }
+    ],
+    "collections": [
+        {
+            "name": "EarlyAccess",
+            "address": "0x7DE413A6b1451889936f37eD63A576f5857e5095",
+            "block": 16821447
+        }
+    ],
+    "erc721FactoriesLegacy": [],
+    "exchangesLegacy": [],
+    "offersLegacy": []
+}
+

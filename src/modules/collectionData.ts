@@ -3,7 +3,7 @@ import {
   CollectionHistoricData,
   CollectionHourData,
 } from '../../generated/schema';
-import { NULL_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
+import { MATIC_ADDRESS, ONE_BI, ZERO_BI } from '../utils/constants';
 import { isBurnEvent, isMintEvent } from './nft';
 import { getOrCreateOwnershipPerContract } from './ownership';
 import {
@@ -121,7 +121,7 @@ export function updateHistoricDataForAuctionCompleted(
   contractAddress: Bytes,
   volumeTraded: BigInt,
   tokenAmount: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  paymentErc20TokenAddress: Bytes = MATIC_ADDRESS
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
   collectionStats.onSaleCount = collectionStats.onSaleCount.minus(tokenAmount);
@@ -143,7 +143,7 @@ export function updateHistoricDataForAuctionCompleted(
 export function updateHistoricDataForOfferAccepted(
   contractAddress: Bytes,
   volumeTraded: BigInt,
-  paymentErc20TokenAddress: Bytes = NULL_ADDRESS
+  paymentErc20TokenAddress: Bytes = MATIC_ADDRESS
 ): void {
   let collectionStats = getOrCreateColectionHistoricData(contractAddress);
 
