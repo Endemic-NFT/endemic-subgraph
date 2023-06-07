@@ -1,0 +1,25 @@
+{
+    "network": "matic",
+    "erc1155FactoryAddress": "",
+    "royaltiesProviderAddress": "0xaBF9Bd38B968e6ABba30736bb7Ca93270fC023A0",
+    "metadataUpdaterAddress": "",
+    "startBlock": 43635717,
+    "erc721Factories": [
+        {
+            "name": "EndemicCollectionFactory",
+            "address": "0x9E7Fa3B7376B5De318d7cE05cB4109d2d3c3fC87",
+            "block": 43635717
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "EndemicExchange",
+            "address": "0x18BE99C9a17590BCF5955BaC3188772915347bCd",
+            "block": 43635717
+        }
+    ],
+    "collections": [],
+    "erc721FactoriesLegacy": [],
+    "exchangesLegacy": [],
+    "offersLegacy": []
+}
